@@ -19,7 +19,7 @@
 import { ref } from 'vue'
 import { useNotify } from '@/composables/useNotify'
 import { downloadBlob } from '@/utils/downloadFile'
-
+import { buildExportUrl as appendExportParams } from '@/utils/exportUrl'
 
 const { t } = useI18n()
 
@@ -58,23 +58,12 @@ const formats = [
 // caller does not have to strip empty entries before passing the
 // dict in.
 function buildUrl(format) {
-  let url = props.urlBuilder(format)
-  const params = new URLSearchParams()
-  for (const [key, value] of Object.entries(props.filterParams || {})) {
-    if (value === null || value === undefined) continue
-    if (typeof value === 'string' && value.trim() === '') continue
-    if (Array.isArray(value)) {
-      if (value.length === 0) continue
-      params.set(key, value.join(','))
-    } else {
-      params.set(key, String(value))
-    }
+  const options = {
+    format,
+    filterParams: props.filterParams,
+    theme: document.documentElement.dataset.theme,
   }
-  const qs = params.toString()
-  if (qs) {
-    url += (url.includes('?') ? '&' : '?') + qs
-  }
-  return url
+  return appendExportParams(props.urlBuilder(format), options)
 }
 
 
