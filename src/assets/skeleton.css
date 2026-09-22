@@ -1,0 +1,66 @@
+/* frontend/src/assets/skeleton.css*/
+
+.base-skeleton {
+  display: flex;
+  flex-direction: column;
+}
+
+.base-skeleton-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--skeleton-gap, var(--space-sm));
+}
+
+.base-skeleton__card {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: var(--border-width) solid var(--color-border);
+}
+
+.base-skeleton__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-circle);
+  background: var(--color-bg-alt);
+  flex-shrink: 0;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Line shapes. The base `.base-skeleton__line` rule was moved here
+   from `empty.css`. */
+.base-skeleton__line {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-alt) 25%,
+    color-mix(in srgb, var(--color-bg-alt) 50%, var(--color-bg-card)) 50%,
+    var(--color-bg-alt) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: var(--radius-sm);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.base-skeleton__lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.base-skeleton__line--wide {
+  width: 80%;
+  height: 20px;
+}
+
+.base-skeleton__line--narrow {
+  width: 50%;
+  height: 16px;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

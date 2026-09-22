@@ -1,0 +1,390 @@
+/* frontend/src/assets/tokens.css */
+/* ============================================
+   DESIGN TOKENS – LIGHT (default) + THEME OVERRIDES
+   ============================================ */
+
+:root {
+  /* ----- ROOT FONT SIZE -----
+     Every --font-size-*, --space-*, --radius-*, and --icon-*
+     token below is expressed in `rem`, which is relative to the
+     root element's computed font-size. The browser default is
+     16px; setting it to 18 px here scales the entire token-based
+     design system — text, spacing, corner radii, and icon
+     sizes — uniformly by e.g 18/16 = +12.5 %.
+
+     Why a single root change instead of editing each clamp()
+     value: the clamps in this file all use `rem + vw` in their
+     preferred slot, so bumping the root font size moves the
+     minimum, the preferred value, AND the maximum together by
+     the same factor. Editing each clamp by hand would produce
+     the same effect but with twelve chances to introduce a
+     rounding error, and would break the moment a new size
+     token is added and someone forgets to bump it.
+
+     The two physical-pixel values that should NOT scale —
+     `--control-height` and `--control-height-compact`, plus
+     the 44×44 touch targets inside individual components — are
+     left in `px` deliberately. Those are minimum hit areas, not
+     typographic sizes; scaling them would break the WCAG
+     2.5.5 target size guarantee on smaller screens. */
+  font-size: 18px;
+
+  /* ----- CORE COLOURS ----- */
+  --color-primary: #c47d3a;
+  --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
+  --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
+  --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
+
+  --color-success: #558b6f;
+  --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
+  --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
+
+  --color-danger: #b55a4a;
+  --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
+  --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
+
+  --color-warning: #d49a1f;
+  --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
+  --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
+
+  --color-info: #2e8ac0;
+  --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
+  --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
+
+  /* ----- BACKGROUNDS (LIGHT THEME) – darkened for eye comfort ----- */
+  --color-bg-body: #d5cdbc;
+  --color-bg-card: #e8dfd2;
+  --color-bg-alt: #dfd5c7;
+
+  /* ----- TEXT COLOURS ----- */
+  --color-text-primary: #3b2a1f;
+  --color-text-secondary: #5a4a38;
+  --color-text-muted: #8b7355;
+
+  --color-border: rgba(210, 180, 140, 0.35);
+  --color-overlay: rgba(0, 0, 0, 0.5);
+
+  /* ----- CONTRAST-SAFE "ON" COLORS ----- */
+  --color-on-primary: #fff;
+  --color-on-success: #fff;
+  --color-on-danger: #fff;
+  --color-on-warning: #fff;
+  --color-on-info: #fff;
+
+  /* ----- TEXT HELPERS ----- */
+  --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
+  --color-text-inverse: #fff;
+
+  /* ----- MISC ----- */
+  --opacity-disabled: 0.5;
+  --color-focus-ring: var(--color-primary);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 3px;
+  --color-selected: var(--color-primary);
+  --color-selected-highlight: var(--color-primary-light);
+
+  /* ----- BORDERS ----- */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+
+  /* ----- SPACING ----- */
+  --space-xs: 0.25rem;
+  --space-2xs: 0.375rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* ----- TYPOGRAPHY -----
+     RTL/LTR NOTE — font stacks
+     --------------------------
+     The base and heading stacks previously disagreed about which
+     script had visual priority:
+
+       --font-family-base:    'Noto Sans Arabic', 'Tahoma', 'Outfit', …
+       --font-family-heading: 'Outfit', 'Noto Sans Arabic', 'Tahoma', …
+
+     `--font-family-base` correctly put the Arabic font first. The
+     heading stack put the Latin-first 'Outfit' first, so in Arabic
+     mode every heading fell through Outfit's per-glyph fallback to
+     reach Noto Sans Arabic — producing different letter-spacing,
+     weight rendering, and metric alignment between headings and
+     body text.
+
+     The heading stack now mirrors the base stack's intent: Arabic
+     font first, with Outfit as the Latin display font behind it.
+     `index.css` overrides BOTH tokens for the English locale (see
+     the `[data-locale="en"]` block there) so English mode gets a
+     Latin-first stack throughout.
+
+     The mono stack is intentionally shared across locales — see
+     the comment in index.css for the rationale. */
+  --font-family-base: 'Noto Sans Arabic', 'Tahoma', 'Outfit', sans-serif;
+  --font-family-heading: 'Noto Sans Arabic', 'Outfit', 'Tahoma', sans-serif;
+  --font-family-mono: 'Consolas', 'Monaco', 'Courier New', monospace;
+
+  --font-size-xs: clamp(0.6875rem, 0.6rem + 0.2vw, 0.75rem);
+  --font-size-sm: clamp(0.8125rem, 0.7rem + 0.3vw, 0.875rem);
+  --font-size-base: clamp(0.9375rem, 0.85rem + 0.3vw, 1rem);
+  --font-size-lg: clamp(1.0625rem, 0.95rem + 0.35vw, 1.125rem);
+  --font-size-xl: clamp(1.1875rem, 1rem + 0.5vw, 1.25rem);
+  --font-size-2xl: clamp(1.375rem, 1.2rem + 0.7vw, 1.5rem);
+  --font-size-3xl: clamp(1.75rem, 1.5rem + 1vw, 2rem);
+  --font-size-display: clamp(2rem, 1.8rem + 1.5vw, 2.5rem);
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --line-height-body: 1.6;
+  --line-height-heading: 1.3;
+  --line-height-numeral: 1.15;
+  --letter-spacing-badge: 0.02em;
+
+  /* ----- RADIUS ----- */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+  --radius-pill: 9999px;
+  --radius-circle: 50%;
+
+  /* ----- ELEVATION ----- */
+  --elevation-1: 0 4px 12px rgba(59, 42, 31, 0.06);
+  --elevation-2: 0 8px 24px rgba(59, 42, 31, 0.09);
+  --elevation-3: 0 16px 32px rgba(59, 42, 31, 0.13);
+  --elevation-4: 0 20px 40px rgba(59, 42, 31, 0.19);
+
+  --shadow-sm: var(--elevation-1);
+  --shadow-md: var(--elevation-2);
+  --shadow-lg: var(--elevation-3);
+  --shadow-hover-lift: var(--elevation-2);
+
+  /* ----- MOTION ----- */
+  --motion-fast: 0.15s;
+  --motion-base: 0.25s;
+  --motion-slow: 0.35s;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --motion-fast-out: var(--motion-fast) var(--ease-out);
+  --motion-base-out: var(--motion-base) var(--ease-out);
+  --motion-slow-out: var(--motion-slow) var(--ease-out);
+  --motion-fast-in: var(--motion-fast) var(--ease-in);
+  --motion-base-in: var(--motion-base) var(--ease-in);
+  --motion-slow-in: var(--motion-slow) var(--ease-in);
+  --motion-fast-in-out: var(--motion-fast) var(--ease-in-out);
+  --motion-base-in-out: var(--motion-base) var(--ease-in-out);
+  --motion-slow-in-out: var(--motion-slow) var(--ease-in-out);
+
+  /* ----- Z-INDEX ----- */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-nav: 1030;
+  --z-modal-overlay: 1040;
+  --z-modal: 1050;
+  --z-toast: 1060;
+  --z-tooltip: 1070;
+
+  /* ----- CONTAINER WIDTHS ----- */
+  --content-narrow: 600px;
+  --content-base: 800px;
+  --content-wide: 1280px;
+  --content-form: 480px;
+  --content-medium: 700px;
+
+  /* ----- ICON SIZES ----- */
+  --icon-sm: 0.9rem;
+  --icon-md: 1.2rem;
+  --icon-lg: 1.6rem;
+  --icon-xl: 2.5rem;
+  --icon-2xl: 4rem;
+
+  /* ----- NAVBAR ----- */
+  --navbar-height: 48px;
+
+  /* ----- CONTROL GEOMETRY ----- */
+  --control-height: 44px;
+  --control-height-compact: 36px;
+  --control-radius: var(--radius-md);
+
+  /* ----- NATIVE CONTROL THEMING ----- */
+  color-scheme: light;
+  scrollbar-color: var(--color-primary) var(--color-bg-alt);
+}
+
+/* ===== DARK THEME ===== */
+[data-theme="dark"] {
+  --color-primary: #f0c28a;
+  --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
+  --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
+  --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
+
+  --color-success: #7eb09e;
+  --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
+  --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
+
+  --color-danger: #c97e6a;
+  --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
+  --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
+
+  --color-warning: #f4b942;
+  --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
+  --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
+
+  --color-info: #4facfe;
+  --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
+  --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
+
+  --color-bg-body: #0f0f1a;
+  --color-bg-card: #1e1e2f;
+  --color-bg-alt: #2a2a3e;
+
+  --color-text-primary: #e8e8ee;
+  --color-text-secondary: #c0c0d0;
+  --color-text-muted: #b0b0c0;
+
+  --color-border: rgba(150, 170, 200, 0.3);
+  --color-overlay: rgba(0, 0, 0, 0.7);
+
+  --color-on-primary: #241303;
+  --color-on-success: #1a2f24;
+  --color-on-danger: #2f1a16;
+  --color-on-warning: #241303;
+  --color-on-info: #0f1f2f;
+
+  --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
+  --color-text-inverse: #fff;
+
+  --elevation-1: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --elevation-2: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --elevation-3: 0 16px 32px rgba(0, 0, 0, 0.6);
+  --elevation-4: 0 20px 40px rgba(0, 0, 0, 0.7);
+
+  color-scheme: dark;
+  scrollbar-color: var(--color-primary) var(--color-bg-alt);
+}
+
+/* ===== BLOSSOM THEME – backgrounds darkened ===== */
+[data-theme="blossom"] {
+  --color-primary: #c47088;
+  --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
+  --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
+  --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
+
+  --color-success: #5a8a78;
+  --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
+  --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
+
+  --color-danger: #b55a4a;
+  --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
+  --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
+
+  --color-warning: #d49a1f;
+  --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
+  --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
+
+  --color-info: #2e8ac0;
+  --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
+  --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
+
+  /* Darkened backgrounds */
+  --color-bg-body: #e0d0d8;
+  --color-bg-card: #ece0e4;
+  --color-bg-alt: #e4d6de;
+
+  --color-text-primary: #4a2232;
+  --color-text-secondary: #6a4a5a;
+  --color-text-muted: #7a5a6a;
+
+  --color-border: rgba(210, 140, 160, 0.3);
+  --color-overlay: rgba(0, 0, 0, 0.5);
+
+  --color-on-primary: #fff;
+  --color-on-success: #fff;
+  --color-on-danger: #fff;
+  --color-on-warning: #fff;
+  --color-on-info: #fff;
+
+  --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
+  --color-text-inverse: #fff;
+
+  --elevation-1: 0 4px 12px rgba(0,0,0,0.06);
+  --elevation-2: 0 8px 24px rgba(0,0,0,0.1);
+  --elevation-3: 0 16px 32px rgba(0,0,0,0.14);
+  --elevation-4: 0 20px 40px rgba(0,0,0,0.18);
+
+  color-scheme: light;
+  scrollbar-color: var(--color-primary) var(--color-bg-alt);
+}
+
+/* ===== FRESH THEME – backgrounds darkened ===== */
+[data-theme="fresh"] {
+  --color-primary: #3e8a3e;
+  --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
+  --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
+  --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
+
+  --color-success: #2a6a2a;
+  --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
+  --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
+
+  --color-danger: #a05030;
+  --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
+  --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
+
+  --color-warning: #908030;
+  --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
+  --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
+
+  --color-info: #3078a0;
+  --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
+  --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
+
+  /* Darkened backgrounds */
+  --color-bg-body: #ccd8cc;
+  --color-bg-card: #dee6de;
+  --color-bg-alt: #d2ddd2;
+
+  --color-text-primary: #1f4f1f;
+  --color-text-secondary: #3f6f3f;
+  --color-text-muted: #5f8f5f;
+
+  --color-border: rgba(80, 120, 80, 0.3);
+  --color-overlay: rgba(0, 0, 0, 0.5);
+
+  --color-on-primary: #fff;
+  --color-on-success: #fff;
+  --color-on-danger: #fff;
+  --color-on-warning: #fff;
+  --color-on-info: #fff;
+
+  --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
+  --color-text-inverse: #fff;
+
+  --elevation-1: 0 4px 12px rgba(0,0,0,0.06);
+  --elevation-2: 0 8px 24px rgba(0,0,0,0.1);
+  --elevation-3: 0 16px 32px rgba(0,0,0,0.14);
+  --elevation-4: 0 20px 40px rgba(0,0,0,0.18);
+
+  color-scheme: light;
+  scrollbar-color: var(--color-primary) var(--color-bg-alt);
+}
+
+/* ===========================
+   THEME TRANSITION
+   =========================== */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease !important;
+}

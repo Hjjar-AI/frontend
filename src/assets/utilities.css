@@ -1,0 +1,20 @@
+/* Utility helpers */
+.hover-lift {
+  transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover-lift);
+}
+
+
+.tags { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xs); }
+.tag {
+  background: var(--color-bg-alt);
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+blockquote { hanging-punctuation: first allow-end last; }

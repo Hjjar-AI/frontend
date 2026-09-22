@@ -1,0 +1,133 @@
+<!-- frontend/index.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <title>Mukhtabir</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <!-- ============================================================
+       Locale bootstrap.
+       Reads the persisted language from localStorage and applies
+       it to <html lang dir data-locale> BEFORE any CSS paints.
+       Must run above the font stylesheet links and the
+       __cdnFallback utility so the initial render is already in
+       the correct direction (no LTR→RTL flash).
+       Mirrors the theme bootstrap below.
+       ============================================================ -->
+  <script>
+    (function () {
+      try {
+        var supported = { ar: 'rtl', en: 'ltr' }
+        var saved = localStorage.getItem('locale')
+        var locale = (saved && supported[saved]) ? saved : 'ar'
+        document.documentElement.setAttribute('lang', locale)
+        document.documentElement.setAttribute('dir', supported[locale])
+        document.documentElement.setAttribute('data-locale', locale)
+      } catch (e) { /* storage disabled / private mode — keep defaults */ }
+    })();
+  </script>
+
+  <!-- ============================================================
+       Theme bootstrap.
+       Reads the persisted theme from localStorage and applies it
+       to <html data-theme> BEFORE any CSS paints.
+
+       WHY THIS EXISTS
+       ---------------
+       Without this, a user whose preference is dark / blossom /
+       fresh would see a light flash on every reload: the CSS was
+       parsed and the first paint happened before main.js called
+       useTheme().loadSavedTheme(), which is what used to be the
+       only writer of `data-theme`. The default in the CSS is
+       `light`, so the flash is always "light → chosen theme".
+
+       The supported list here must stay in sync with
+       `THEMES` in frontend/src/utils/constants.js and with the
+       set of `[data-theme="…"]` blocks in the CSS. All three are
+       the same four values today.
+       ============================================================ -->
+  <script>
+    (function () {
+      try {
+        var supported = ['light', 'dark', 'blossom', 'fresh']
+        var saved = localStorage.getItem('theme')
+        var theme = (saved && supported.indexOf(saved) !== -1)
+          ? saved
+          : 'light'
+        document.documentElement.setAttribute('data-theme', theme)
+      } catch (e) { /* storage disabled / private mode — keep defaults */ }
+    })();
+  </script>
+
+  <!-- ============================================================
+       CDN-first asset loader utility
+       Tries CDN first. If the CDN is blocked, returns an error,
+       or takes longer than the timeout (default 5 s), the local
+       copy is injected automatically.
+       ============================================================ -->
+  <script>
+    window.__cdnFallback = (function () {
+      var DEFAULT_TIMEOUT = 5000;
+      function loadCSS(id, cdnUrl, localUrl, timeout) {
+        timeout = timeout || DEFAULT_TIMEOUT;
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.id = id;
+        link.href = cdnUrl;
+        var settled = false;
+        function useLocal() {
+          if (settled) return;
+          settled = true;
+          link.href = localUrl;
+        }
+        link.onload = function () { settled = true; };
+        link.onerror = function () { useLocal(); };
+        document.head.appendChild(link);
+        setTimeout(function () {
+          if (!settled) useLocal();
+        }, timeout);
+      }
+      function loadJS(id, cdnUrl, localUrl, timeout) {
+        timeout = timeout || DEFAULT_TIMEOUT;
+        var script = document.createElement('script');
+        script.id = id;
+        script.src = cdnUrl;
+        var settled = false;
+        function useLocal() {
+          if (settled) return;
+          settled = true;
+          var localScript = document.createElement('script');
+          localScript.src = localUrl;
+          localScript.id = id + '-local';
+          document.body.appendChild(localScript);
+        }
+        script.onload = function () { settled = true; };
+        script.onerror = function () { useLocal(); };
+        document.body.appendChild(script);
+        setTimeout(function () {
+          if (!settled) useLocal();
+        }, timeout);
+      }
+      return { loadCSS: loadCSS, loadJS: loadJS };
+    })();
+  </script>
+
+  <!-- Bootstrap Icons CSS: CDN first → local fallback -->
+  <script>
+    window.__cdnFallback.loadCSS(
+        'bootstrapIconsCss',
+      'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css',
+      '/bootstrapIcons.css',
+      5000
+    );
+  </script>
+</head>
+<body>
+  
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

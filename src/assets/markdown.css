@@ -1,0 +1,141 @@
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+  flex-wrap: wrap;
+}
+.markdown-help-link {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  white-space: nowrap;
+}
+.markdown-help-link:hover { text-decoration: underline; }
+.textarea-wrapper { position: relative; }
+.char-count {
+  position: absolute;
+  bottom: var(--space-xs);
+  inset-inline-end: var(--space-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+.char-count--warn { color: var(--color-danger); }
+.word-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2xs);
+}
+.preview-toggle { margin-top: var(--space-xs); }
+.markdown-preview {
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  margin-top: var(--space-xs);
+}
+
+/* ── Toolbar ────────────────────────────────────────────────────────
+   `flex-wrap: wrap` and `overflow-x: auto` are competing strategies:
+   with wrapping enabled, items drop to a second row before they ever
+   overflow, so the horizontal-scroll hint never fires. The wrap
+   behavior is what actually renders today and is what we keep; the
+   two overflow declarations have been removed. The trailing help
+   link (`.markdown-toolbar__help`) is part of the wrap group, so it
+   flows to the second row with the last buttons. */
+.markdown-toolbar {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  padding: var(--space-xs) 0;
+  align-items: center;
+}
+.markdown-toolbar .btn-icon {
+  min-height: var(--control-height-compact);
+  min-width: var(--control-height-compact);
+}
+.markdown-toolbar__help {
+  font-size: var(--icon-md);
+  color: var(--color-text-muted);
+  transition: color var(--motion-fast);
+  margin-inline-start: var(--space-xs);
+  min-width: var(--control-height-compact);
+  min-height: var(--control-height-compact);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.markdown-toolbar__help:hover { color: var(--color-primary); }
+
+/* Sanitized markdown output. */
+.base-markdown {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  font-size: var(--font-size-base);
+  max-width: 65ch;
+}
+.base-markdown .markdown-image { max-width: 100%; height: auto; }
+.base-markdown .external-link::after {
+  content: ' ↗';
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+.base-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-md) 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  font-size: var(--font-size-sm);
+}
+.base-markdown th,
+.base-markdown td {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  text-align: start;
+}
+.base-markdown th {
+  background: var(--color-bg-alt);
+  font-weight: var(--font-weight-bold);
+}
+.base-markdown tr:nth-child(even) {
+  background: color-mix(in srgb, var(--color-bg-alt) 30%, transparent);
+}
+.base-markdown p { margin-bottom: var(--space-sm); line-height: var(--line-height-body); }
+.base-markdown h1 { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); font-family: var(--font-family-heading); margin: var(--space-md) 0 var(--space-sm); }
+.base-markdown h2 { font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); font-family: var(--font-family-heading); margin: var(--space-md) 0 var(--space-sm); }
+.base-markdown h3 { font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); font-family: var(--font-family-heading); margin: var(--space-md) 0 var(--space-sm); }
+.base-markdown h4 { font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); font-family: var(--font-family-heading); margin: var(--space-md) 0 var(--space-sm); }
+.base-markdown pre {
+  background: var(--color-bg-alt);
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+}
+.base-markdown code {
+  background: var(--color-bg-alt);
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+}
+.base-markdown pre code { background: transparent; padding: 0; }
+.base-markdown ul,
+.base-markdown ol {
+  padding-inline-start: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+.base-markdown li { line-height: 1.6; margin-bottom: var(--space-xs); }
+.base-markdown blockquote {
+  border-inline-start: 4px solid var(--color-primary);
+  padding: var(--space-sm) var(--space-md);
+  margin: var(--space-sm) 0;
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-sm);
+}
+.base-markdown--inline { display: inline; }

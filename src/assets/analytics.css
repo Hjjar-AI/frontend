@@ -1,0 +1,366 @@
+/* frontend/src/assets/analytics.css */
+
+.analytics-page { padding: var(--space-lg) 0; }
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .analytics-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Section blocks (member-facing + admin) ────────────────────── */
+.analytics-section {
+  margin-top: var(--space-xl);
+}
+
+.analytics-section__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin: 0 0 var(--space-md);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.analytics-section__header i {
+  color: var(--color-primary);
+  font-size: var(--icon-md);
+}
+
+.analytics-section__subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0 0 var(--space-lg);
+  max-width: 80ch;
+  line-height: var(--line-height-body);
+}
+
+/* ── Report accordion wrapper ──────────────────────────────────── */
+.report-accordion {
+  margin-bottom: var(--space-md);
+}
+
+.report-accordion__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  transition: color var(--motion-fast);
+}
+
+.report-accordion__toggle:hover {
+  color: var(--color-primary);
+}
+
+.report-accordion__toggle:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.report-accordion__toggle-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.report-accordion__toggle-left i:first-child {
+  color: var(--color-primary);
+  font-size: var(--icon-md);
+}
+
+.report-accordion__title {
+  color: inherit;
+}
+
+.report-accordion__arrow {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  transition: transform var(--motion-base-out);
+}
+
+.report-accordion__arrow--open {
+  transform: rotate(180deg);
+}
+
+.report-accordion__summary {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-normal);
+}
+
+.report-accordion__body {
+  margin-top: var(--space-md);
+}
+
+.report-accordion__desc {
+  margin: 0 0 var(--space-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+  max-width: 80ch;
+}
+
+.report-accordion__skeleton {
+  padding: var(--space-sm) 0;
+}
+
+/* ── Generic bar list (used by several reports) ────────────────── */
+.report-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.report-bar {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 3fr auto;
+  gap: var(--space-sm);
+  align-items: center;
+  font-size: var(--font-size-sm);
+}
+
+.report-bar__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-width: 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.report-bar__label-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.report-bar__label-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.report-bar__track {
+  position: relative;
+  height: 18px;
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.report-bar__fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width var(--motion-base);
+  min-width: 2px;
+}
+
+.report-bar__value {
+  min-width: 60px;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 640px) {
+  .report-bar {
+    grid-template-columns: 1fr auto;
+    row-gap: 2px;
+  }
+  .report-bar__track {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── Generic report table ──────────────────────────────────────── */
+.report-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.report-table thead th {
+  background: var(--color-bg-alt);
+  padding: var(--space-sm) var(--space-md);
+  text-align: start;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.report-table tbody tr {
+  border-top: 1px solid var(--color-border);
+}
+
+.report-table tbody tr:hover {
+  background: color-mix(in srgb, var(--color-primary) 4%, transparent);
+}
+
+.report-table td {
+  padding: var(--space-sm) var(--space-md);
+  white-space: nowrap;
+}
+
+.report-table td.numeric {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.report-table td.text-wrap {
+  white-space: normal;
+  max-width: 320px;
+}
+
+/* ── Stat strip (used at the top of several reports) ──────────── */
+.report-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-md);
+}
+
+.report-stat {
+  text-align: center;
+}
+
+.report-stat__value {
+  display: block;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-primary);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.report-stat__label {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Streak history mini-chart ────────────────────────────────── */
+.streak-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 120px;
+  padding: var(--space-xs) 0;
+  margin-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.streak-chart__day {
+  flex: 1;
+  min-height: 2px;
+  background: color-mix(in srgb, var(--color-success) 60%, transparent);
+  border-radius: 2px 2px 0 0;
+  transition: background var(--motion-fast);
+  cursor: help;
+}
+
+.streak-chart__day--empty {
+  background: var(--color-bg-alt);
+}
+
+.streak-chart__day:hover {
+  background: var(--color-success);
+}
+
+.streak-chart__baseline {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Two-column layout inside a card (used by member advanced) ─ */
+.analytics-member-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+@media (max-width: 900px) {
+  .analytics-member-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Empty state inside a report card ─────────────────────────── */
+.report-empty {
+  padding: var(--space-lg) var(--space-md);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.report-empty i {
+  display: block;
+  font-size: var(--icon-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+/* ── Accuracy chip (color coding reused across several reports) ─ */
+.accuracy-chip {
+  display: inline-block;
+  padding: 1px var(--space-xs);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.accuracy-chip--great {
+  background: color-mix(in srgb, var(--color-success) 15%, transparent);
+  color: var(--color-success-dark);
+}
+
+.accuracy-chip--ok {
+  background: color-mix(in srgb, var(--color-warning) 15%, transparent);
+  color: var(--color-warning-dark);
+}
+
+.accuracy-chip--low {
+  background: color-mix(in srgb, var(--color-danger) 15%, transparent);
+  color: var(--color-danger-dark);
+}
+
+.difficulty-calibration__table { margin-top: var(--space-md); }

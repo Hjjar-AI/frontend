@@ -1,0 +1,165 @@
+/* frontend/src/assets/notebook.css */
+/* FEATURE #1 / #2 / #5 — wrong-answer notebook, fragile list,
+   SRS review start card, and the attempt-summary tile grid. */
+
+.notebook-page {
+  padding: var(--space-lg) 0;
+}
+
+.notebook-page__header-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.notebook-empty {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  background: color-mix(in srgb, var(--color-success) 5%, var(--color-bg-card));
+  border-radius: var(--radius-lg);
+  border-inline-start: 4px solid var(--color-success);
+}
+.notebook-empty > i {
+  font-size: var(--icon-2xl);
+  color: var(--color-success);
+  margin-bottom: var(--space-md);
+  display: block;
+}
+.notebook-empty h4 {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--font-size-xl);
+}
+.notebook-empty p {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  max-width: 45ch;
+  margin-inline: auto;
+}
+
+/* Attempt summary grid — used on Dashboard. Four small tiles that
+   describe the user's personal memory state. */
+.attempt-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.attempt-tile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  border-inline-start: 4px solid var(--tile-accent, var(--color-primary));
+  transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.attempt-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.attempt-tile__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--tile-accent, var(--color-primary)) 15%, transparent);
+  color: var(--tile-accent, var(--color-primary));
+  font-size: var(--icon-md);
+  flex-shrink: 0;
+}
+.attempt-tile__body {
+  flex: 1;
+  min-width: 0;
+}
+.attempt-tile__value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  line-height: var(--line-height-numeral);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.attempt-tile__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* SRS review card — Dashboard call-to-action. */
+.srs-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-card)),
+    var(--color-bg-card)
+  );
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  border-inline-start: 4px solid var(--color-primary);
+  margin-bottom: var(--space-lg);
+}
+.srs-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-circle);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--icon-xl);
+  flex-shrink: 0;
+  animation: srs-pulse 2.5s ease-in-out infinite;
+}
+@keyframes srs-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 var(--color-primary-glow); }
+  50% { transform: scale(1.04); box-shadow: 0 0 0 12px transparent; }
+}
+.srs-card__body {
+  flex: 1;
+  min-width: 0;
+}
+.srs-card__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--space-xs);
+}
+.srs-card__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+.srs-card__count {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-primary);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  margin-inline-end: var(--space-xs);
+}
+
+@media (max-width: 768px) {
+  .srs-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .srs-card__icon {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .srs-card__icon { animation: none; }
+  .attempt-tile:hover { transform: none; }
+}

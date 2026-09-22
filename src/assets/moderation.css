@@ -1,0 +1,23 @@
+.moderation-card__header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-sm); }
+.moderation-card__title { display: flex; align-items: center; gap: var(--space-sm); }
+.moderation-card__label { font-weight: var(--font-weight-semibold); display: block; }
+.moderation-card__subtitle { font-size: var(--font-size-sm); color: var(--color-text-muted); }
+.moderation-card__actions { display: flex; gap: var(--space-xs); align-items: center; }
+.moderation-card__meta { display: flex; flex-wrap: wrap; gap: var(--space-md); font-size: var(--font-size-sm); color: var(--color-text-muted); }
+.moderation-card__body { margin-top: var(--space-sm); }
+.btn-icon--active { background: var(--color-primary-light); border-color: var(--color-primary); color: var(--color-primary-dark); }
+
+.review-item { margin-bottom: var(--space-md); }
+.review-item__header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-sm); }
+.review-item__question { margin: 0; flex: 1 1 auto; max-width: 65ch; }
+.review-item__index { font-weight: var(--font-weight-bold); margin-inline-end: var(--space-xs); }
+.review-choice { padding: 0.2rem 0.5rem; border-radius: var(--radius-sm); margin-bottom: var(--space-xs); display: flex; align-items: center; gap: var(--space-xs); }
+.review-choice--correct { background: color-mix(in srgb, var(--color-success) 15%, transparent); }
+.review-choice--wrong { background: color-mix(in srgb, var(--color-danger) 15%, transparent); }
+.review-choice--user { font-weight: var(--font-weight-bold); }
+.review-choice__check { color: var(--color-success); }
+.review-choice__cross { color: var(--color-danger); }
+.review-item__explanation { margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: var(--color-bg-alt); border-radius: var(--radius-md); }
+
+.review-queue { padding: var(--space-lg) 0; }
+.review-queue__bulk { display: flex; gap: var(--space-sm); margin-bottom: var(--space-md); }

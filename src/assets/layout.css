@@ -1,0 +1,8 @@
+/* Page width utilities and grids */
+.page--narrow { max-width: var(--content-narrow); margin-inline: auto; }
+.page--base { max-width: var(--content-base); margin-inline: auto; }
+.page--wide { max-width: var(--content-wide); margin-inline: auto; }
+.page--form { max-width: var(--content-form); margin-inline: auto; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-md); }
+.stat-grid--wide { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }

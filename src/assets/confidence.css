@@ -1,0 +1,118 @@
+/* frontend/src/assets/confidence.css */
+/* FEATURE #5 — confidence toggle attached to each answer card. */
+
+.confidence-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.confidence-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  user-select: none;
+}
+
+.confidence-toggle input {
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-card);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--motion-fast), background var(--motion-fast);
+  flex-shrink: 0;
+}
+.confidence-toggle input:checked {
+  background: var(--color-success);
+  border-color: var(--color-success);
+}
+.confidence-toggle input:checked::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 10px;
+  border: solid var(--color-on-success);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-top: -2px;
+}
+.confidence-toggle input:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.confidence-toggle__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+.confidence-toggle__label i {
+  color: var(--color-text-muted);
+  font-size: var(--icon-sm);
+}
+.confidence-toggle input:checked ~ .confidence-toggle__label i {
+  color: var(--color-success);
+}
+
+.confidence-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-inline-start: auto;
+}
+
+/* Fragile-knowledge callout on the results page. */
+.fragile-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: color-mix(in srgb, var(--color-warning) 8%, var(--color-bg-card));
+  border: 1px solid color-mix(in srgb, var(--color-warning) 30%, transparent);
+  border-inline-start: 4px solid var(--color-warning);
+  border-radius: var(--radius-md);
+  margin: var(--space-md) 0;
+}
+.fragile-callout > i {
+  font-size: var(--icon-lg);
+  color: var(--color-warning);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.fragile-callout__body {
+  flex: 1;
+}
+.fragile-callout__title {
+  display: block;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-xs);
+}
+.fragile-callout__text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .confidence-row {
+    flex-wrap: wrap;
+  }
+  .confidence-hint {
+    width: 100%;
+    margin-inline-start: 0;
+  }
+}

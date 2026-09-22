@@ -1,0 +1,113 @@
+/* frontend/src/assets/auth.css
+   Login and change-password page layouts.
+
+   These rules previously lived at the top of analytics.css — they
+   were written when the auth views were first added and never moved
+   out. All declarations are byte-identical to the originals; only
+   the file location changed. */
+
+/* ── Change password ───────────────────────────────────────────── */
+.change-password-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-body);
+  padding: var(--space-md);
+}
+.change-password-card {
+  max-width: 480px;
+  width: 100%;
+  padding: var(--space-2xl) var(--space-xl);
+}
+.change-password-card__header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+.change-password-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.change-password-form__actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.change-password-form__actions .base-button { flex: 1; }
+@media (max-width: 480px) {
+  .change-password-card { padding: var(--space-lg) var(--space-md); }
+}
+
+/* ── Login ─────────────────────────────────────────────────────── */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-body);
+  padding: var(--space-md);
+}
+.login-card {
+  max-width: 480px;
+  width: 100%;
+  padding: var(--space-2xl) var(--space-xl);
+}
+.login-card__header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+.login-card__title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
+  margin-bottom: var(--space-xs);
+}
+.login-card__subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+.login-success {
+  text-align: center;
+  padding: var(--space-xl);
+}
+.success-icon {
+  font-size: var(--icon-2xl);
+  color: var(--color-success);
+  animation: scaleIn 0.4s ease;
+}
+@keyframes scaleIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.success-fade-enter-active { animation: fadeIn 0.3s ease; }
+.success-fade-leave-active { animation: fadeOut 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.login-form__submit {
+  width: 100%;
+  margin-top: var(--space-sm);
+}
+.login-disclaimer {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: color-mix(in srgb, var(--color-primary) 4%, var(--color-bg-card));
+  border-inline-start: 3px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+.login-disclaimer p { margin-bottom: var(--space-xs); }
+.login-disclaimer p:last-child { margin-bottom: 0; }
+.login-disclaimer a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.login-disclaimer a:hover { text-decoration: underline; }
+@media (max-width: 480px) {
+  .login-card { padding: var(--space-lg) var(--space-md); }
+}

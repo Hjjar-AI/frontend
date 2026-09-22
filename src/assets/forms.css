@@ -1,0 +1,717 @@
+/* frontend/src/assets/forms.css */
+/* Form controls, selects, checkboxes, radios, form groups */
+.form-control {
+  width: 100%; padding: 0.5rem 0.75rem; border: var(--border-width) solid var(--color-border);
+  border-radius: var(--control-radius); background: var(--color-bg-card); color: var(--color-text-primary);
+  font-family: var(--font-family-base); font-size: var(--font-size-sm); min-height: var(--control-height);
+  transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
+}
+.form-control:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 var(--focus-ring-width) var(--color-primary-glow); }
+.form-control:disabled { opacity: var(--opacity-disabled); cursor: not-allowed; background: var(--color-bg-alt); }
+.form-control::placeholder { color: var(--color-text-placeholder); opacity: 1; }
+.textarea.form-control, textarea.form-control { resize: vertical; line-height: var(--line-height-body); }
+
+.select.form-control, select.form-control {
+  appearance: none;
+  padding-inline-end: 2rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L0 2h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 0.75rem center;
+  cursor: pointer;
+}
+[dir="rtl"] .select.form-control,
+[dir="rtl"] select.form-control {
+  background-position: right 0.75rem center;
+}
+.form-control--compact { min-height: var(--control-height-compact); padding: 0.3rem 0.6rem; font-size: var(--font-size-xs); }
+
+/* Autofill fix */
+.form-control:-webkit-autofill, input:-webkit-autofill, select:-webkit-autofill, textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-bg-card) inset;
+  -webkit-text-fill-color: var(--color-text-primary);
+  caret-color: var(--color-text-primary);
+}
+
+::selection { background: var(--color-primary); color: var(--color-on-primary); }
+
+.form-group { margin-bottom: var(--space-md); }
+.form-group label { display: block; font-weight: var(--font-weight-semibold); margin-bottom: var(--space-xs); font-size: var(--font-size-sm); }
+.form-group small { display: block; color: var(--color-text-muted); font-size: var(--font-size-xs); margin-top: var(--space-xs); }
+
+.form-group.checkbox label { display: flex; align-items: center; gap: var(--space-sm); font-weight: normal; cursor: pointer; }
+.form-group.checkbox input[type="checkbox"] {
+  appearance: none; width: 22px; height: 22px; border: var(--border-width-strong) solid var(--color-border); border-radius: var(--radius-sm);
+  background: var(--color-bg-card); cursor: pointer; transition: border var(--motion-fast), background var(--motion-fast);
+  display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; margin: 0; flex-shrink: 0;
+}
+.form-group.checkbox input[type="checkbox"]:checked { background: var(--color-primary); border-color: var(--color-primary); }
+.form-group.checkbox input[type="checkbox"]:checked::after { content: ''; display: block; width: 6px; height: 10px; border: solid var(--color-on-primary); border-width: 0 2px 2px 0; transform: rotate(45deg); margin-top: -2px; }
+.form-group.checkbox input[type="checkbox"]:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+
+input[type="radio"].custom-radio { appearance: none; width: 22px; height: 22px; border: var(--border-width-strong) solid var(--color-border); border-radius: var(--radius-circle); background: var(--color-bg-card); cursor: pointer; transition: border var(--motion-fast), background var(--motion-fast); display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; margin: 0; flex-shrink: 0; }
+input[type="radio"].custom-radio:checked { background: var(--color-primary); border-color: var(--color-primary); }
+input[type="radio"].custom-radio:checked::after { content: ''; width: 10px; height: 10px; background: var(--color-on-primary); border-radius: var(--radius-circle); }
+input[type="radio"].custom-radio:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+
+/* Date input theming */
+input[type="date"] {
+  color-scheme: light; appearance: none; background: var(--color-bg-card); border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md); padding: 0.6rem 0.8rem; font-family: var(--font-family-base); font-size: var(--font-size-base); color: var(--color-text-primary);
+}
+input[type="date"]:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 var(--focus-ring-width) var(--color-primary-glow); }
+[data-theme="dark"] input[type="date"] { color-scheme: dark; }
+[data-theme="blossom"] input[type="date"] { color-scheme: light; }
+[data-theme="fresh"] input[type="date"] { color-scheme: light; }
+
+/* ── Base input — text / password / email / search ──────────────── */
+.base-input { display: flex; flex-direction: column; gap: 0; width: 100%; }
+.base-input__label { font-weight: var(--font-weight-semibold); color: var(--color-text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-xs); }
+.base-input__required { color: var(--color-danger); margin-inline-start: var(--space-xs); }
+.base-input__wrapper { position: relative; display: flex; align-items: center; }
+.base-input__field { min-height: var(--control-height); }
+.base-input--error .base-input__field { border-color: var(--color-danger); }
+.base-input--error .base-input__field:focus { box-shadow: 0 0 0 var(--focus-ring-width) color-mix(in srgb, var(--color-danger) 20%, transparent); }
+.base-input__clear { position: absolute; inset-inline-end: 12px; background: none; border: none; cursor: pointer; color: var(--color-text-muted); font-size: var(--icon-md); padding: 0.5rem; border-radius: var(--radius-circle); display: flex; align-items: center; justify-content: center; transition: color var(--motion-fast); min-height: 44px; min-width: 44px; }
+.base-input__clear:hover { color: var(--color-danger); background: var(--color-bg-alt); }
+.base-input__clear--offset { inset-inline-end: 48px; }
+.base-input__toggle { position: absolute; inset-inline-end: 12px; background: none; border: none; cursor: pointer; font-size: var(--icon-md); padding: 0.5rem; color: var(--color-text-muted); border-radius: var(--radius-circle); display: flex; align-items: center; justify-content: center; transition: transform var(--motion-fast), color var(--motion-fast); min-height: 44px; min-width: 44px; }
+.base-input__toggle:hover { color: var(--color-primary); transform: scale(1.1); }
+.base-input__feedback { min-height: 1.4em; }
+.base-input__error { color: var(--color-danger); font-size: var(--font-size-sm); }
+.base-input__hint { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+
+/** ═══════════════════════════════════════════════════════════════════
+   Base input — number variant.
+
+   The wrapper behaves like a single form control: it owns the border,
+   background, and focus ring. Inside, a "value group" holds the
+   chevron spinner and the bare number field and hugs the start of the
+   control; the clear button (when shown) is pushed to the far end
+   with `margin-inline-start: auto`.
+
+   Layout in both directions:
+
+       LTR:  [ ▲▼ 10 ................ × ]
+       RTL:  [ × ................ 10 ▲▼ ]
+
+   The DOM order inside `.base-input__number-group` is:
+       spinner, then input
+   Flex `row` mirrors the group automatically for RTL, so no
+   `[dir="rtl"]` override is required on the group itself. The auto
+   margin on the clear button absorbs the free space on the correct
+   side in both directions.
+
+   Native spinner suppression
+   --------------------------
+   The browser's built-in spinner is pinned to the inline-end edge of
+   an <input type="number"> and cannot be repositioned with CSS. To
+   move the spinner to the inline-start edge, we hide the native one.
+   Cross-browser hiding:
+
+       appearance: textfield;          /* Firefox                      
+       ::-webkit-inner-spin-button,
+       ::-webkit-outer-spin-button {
+         -webkit-appearance: none;
+         margin: 0; Chrome, Edge, Safari          
+
+   Both rulesets are required — a browser ignores the selector whose
+   vendor prefix it does not recognise.
+
+   Field width
+   -----------
+   The number field uses a fixed `4ch` width and centers its content.
+   4ch fits four digits comfortably; the field this variant is used
+   for (question count, expiry days, exam duration) tops out at three
+   or four digits, so a wider field would only add dead space between
+   the number and the spinner. A narrower field would clip three-digit
+   values. If a future caller needs a wider number (billions, etc.),
+   add a width prop rather than loosening the rule globally.
+
+   Disabled state
+   --------------
+   Two layers: the wrapper gets an `--disabled` class (which dims the
+   border and the spinner), and each interactive child is marked
+   `:disabled` so the browser suppresses their own hover/focus states.
+   We do not use `pointer-events: none` on the wrapper because that
+   would also swallow the tooltip on a disabled control.
+
+   RTL notes
+   ---------
+   Every horizontal edge in this block is expressed with a logical
+   property (`margin-inline-start`, `padding-inline`, `flex` layout).
+   No `[dir="rtl"]` override is required — the flex row reverses on
+   its own and the auto margin absorbs free space on the correct side.
+   ═══════════════════════════════════════════════════════════════════ */
+.base-input__number {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 0 var(--space-sm);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--control-radius);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
+}
+
+.base-input__number:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--color-primary-glow);
+}
+
+.base-input--error .base-input__number {
+  border-color: var(--color-danger);
+}
+
+.base-input--error .base-input__number:focus-within {
+  box-shadow: 0 0 0 var(--focus-ring-width) color-mix(in srgb, var(--color-danger) 20%, transparent);
+}
+
+.base-input__number--disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  background: var(--color-bg-alt);
+}
+
+/* The "value group" holds the spinner and the field and is sized to
+   its content, so the pair hugs the start of the control. Without
+   `flex: 0 0 auto` on this element, a flex-grow would be inherited
+   from the parent and the group would stretch, pushing the spinner
+   away from the number — exactly the visual we are removing. */
+.base-input__number-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.base-input__number-field {
+
+  width: 4ch;
+  min-width: 4ch;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  color: inherit;
+  text-align: center;
+  /* Hide the native spinner. Both prefixes are required. */
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.base-input__number-field::-webkit-outer-spin-button,
+.base-input__number-field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.base-input__number-field:focus {
+  outline: none;
+}
+
+.base-input__number-field:disabled {
+  cursor: not-allowed;
+}
+
+.base-input__number-field::placeholder {
+  color: var(--color-text-placeholder);
+  opacity: 1;
+}
+
+/* Two chevrons stacked vertically. Each is a real <button> so the
+   component works with a screen reader and a keyboard, but they are
+   `tabindex="-1"` in the template so Tab lands on the input — the
+   spinner is a convenience, not a required step in the form flow. */
+.base-input__number-spinner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  /* Nudge the spinner down by one pixel so the visual midpoint of the
+     pair lines up with the visual midpoint of the number text. The
+     number renders at line-height ~1.4 within an ~18 px box; the two
+     stacked 10 px buttons have their own natural center. Without this
+     nudge the spinner reads about 1 px high. */
+  margin-top: 1px;
+}
+
+.base-input__number-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 0.55rem;
+  line-height: 1;
+  transition: color var(--motion-fast);
+}
+
+.base-input__number-btn:hover:not(:disabled) {
+  color: var(--color-primary);
+}
+
+.base-input__number-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.base-input__number-btn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: 1px;
+  border-radius: var(--radius-sm);
+}
+
+/* The clear button. `margin-inline-start: auto` absorbs all remaining
+   free space in the flex row and pushes the button to the inline-end
+   edge of the control. When the button is absent (empty value), the
+   auto margin goes with it and the number + spinner remain at the
+   start with no visual shift. */
+.base-input__number-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: auto;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-circle);
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: var(--icon-sm);
+  transition: color var(--motion-fast), background var(--motion-fast);
+  flex-shrink: 0;
+}
+
+.base-input__number-clear:hover:not(:disabled) {
+  color: var(--color-danger);
+  background: var(--color-bg-alt);
+}
+
+.base-input__number-clear:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.base-input__number-clear:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Base checkbox component (migrated from BaseCheckbox.vue) */
+.base-checkbox { display: inline-flex; align-items: center; gap: var(--space-sm); cursor: pointer; font-size: var(--font-size-sm); padding: 0.2rem 0.4rem; border-radius: var(--radius-sm); transition: background var(--motion-fast); }
+.base-checkbox:hover:not(.base-checkbox--disabled) { background: var(--color-bg-alt); }
+.base-checkbox:focus-within { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+.base-checkbox--disabled { opacity: var(--opacity-disabled); cursor: not-allowed; }
+.base-checkbox__input { position: absolute; opacity: 0; width: 0; height: 0; }
+.base-checkbox__checkmark { width: 22px; height: 22px; border: 2px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg-card); display: flex; align-items: center; justify-content: center; transition: border var(--motion-fast), background var(--motion-fast); flex-shrink: 0; }
+.base-checkbox__input:checked + .base-checkbox__checkmark { background: var(--color-primary); border-color: var(--color-primary); }
+.base-checkbox__input:checked + .base-checkbox__checkmark::after { content: ''; display: block; width: 6px; height: 10px; border: solid var(--color-on-primary); border-width: 0 2px 2px 0; transform: rotate(45deg); margin-top: -2px; }
+.base-checkbox__input:indeterminate + .base-checkbox__checkmark { background: var(--color-primary); border-color: var(--color-primary); }
+.base-checkbox__input:indeterminate + .base-checkbox__checkmark::after { content: ''; display: block; width: 10px; height: 2px; background: var(--color-on-primary); }
+.base-checkbox__input:focus-visible + .base-checkbox__checkmark { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+.base-checkbox__label { color: var(--color-text-primary); }
+
+/* Base radio component (migrated from BaseRadio.vue) */
+.base-radio { display: inline-flex; align-items: center; gap: var(--space-sm); cursor: pointer; font-size: var(--font-size-sm); padding: 0.2rem 0.4rem; border-radius: var(--radius-sm); transition: background var(--motion-fast); }
+.base-radio:hover:not(.base-radio--disabled) { background: var(--color-bg-alt); }
+.base-radio:focus-within { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+.base-radio--disabled { opacity: var(--opacity-disabled); cursor: not-allowed; }
+.base-radio__input { position: absolute; opacity: 0; width: 0; height: 0; }
+.base-radio__circle { width: 22px; height: 22px; border: 2px solid var(--color-border); border-radius: var(--radius-circle); background: var(--color-bg-card); display: flex; align-items: center; justify-content: center; transition: border var(--motion-fast), background var(--motion-fast); flex-shrink: 0; }
+.base-radio__input:checked + .base-radio__circle { background: var(--color-primary); border-color: var(--color-primary); }
+.base-radio__input:checked + .base-radio__circle::after { content: ''; width: 10px; height: 10px; background: var(--color-on-primary); border-radius: var(--radius-circle); }
+.base-radio__input:focus-visible + .base-radio__circle { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+.base-radio__label { color: var(--color-text-primary); }
+
+.base-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.base-select__label {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.base-select__required {
+  color: var(--color-danger);
+  margin-inline-start: var(--space-xs);
+}
+
+.base-select__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.base-select__field {
+  width: 100%;
+  appearance: none;
+  padding: 0.5rem 0.75rem;
+  padding-inline-end: 2.5rem;              /* reserve space for our own arrow */
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-alt);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  min-height: var(--control-height);
+  cursor: pointer;
+  transition: background var(--motion-fast-out),
+              color var(--motion-fast-out),
+              border-color var(--motion-fast-out),
+              box-shadow var(--motion-fast-out);
+}
+
+.base-select__field:hover {
+  background: var(--color-bg-card);
+  border-color: var(--color-primary);
+}
+
+.base-select__field:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--color-primary-glow);
+}
+
+.base-select__field:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  background: var(--color-bg-alt);
+}
+
+.base-select__arrow {
+  position: absolute;
+  inset-inline-end: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  pointer-events: none;
+  transition: transform var(--motion-fast-out);
+}
+
+.base-select__field:focus + .base-select__arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.base-select__error {
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-xs);
+}
+
+.base-select__hint {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-xs);
+}
+
+.base-select--error .base-select__field {
+  border-color: var(--color-danger);
+}
+
+.base-select--error .base-select__field:focus {
+  box-shadow: 0 0 0 var(--focus-ring-width) color-mix(in srgb, var(--color-danger) 20%, transparent);
+}
+
+.base-select__field[multiple] {
+  padding-inline-end: 0.75rem;
+  border-radius: var(--radius-md);
+  min-height: auto;
+}
+
+.base-select__field.form-control--compact {
+  min-height: var(--control-height-compact);
+  padding: 0.3rem 0.6rem;
+  padding-inline-end: 2rem;
+  font-size: var(--font-size-xs);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Base dropdown component (BaseDropdown.vue).
+
+   Navbar-style dropdown: <button> toggle + menu-surface popup,
+   visually identical to `.language-dropdown` and `.theme-dropdown` in
+   navigation.css. This is the correct control for anything that
+   should read as chrome (filter chips, sort selectors, view
+   switchers) rather than as a form field.
+
+   Why a separate component rather than extending BaseSelect:
+   BaseSelect renders a native <select>, whose popup is drawn by the
+   OS and cannot be themed. BaseDropdown renders the menu itself, so
+   the open state matches the rest of the app.
+
+   RTL notes:
+     • `inset-inline-end` on the menu anchors its inline-end edge to
+       the toggle's inline-end edge — the menu grows toward the
+       inline-start edge in both directions, so it never leaves the
+       viewport from a right-side action row.
+     • `.base-dropdown__item` uses `text-align: start` so the item
+       label hugs the reading edge.
+     • The chevron is a Bootstrap icon rotated by transform, which is
+       direction-independent (it rotates around the arrow's own
+       centre); no `[dir="rtl"]` override is needed.
+   ═══════════════════════════════════════════════════════════════════ */
+.base-dropdown {
+  position: relative;
+  /* inline-block, not flex, so the wrapper sizes to its content and
+     does not stretch when placed in a flex row (which is exactly the
+     bug the old BaseSelect had: `width: 100%` made it fill the page
+     header's action row). `flex: 0 0 auto` is set explicitly so a
+     parent flex container cannot override the content-based sizing
+     with `flex-grow`. */
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+.base-dropdown__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 0.3rem 0.8rem;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  min-height: var(--control-height-compact);
+  white-space: nowrap;
+  transition: background var(--motion-fast-out),
+              color var(--motion-fast-out),
+              border-color var(--motion-fast-out);
+}
+
+.base-dropdown__toggle:hover:not(:disabled) {
+  background: var(--color-bg-card);
+  border-color: var(--color-primary);
+}
+
+.base-dropdown__toggle:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.base-dropdown__value {
+  white-space: nowrap;
+}
+
+.base-dropdown__arrow {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  margin-inline-start: var(--space-xs);
+  transition: transform var(--motion-base-out);
+}
+
+.base-dropdown__arrow--open {
+  transform: rotate(180deg);
+}
+
+.base-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  inset-inline-end: 0;
+  min-width: 180px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.base-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  text-align: start;
+  transition: background var(--motion-fast-out);
+}
+
+.base-dropdown__item:hover {
+  background: var(--color-bg-alt);
+}
+
+.base-dropdown__item--active {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.base-dropdown__item-label {
+  flex: 1;
+}
+
+.base-dropdown__item-check {
+  color: var(--color-success);
+  font-size: var(--icon-sm);
+}
+
+/* Shared source/category/tag grid picker. */
+.source-grid-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.source-grid-picker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+.source-grid-picker__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+.source-grid-picker__optional {
+  font-weight: normal;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  padding: 1px var(--space-2xs);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+}
+.source-grid-picker__clear {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+  padding: 0;
+}
+.source-grid-picker__clear:hover { text-decoration: underline; }
+.source-grid-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 2px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: var(--space-xs);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.source-grid-picker__grid--single {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  max-height: 180px;
+}
+.source-grid-picker__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  transition: background var(--motion-fast);
+  user-select: none;
+  min-width: 0;
+}
+.source-grid-picker__item:hover { background: var(--color-bg-card); }
+.source-grid-picker__item--selected {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  color: var(--color-primary);
+}
+.source-grid-picker__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.source-grid-picker__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-card);
+  font-size: 0.7rem;
+  color: transparent;
+  flex-shrink: 0;
+  transition: background var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast);
+}
+.source-grid-picker__item--selected .source-grid-picker__check {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.source-grid-picker__input:focus-visible + .source-grid-picker__check {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+.source-grid-picker__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.source-grid-picker__icon {
+  font-size: var(--icon-sm);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+.source-grid-picker__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.source-grid-picker__count {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 0 0.4rem;
+  min-width: 1.6em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.source-grid-picker__empty {
+  padding: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+.source-grid-picker__loading { padding: var(--space-xs); }
+.source-grid-picker__hint {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}

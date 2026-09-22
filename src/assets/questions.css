@@ -1,0 +1,116 @@
+/* `overflow: hidden` was removed from `.question-card` because it
+   clipped two absolutely-positioned children that must be able to
+   extend past the card's bounds:
+
+     • `.question-card-actions__menu` in QuestionCardActions.vue,
+       positioned at `top: calc(100% + 4px)` from the card's own
+       action row. Opening the menu near a card's bottom edge cut
+       it off at the card's border instead of letting it float.
+
+   The verified/unverified overlay (`.question-card__stamp`) is the
+   only child that ever motivated the clip, and it already sets
+   `border-radius: var(--radius-lg)` on itself, so it renders
+   correctly without a clipping parent. The card's 1px border and
+   the stamp's radius are close enough that the ~1px corner
+   over-hang is invisible against the semi-transparent overlay. */
+.question-card { position: relative; }
+.question-card--verified { background: color-mix(in srgb, var(--color-success) 3%, var(--color-bg-card)); }
+.question-card--unverified { background: color-mix(in srgb, var(--color-warning) 3%, var(--color-bg-card)); }
+.question-card--selected { border-color: var(--color-primary); box-shadow: 0 0 0 2px var(--color-primary-glow), var(--shadow-md); }
+.question-card__stamp {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--color-bg-card) 85%, transparent);
+  border-radius: var(--radius-lg); z-index: 10; pointer-events: none;
+}
+.question-card__stamp i {
+  font-size: var(--icon-2xl);
+  color: var(--color-success);
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--color-success) 60%, transparent));
+  animation: stamp-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes stamp-in {
+  0% { transform: scale(3) rotate(-30deg); opacity: 0; }
+  50% { transform: scale(0.9) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.stamp-enter-active { animation: stamp-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.stamp-leave-active { animation: stamp-out 0.3s ease-in forwards; }
+@keyframes stamp-out { to { opacity: 0; transform: scale(1.2); } }
+.question-card__header { display: flex; flex-direction: column; gap: var(--space-sm); }
+.question-card__top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm); }
+.question-card__text { font-weight: var(--font-weight-semibold); font-size: var(--font-size-lg); max-width: 65ch; display: inline-block; }
+.question-card__badges { display: flex; gap: var(--space-xs); flex-wrap: wrap; }
+.question-card__actions { display: flex; gap: var(--space-md); flex-wrap: wrap; margin-top: var(--space-md); }
+.question-card__actions-group { display: flex; gap: var(--space-xs); }
+.question-card__actions-group--middle { margin-inline-start: auto; }
+.question-card__actions-group--end { margin-inline-start: auto; }
+.question-card__choices { margin-top: var(--space-md); }
+.choices-list { list-style: none; padding: 0; margin: var(--space-xs) 0 0 0; }
+.choice-item { padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); margin-bottom: var(--space-xs); border: 1px solid var(--color-border); background: var(--color-bg-card); line-height: 1.6; }
+.choice-item--correct { border-color: var(--color-success); background: color-mix(in srgb, var(--color-success) 10%, transparent); }
+.question-card__explanation { margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--color-bg-alt); border-radius: var(--radius-md); }
+.explanation-toggle {
+  display: flex; justify-content: space-between; align-items: center; width: 100%;
+  background: none; border: none; cursor: pointer; padding: 0; color: var(--color-text-primary);
+  font-family: var(--font-family-base); font-size: var(--font-size-base);
+}
+.toggle-indicator { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--color-primary); font-size: var(--font-size-sm); }
+.explanation-text { max-width: 65ch; line-height: var(--line-height-body); margin-top: var(--space-xs); }
+.explanation-enter-active, .explanation-leave-active { transition: opacity var(--motion-fast), transform var(--motion-fast); }
+.explanation-enter-from, .explanation-leave-to { opacity: 0; transform: translateY(-5px); }
+.question-card__source { margin-top: var(--space-sm); color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.question-card__meta { margin-top: var(--space-sm); display: flex; flex-wrap: wrap; gap: var(--space-md); font-size: var(--font-size-sm); color: var(--color-text-muted); border-top: 1px solid var(--color-border); padding-top: var(--space-sm); }
+
+.question-card__rating { display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-sm); border-top: 1px solid var(--color-border); padding-top: var(--space-sm); }
+.rating-label { font-size: var(--font-size-sm); color: var(--color-text-muted); }
+.star-btn { background: none; border: none; cursor: pointer; color: var(--color-text-muted); font-size: var(--icon-md); transition: color var(--motion-fast), transform var(--motion-fast); padding: 2px; }
+.star-btn.active { color: var(--color-warning); }
+.star-btn:hover { transform: scale(1.2); color: var(--color-warning); }
+.rating-avg { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-inline-start: var(--space-sm); }
+@keyframes heartbeat {
+  0% { transform: scale(1); } 25% { transform: scale(1.3); } 50% { transform: scale(0.95); } 75% { transform: scale(1.15); } 100% { transform: scale(1); }
+}
+
+.question-card-actions__menu-wrap { position: relative; }
+.question-card-actions__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  inset-inline-end: 0;
+  min-width: 180px;
+  padding: var(--space-2xs) 0;
+  z-index: var(--z-dropdown);
+}
+.question-card-actions__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  text-align: start;
+  transition: background var(--motion-fast);
+}
+.question-card-actions__item:hover { background: var(--color-bg-alt); }
+.question-card-actions__item i {
+  color: var(--color-text-muted);
+  font-size: var(--icon-sm);
+  width: 1em;
+  text-align: center;
+}
+.question-card-actions__item:hover i { color: var(--color-primary); }
+.question-card-actions__item--danger,
+.question-card-actions__item--danger i { color: var(--color-danger); }
+.question-card-actions__item--danger:hover {
+  background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+}
+.question-card-actions__divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-2xs) 0;
+}
+.question-card-actions__bookmark--animated { animation: heartbeat 0.4s ease; }

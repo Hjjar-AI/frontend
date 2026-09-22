@@ -1,0 +1,67 @@
+/* frontend/src/assets/progress.css */
+.navbar-progress { position: fixed; top: 0; inset-inline-start: 0; inset-inline-end: 0; height: 3px; z-index: calc(var(--z-nav) + 10); overflow: hidden; opacity: 0; transition: opacity var(--motion-fast-out); }
+.navbar-progress--loading { opacity: 1; }
+.navbar-progress__bar { height: 100%; width: 100%; background: linear-gradient(90deg, var(--color-primary), var(--color-success), var(--color-primary)); background-size: 200% 100%; animation: progressMove 1.5s linear infinite; animation-play-state: paused; }
+.navbar-progress--loading .navbar-progress__bar { animation-play-state: running; }
+@keyframes progressMove { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+.progress-bar { display: flex; align-items: center; gap: var(--space-sm); }
+.progress-bar__track { flex: 1; height: 10px; background: var(--color-border); border-radius: var(--radius-pill); overflow: visible; box-shadow: inset 0 1px 3px color-mix(in srgb, var(--color-text-primary) 10%, transparent); position: relative; }
+.progress-bar__fill { height: 100%; background: linear-gradient(90deg, var(--color-primary), var(--color-success)); border-radius: var(--radius-pill); transition: width var(--motion-base); position: relative; }
+.progress-bar__fill--flash { animation: fill-flash 0.6s ease-out; }
+@keyframes fill-flash { 0% { filter: brightness(1); transform: scaleY(1); } 50% { filter: brightness(1.5); transform: scaleY(1.2); box-shadow: 0 0 12px var(--color-success); } 100% { filter: brightness(1); transform: scaleY(1); } }
+.progress-bar__milestones { position: absolute; inset: 0; pointer-events: none; }
+
+.progress-bar__milestone { position: absolute; top: 50%; width: 4px; height: 14px; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 2px; transform: translate(-50%, -50%); transition: background var(--motion-fast), border-color var(--motion-fast); }
+.progress-bar__milestone--reached { background: var(--color-success); border-color: var(--color-success-dark); }
+.progress-bar__label { font-size: var(--font-size-sm); color: var(--color-text-muted); min-width: 50px; text-align: end; }
+
+.timer {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-numeral);
+  font-variant-numeric: tabular-nums;
+  background: var(--color-bg-alt);
+  padding: 0.2rem 0.8rem;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  transition: background var(--motion-fast), color var(--motion-fast);
+}
+.timer__icon { font-size: var(--icon-md); }
+.timer--warning {
+  background: color-mix(in srgb, var(--color-warning) 15%, transparent);
+  color: var(--color-warning-dark);
+}
+.timer--critical {
+  background: color-mix(in srgb, var(--color-danger) 15%, transparent);
+  color: var(--color-danger-dark);
+  animation: pulse-warning 1s ease-in-out infinite;
+}
+@keyframes pulse-warning { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+@media (max-width: 768px) { .timer { font-size: var(--font-size-2xl); padding: 0.3rem 1rem; } }
+@media (max-width: 360px) { .timer { font-size: var(--font-size-lg); padding: 0.2rem 0.6rem; } }
+
+.progress-circle { position: relative; width: 120px; height: 120px; margin: 0 auto; }
+.progress-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; }
+.week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--space-sm); margin-top: var(--space-md); }
+.day-cell { background: var(--color-bg-alt); border-radius: var(--radius-md); padding: var(--space-sm); text-align: center; transition: background var(--motion-fast); }
+.day-cell--done { background: var(--color-success); color: var(--color-on-success); }
+.day-cell--partial { background: var(--color-warning); color: var(--color-on-warning); }
+.day-label { font-size: var(--font-size-xs); display: block; }
+.day-count { font-weight: bold; font-size: var(--font-size-lg); display: block; }
+
+.continue-card__ring { position: relative; width: 64px; height: 64px; flex-shrink: 0; }
+.progress-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+.progress-ring__bg { fill: none; stroke: var(--color-border); stroke-width: 3; }
+.progress-ring__circle {
+  fill: none; stroke: var(--color-success); stroke-width: 3;
+  stroke-linecap: round; transition: stroke-dasharray var(--motion-base);
+}
+.continue-card__ring-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--color-text-primary);
+}

@@ -1,0 +1,272 @@
+/* frontend/src/assets/print.css */
+/* Print-specific styles for the entire app */
+
+@page {
+  size: auto;
+  margin: 15mm;
+}
+
+/*
+  RTL/LTR note
+  ------------
+  The print stylesheet does not declare `direction` explicitly.
+  Browsers apply the ELEMENT's computed `direction` to the printed
+  layout, which for `<html dir="rtl">` is RTL — correct. The `<html>`
+  attribute is set by `applyLocaleToDOM` (i18n/helpers/direction.js),
+  which runs before first paint, so any print performed from a live
+  session sees the correct direction.
+
+  `direction` is intentionally NOT forced here: a future "print this
+  English summary from an Arabic session" affordance would set
+  `direction: ltr` on its own container without touching this file.
+*/
+@media print {
+  /* ── Theme-token reset ───────────────────────────────────────────
+     Force light-theme values for the print medium.
+
+     WHY THIS IS NEEDED
+     ------------------
+     This stylesheet forces `body { background: white; color: black }`
+     but does NOT reset the `data-theme` attribute, so every
+     `var(--color-*)` in the cascade still resolves against the
+     active on-screen theme. In dark mode that means:
+
+       • `--color-border: rgba(150, 170, 200, 0.3)` — a translucent
+         light-blue tuned to a #1e1e2f background. On white paper it
+         renders as a barely-visible hairline.
+       • `--color-primary: #f0c28a` — a pale peach meant to pop on
+         a dark card. On white paper it washes out against the page.
+
+     Net effect: printed question sheets and result breakdowns from
+     a dark-theme session are effectively unreadable.
+
+     SPECIFICITY
+     -----------
+     `html[data-theme]` has specificity (0, 1, 1) — an element plus an
+     attribute selector — which is strictly greater than the (0, 1, 0)
+     of every theme block in tokens.css (`[data-theme="dark"]`,
+     `[data-theme="blossom"]`, `[data-theme="fresh"]`, and `:root` for
+     the default). The bare `html` selector covers the case where the
+     attribute is missing entirely.
+
+     The values below are the LIGHT theme's values copied from
+     tokens.css. If a future edit changes a light-theme value in
+     tokens.css, mirror it here — this block is deliberately a
+     static snapshot, not a `var()` alias, because a `var()` alias
+     would resolve against whatever tokens.css is currently
+     defining and reintroduce the exact problem this block solves. */
+  html,
+  html[data-theme] {
+    --color-primary: #c47d3a;
+    --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
+    --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
+    --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
+
+    --color-success: #558b6f;
+    --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
+    --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
+
+    --color-danger: #b55a4a;
+    --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
+    --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
+
+    --color-warning: #d49a1f;
+    --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
+    --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
+
+    --color-info: #2e8ac0;
+    --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
+    --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
+
+    --color-bg-body: #ffffff;
+    --color-bg-card: #ffffff;
+    --color-bg-alt: #f5f5f5;
+
+    --color-text-primary: #000000;
+    --color-text-secondary: #333333;
+    --color-text-muted: #666666;
+
+    --color-border: rgba(0, 0, 0, 0.18);
+    --color-overlay: rgba(0, 0, 0, 0.5);
+
+    /* The "on-*" foreground colours are already white in every theme
+       except dark; reasserting them here keeps them correct on white
+       paper where the dark theme's near-black on-colours would show
+       through any remaining accent surface. */
+    --color-on-primary: #ffffff;
+    --color-on-success: #ffffff;
+    --color-on-danger: #ffffff;
+    --color-on-warning: #ffffff;
+    --color-on-info: #ffffff;
+  }
+
+  /* ── Chrome hidden in the printed output ────────────────────── */
+  .navbar,
+  .navbar-progress,
+  .footer,
+  .scroll-to-top,
+  .theme-dropdown,
+  .error-banner,
+  .bulk-actions,
+  .import-preview,
+  .modal,
+  .toast,
+  .toast-container,
+  .base-modal-overlay,
+  .navbar__toggle,
+  .navbar__links,
+  .bottom-nav,
+  .offline-banner,
+  .base-pagination,
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    padding-top: 0 !important;
+    margin: 0 !important;
+    font-size: 12pt;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  a,
+  a:visited {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+
+  a[href^='http://']::after,
+  a[href^='https://']::after,
+  a[href^='mailto:']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    font-weight: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .bi::before {
+    color: currentColor !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .layout__main {
+    padding: 0 !important;
+  }
+
+  .base-card,
+  .question-card,
+  .stat-tile,
+  .review-item {
+    box-shadow: none !important;
+    border: 1px solid var(--color-border) !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .review-item {
+    margin-bottom: 1rem;
+  }
+
+  .test-results {
+    max-width: 100% !important;
+  }
+
+  .test-results__actions,
+  .motivational-quote,
+  .export-section {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    break-inside: avoid;
+  }
+
+  .print-table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-table th,
+  .print-table td {
+    border: 1px solid var(--color-border);
+    padding: 0.5rem;
+    text-align: start;
+  }
+
+  .chart-card,
+  .chart-card__body {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .chart-card__body {
+    height: 240px !important;
+  }
+
+  .chart-card__body canvas {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+  }
+
+  img,
+  svg {
+    max-width: 100% !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  p,
+  li,
+  blockquote {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .table-shared {
+    width: 100%;
+    border-collapse: collapse;
+    break-inside: avoid;
+  }
+
+  .table-shared th,
+  .table-shared td {
+    border: 1px solid var(--color-border);
+    padding: 0.4rem;
+    text-align: start;
+  }
+
+  .table-shared tbody tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+@media screen {
+  .print-only {
+    display: none;
+  }
+}

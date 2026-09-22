@@ -1,0 +1,96 @@
+/* frontend/src/assets/cases.css
+   FEATURE (case-based question chains) — shared clinical vignette
+   styles used across QuestionCard, QuestionForm, and QuestionDisplay.
+   Grouped here because they all belong to the same feature. */
+
+/* ── QuestionDisplay.vue — case stem panel ──────────────────────── */
+.case-stem-panel {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-inline-start: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.case-stem-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  margin-bottom: var(--space-sm);
+}
+.case-stem-panel__body {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+}
+
+/* ── QuestionCard.vue — collapsible case stem ───────────────────── */
+.question-card__case {
+  margin-bottom: var(--space-md);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-inline-start: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+}
+.question-card__case-summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  list-style: none;
+}
+.question-card__case-summary::-webkit-details-marker { display: none; }
+.question-card__case-group {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-weight: normal;
+}
+.question-card__case-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-weight: normal;
+}
+.question-card__case-body {
+  margin-top: var(--space-sm);
+  line-height: var(--line-height-body);
+}
+
+/* Author-rank badge that sits next to the question-card author. */
+.author-rank-badge {
+  margin-inline-start: var(--space-xs);
+  font-size: var(--font-size-xs);
+}
+
+/* ── QuestionForm.vue — case fields section ────────────────────── */
+.question-form__case-section {
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.question-form__case-summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: var(--font-weight-bold);
+  list-style: none;
+}
+.question-form__case-summary::-webkit-details-marker { display: none; }
+.question-form__case-badge {
+  margin-inline-start: auto;
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-weight: normal;
+}

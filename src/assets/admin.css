@@ -1,0 +1,125 @@
+/* Admin */
+.tag-node { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-xs) 0; }
+.tag-toggle { cursor: pointer; min-width: 24px; }
+.tag-actions { display: flex; gap: var(--space-xs); }
+.tag-children { list-style: none; padding-inline-start: var(--space-lg); margin: 0; }
+
+/* ── Tag tree horizontal-scroll wrapper ─────────────────────────
+   The recursive tag tree adds `padding-inline-start: var(--space-lg)`
+   of indentation per nesting level (~27px at this app's 18px root
+   font size), and each node's label renders through
+   `BaseCheckbox`'s inline-flex row whose label has no `min-width: 0`
+   escape. A deeply nested tree, or one carrying an unbreakable tag
+   token, can therefore push a row wider than its card. This wrapper
+   is the same overflow strategy used by `.heatmap-scroll`
+   (heatmap.css) and the master-exam result tables (master.css): the
+   tree scrolls horizontally instead of forcing its parent wider.
+   `overflow-y: hidden` — not the auto-computed default — prevents a
+   spurious vertical scrollbar; the container's own height is auto,
+   so nothing is actually clipped. */
+.tags-tree-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  min-width: 0;
+  padding-bottom: 2px;
+}
+
+.user-form { display: flex; flex-direction: column; gap: var(--space-md); }
+.active-users { padding: var(--space-lg) 0; }
+.users-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-md); }
+.user-time { cursor: help; }
+.database-info { padding: var(--space-lg) 0; }
+.backup-list { margin-top: var(--space-md); }
+.backup-item { display: flex; justify-content: space-between; align-items: center; padding: var(--space-xs) 0; border-bottom: 1px solid var(--color-border); font-size: var(--font-size-sm); flex-wrap: wrap; gap: var(--space-xs); }
+.danger-description { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: var(--space-md); }
+.admin-flags { padding: var(--space-lg) 0; }
+.admin-settings { padding: var(--space-lg) 0; max-width: var(--content-narrow); margin: 0 auto; }
+.settings-form { display: flex; flex-direction: column; gap: var(--space-md); }
+.settings-section { border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg); }
+.settings-section legend { font-weight: var(--font-weight-bold); font-size: var(--font-size-lg); padding: 0 var(--space-sm); color: var(--color-primary); }
+.admin-tags { padding: var(--space-lg) 0; }
+.tag-tree-root { list-style: none; padding: 0; margin: 0; }
+.admin-history { padding: var(--space-lg) 0; }
+.admin-users { padding: var(--space-lg) 0; }
+.verification-stats { padding: var(--space-lg) 0; }
+.verifier-item { display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: 1px solid var(--color-border); }
+.rank { font-weight: var(--font-weight-bold); width: 30px; }
+.name { flex: 1; margin-inline-start: var(--space-sm); }
+.count { color: var(--color-text-muted); }
+
+/* ── Category verification progress bars ─────────────────────────
+   Used by VerificationStats.vue's "التدقيق حسب التصنيف" card and
+   breakdown table. These classes were previously referenced in the
+   template but never defined, so the bars rendered with zero height.
+
+   RTL note: the `width` on `.progress-fill` is applied from the
+   element's inline-start edge, which is the right edge in RTL. The
+   bar therefore fills from the correct side in both directions
+   without any direction-specific rules. The gradient direction is
+   decorative and intentionally not flipped — a horizontal gradient
+   on a thin fill strip reads the same in either direction. */
+.category-progress { margin-bottom: var(--space-md); }
+.category-progress__label { display: flex; justify-content: space-between; font-size: var(--font-size-sm); }
+.progress-track {
+  height: 10px;
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-success));
+  border-radius: var(--radius-pill);
+  transition: width var(--motion-base);
+}
+
+.category-breakdown { overflow-x: auto; }
+.text-success { color: var(--color-success); font-weight: var(--font-weight-bold); }
+.text-warning { color: var(--color-warning); font-weight: var(--font-weight-bold); }
+.text-danger { color: var(--color-danger); font-weight: var(--font-weight-bold); }
+.export-section { margin-top: var(--space-xl); }
+
+/* ── Admin maintenance operations (Settings.vue) ──────────────── */
+.settings-ops__intro {
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-md);
+}
+.settings-ops {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.settings-op {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.settings-op__info {
+  flex: 1;
+  min-width: 0;
+}
+.settings-op__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-base);
+}
+.settings-op__desc {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: var(--space-xs) 0 0;
+  line-height: var(--line-height-body);
+}
+.settings-op__result {
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-success);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}

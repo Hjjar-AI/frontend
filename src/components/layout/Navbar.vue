@@ -1,0 +1,214 @@
+<!-- frontend/src/components/layout/Navbar.vue -->
+<template>
+  <nav class="navbar no-print">
+    <div class="navbar__shell">
+      <router-link to="/" class="navbar__brand">
+        <span class="navbar__brand-icon"><i class="bi bi-journal-medical"></i></span>
+        <span class="navbar__brand-text">{{ t('app.name') }}</span>
+      </router-link>
+
+      <button
+        class="navbar__toggle"
+        @click="menuOpen = !menuOpen"
+        :aria-label="menuOpen ? t('nav.closeMenu') : t('nav.openMenu')"
+        :aria-expanded="menuOpen"
+      >
+        <i :class="menuOpen ? 'bi bi-x-lg' : 'bi bi-list'"></i>
+      </button>
+
+      <div class="navbar__links" :class="{ 'navbar__links--open': menuOpen }">
+        <NavbarDropdown
+          :label="t('nav.content')"
+          icon="bi bi-collection"
+          :is-active="isContentActive"
+        >
+          <router-link to="/questions" class="nav-link">
+            <i class="bi bi-question-circle"></i> {{ t('nav.questions') }}
+          </router-link>
+          <router-link
+            v-if="authStore.can('questions.create')"
+            to="/questions/add"
+            class="nav-link"
+          >
+            <i class="bi bi-plus-circle"></i> {{ t('nav.addQuestion') }}
+          </router-link>
+          <router-link to="/questions/review" class="nav-link">
+            <i class="bi bi-check2-all"></i> {{ t('nav.review') }}
+          </router-link>
+          <router-link to="/questions/mistakes" class="nav-link">
+            <i class="bi bi-journal-x"></i> {{ t('nav.mistakes') }}
+            <span
+              v-if="wrongAnswerStore.summary && wrongAnswerStore.summary.wrong_open > 0"
+              class="badge badge-danger badge--small navbar__badge"
+            >{{ wrongAnswerStore.summary.wrong_open }}</span>
+          </router-link>
+          <router-link to="/questions/fragile" class="nav-link">
+            <i class="bi bi-shield-slash"></i> {{ t('nav.fragile') }}
+          </router-link>
+          <router-link to="/categories" class="nav-link">
+            <i class="bi bi-folder2"></i> {{ t('nav.categories') }}
+          </router-link>
+          <router-link to="/bookmarks" class="nav-link">
+            <i class="bi bi-bookmark-heart"></i> {{ t('nav.bookmarks') }}
+          </router-link>
+        </NavbarDropdown>
+
+        <NavbarDropdown
+          :label="t('nav.tests')"
+          icon="bi bi-pencil-square"
+          :is-active="isTestsActive"
+        >
+          <router-link to="/study" class="nav-link">
+            <i class="bi bi-journal-check"></i> {{ t('nav.studyMode') }}
+          </router-link>
+          <router-link to="/master-exams" class="nav-link">
+            <i class="bi bi-mortarboard"></i> {{ t('nav.masterExams') }}
+            <span
+              v-if="masterExamStore.needsAckCount > 0"
+              class="badge badge-danger badge--small navbar__badge"
+            >{{ masterExamStore.needsAckCount }}</span>
+          </router-link>
+        </NavbarDropdown>
+
+        <router-link to="/manual" class="nav-link" active-class="nav-link--active">
+          <i class="bi bi-book"></i> {{ t('nav.manual') }}
+        </router-link>
+
+        <!--
+          Analytics is a top-level nav destination, not an admin-only
+          entry. The page has a member-facing section (category
+          mastery, streak history) that every authenticated user can
+          read; the admin-only accordion reports on the same page
+          remain hidden by the in-view `canViewAll` check.
+
+          This link is rendered for every authenticated user. The
+          matching `/analytics` entry in `ADMIN_LINKS` (see
+          constants/adminLinks.js) has been removed so admins do not
+          see the same destination twice — once here and once in the
+          admin dropdown.
+        -->
+        <router-link to="/analytics" class="nav-link" active-class="nav-link--active">
+          <i class="bi bi-graph-up"></i> {{ t('nav.analytics') }}
+        </router-link>
+
+        <template v-if="canSeeAdminMenu">
+          <span class="navbar__sep"></span>
+          <NavbarDropdown
+            :label="t('nav.admin')"
+            icon="bi bi-gear"
+            :is-active="isAdminActive"
+          >
+            <router-link
+              v-for="link in visibleAdminLinks"
+              :key="link.to"
+              :to="link.to"
+              class="nav-link"
+            >
+              <i :class="link.icon"></i> {{ t(link.labelKey) }}
+            </router-link>
+          </NavbarDropdown>
+        </template>
+      </div>
+
+      <div class="navbar__actions">
+        <span
+          v-if="showAdminBadge"
+          class="navbar__admin-badge"
+          :title="t('a11y.adminMode')"
+        >
+          <i class="bi bi-shield-lock"></i>
+        </span>
+
+        <span
+          v-if="streak > 0"
+          class="streak-chip streak-chip--compact"
+          :title="t('a11y.streakTooltip', { current: streak, longest: longestStreak })"
+        >
+          <span class="streak-chip__emoji">🔥</span>
+          <span class="streak-chip__count">{{ streak }}</span>
+        </span>
+
+        <NotificationBell
+          v-if="authStore.can('admin.flags')"
+          :count="pendingFlagCount"
+          @click="router.push('/admin/flags')"
+        />
+
+        <LanguageSwitcher />
+        <ThemeDropdown />
+
+        <NavbarUserMenu />
+      </div>
+    </div>
+  </nav>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+import { useFlagStore } from '@/stores/flagStore'
+import { useGroupStore } from '@/stores/groupStore'
+import { useWrongAnswerStore } from '@/stores/wrongAnswerStore'
+import { useMasterExamStore } from '@/stores/masterExamStore'
+import NotificationBell from '@/components/layout/NotificationBell.vue'
+import ThemeDropdown from '@/components/layout/ThemeDropdown.vue'
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher.vue'
+import NavbarDropdown from './NavbarDropdown.vue'
+import NavbarUserMenu from './NavbarUserMenu.vue'
+import { ADMIN_LINKS, ADMIN_BADGE_CAPABILITIES } from '@/constants/adminLinks'
+
+const { t } = useI18n()
+
+const router = useRouter()
+const route = useRoute()
+const authStore = useAuthStore()
+const flagStore = useFlagStore()
+const groupStore = useGroupStore()
+const wrongAnswerStore = useWrongAnswerStore()
+const masterExamStore = useMasterExamStore()
+
+const menuOpen = ref(false)
+const pendingFlagCount = computed(() => flagStore.pendingCount)
+const streak = computed(() => groupStore.currentStreak)
+const longestStreak = computed(() => groupStore.longestStreak)
+
+// `/analytics` is intentionally NOT included here — it is a
+// top-level nav destination (rendered above), not part of the admin
+// dropdown. Highlighting the admin dropdown when the user is on
+// `/analytics` was correct before the route was loosened; now it
+// would be misleading. The top-level `/analytics` link highlights
+// itself via `active-class`.
+const isAdminActive = computed(() => route.path.startsWith('/admin'))
+
+const isTestsActive = computed(() =>
+  ['/exam', '/study', '/master-exams'].some(p => route.path.startsWith(p))
+)
+
+const isContentActive = computed(() =>
+  ['/questions', '/categories', '/bookmarks'].some(p => route.path.startsWith(p))
+)
+
+const visibleAdminLinks = computed(() =>
+  ADMIN_LINKS.filter(link => authStore.can(link.cap))
+)
+
+const canSeeAdminMenu = computed(() => visibleAdminLinks.value.length > 0)
+
+const showAdminBadge = computed(() =>
+  authStore.canAny(...ADMIN_BADGE_CAPABILITIES)
+)
+
+watch(() => route.fullPath, () => {
+  menuOpen.value = false
+})
+
+onMounted(() => {
+  if (authStore.can('admin.flags')) {
+    flagStore.ensureLoaded()
+  }
+  groupStore.fetchStreak()
+  wrongAnswerStore.fetchSummary()
+  masterExamStore.fetchNeedsAck()
+})
+</script>

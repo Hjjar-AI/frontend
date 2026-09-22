@@ -1,0 +1,46 @@
+.drop-zone {
+  border: var(--border-width-strong) dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  position: relative;
+  transition: border-color var(--motion-fast), background var(--motion-fast);
+  background: var(--color-bg-alt);
+}
+.drop-zone--active {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 5%, var(--color-bg-alt));
+}
+.drop-zone__input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+.drop-zone__icon { font-size: var(--icon-xl); color: var(--color-primary); margin-bottom: var(--space-sm); }
+.drop-zone__text { font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-bottom: var(--space-xs); }
+.drop-zone__hint { color: var(--color-text-muted); display: block; margin-bottom: var(--space-md); }
+
+.import-preview-table { background: var(--color-bg-alt); border-radius: var(--radius-md); padding: var(--space-md); margin: var(--space-md) 0; }
+.import-preview-table__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); }
+.import-preview-table__table { font-size: var(--font-size-sm); width: 100%; }
+.import-preview-table__question-cell { max-width: 200px; word-break: break-word; }
+.import-preview-table__choices { list-style: none; padding: 0; margin: 0; }
+.import-preview-table__choices li { font-size: var(--font-size-xs); margin-bottom: 2px; }
+.import-preview-table__choice--correct { font-weight: var(--font-weight-bold); color: var(--color-success); }
+.import-preview-table__more { color: var(--color-text-muted); font-style: italic; }
+.import-preview-table__more-info { text-align: center; color: var(--color-text-muted); font-size: var(--font-size-sm); margin-top: var(--space-sm); }
+
+.import-page {
+padding: var(--space-lg) 0;
+max-width: 700px;
+margin: 0 auto;
+}
+.import-tabs {
+display: flex;
+gap: var(--space-sm);
+margin: var(--space-lg) 0;
+border-bottom: 2px solid var(--color-border);
+padding-bottom: var(--space-sm);
+}

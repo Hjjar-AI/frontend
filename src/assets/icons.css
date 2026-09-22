@@ -1,0 +1,34 @@
+/* frontend/src/assets/icons.css */
+/* Icon system helpers for Bootstrap Icons */
+
+/* Verified / unverified icons */
+.icon-verified {
+  color: var(--color-success);
+}
+.icon-unverified {
+  color: var(--color-warning);
+}
+
+.icon-button {
+  position: relative;
+}
+.icon-button::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-text-primary);
+  color: var(--color-bg-card);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-fast);
+  z-index: var(--z-tooltip);
+}
+.icon-button:hover::after {
+  opacity: 1;
+}

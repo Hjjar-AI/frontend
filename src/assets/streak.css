@@ -1,0 +1,121 @@
+/* frontend/src/assets/streak.css */
+/* FEATURE #9 — fire chip in the Navbar and streak card on Dashboard. */
+
+.streak-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, #ff8c42, #ff5c39);
+  color: #fff;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: default;
+  white-space: nowrap;
+  transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+  user-select: none;
+}
+.streak-chip:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 92, 57, 0.35);
+}
+.streak-chip__emoji {
+  font-size: 1.05em;
+  line-height: 1;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+}
+.streak-chip__count {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.streak-chip--zero {
+  background: var(--color-bg-alt);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+.streak-chip--zero:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Compact mode used inside the Navbar actions row. */
+.streak-chip--compact {
+  padding: 0.15rem 0.5rem;
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 480px) {
+  .streak-chip--compact {
+    display: none;
+  }
+}
+
+/* Streak card on the Dashboard. */
+.streak-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, #ff8c42 12%, var(--color-bg-card)),
+    var(--color-bg-card)
+  );
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, #ff8c42 25%, transparent);
+  border-inline-start: 4px solid #ff5c39;
+  margin-bottom: var(--space-lg);
+}
+.streak-card--empty {
+  background: var(--color-bg-card);
+  border-inline-start-color: var(--color-border);
+  border-color: var(--color-border);
+}
+.streak-card__flame {
+  font-size: 3.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(255, 92, 57, 0.3));
+  animation: flame-flicker 3s ease-in-out infinite;
+}
+@keyframes flame-flicker {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  50% { transform: scale(1.08) rotate(2deg); }
+}
+.streak-card__body {
+  flex: 1;
+  min-width: 0;
+}
+.streak-card__current {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
+  line-height: 1;
+  color: #ff5c39;
+  font-variant-numeric: tabular-nums;
+}
+.streak-card__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+.streak-card__best {
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+.streak-card__best strong {
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 768px) {
+  .streak-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .streak-card__flame { font-size: 2.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .streak-card__flame { animation: none; }
+  .streak-chip:hover { transform: none; }
+}

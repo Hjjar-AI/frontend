@@ -1,0 +1,27 @@
+.bulk-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+.bulk-actions__count {
+  font-weight: var(--font-weight-semibold);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.bulk-actions__buttons { display: flex; gap: var(--space-xs); flex-wrap: wrap; }
+
+.bulk-tag-editor {
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.export-buttons { display: flex; gap: var(--space-sm); flex-wrap: wrap; }

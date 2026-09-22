@@ -1,0 +1,193 @@
+{
+  "about": {
+    "hero": {
+      "badgeVerified": "Verified system",
+      "badgeHospital": "Supported by Ibn Rushd Hospital"
+    },
+    "vision": {
+      "title": "Our vision",
+      "body": "To provide a trusted, advanced digital learning environment that enables physicians and trainees in mental health to review their knowledge and test their clinical abilities in a structured, scientific manner — with a focus on quality and content accuracy through an integrated verification system overseen by a select group of specialist physicians."
+    },
+    "mission": {
+      "title": "Our mission",
+      "body": "We strive to build a bridge between academic knowledge and clinical practice in psychiatry by offering interactive educational tools that combine scientific accuracy with ease of use — helping raise the professional competence of physicians and improve the quality of mental-health care delivered to patients."
+    },
+    "features": {
+      "title": "Key features",
+      "questionManagement": {
+        "title": "Full question management",
+        "description": "Add, edit, delete, advanced search, multi-filter, duplicate, and export in multiple formats."
+      },
+      "twoModes": {
+        "title": "Two test modes",
+        "description": "A timed exam, and self-study with per-answer explanations and multiple filters."
+      },
+      "markdownSupport": {
+        "title": "Full Markdown support",
+        "description": "Write questions and explanations in rich formatting with a live preview."
+      },
+      "membership": {
+        "title": "Advanced membership system",
+        "description": "Multiple roles (admin / doctor) with a configurable validity period and auto-renewal."
+      },
+      "verification": {
+        "title": "Integrated verification system",
+        "description": "Review questions with detailed statistics and a trust score per user."
+      },
+      "tagging": {
+        "title": "Smart organisation",
+        "description": "Manage tags and categories with smart suggestions and colour-coded categories."
+      },
+      "backup": {
+        "title": "Advanced backup",
+        "description": "Protect your data with import and export in multiple formats."
+      },
+      "arabicUI": {
+        "title": "Professional Arabic interface",
+        "description": "Full Arabic support with RTL and four visual themes."
+      }
+    },
+    "team": {
+      "title": "Development team",
+      "lead": {
+        "role": "Supervision and development",
+        "name": "Dr. Muhammad Ali Hajjar",
+        "title": "Psychiatrist and system developer",
+        "bio": "Led the design and development of the system from idea to implementation, focusing on meeting the educational needs of psychiatrists and ensuring the scientific accuracy of the content."
+      },
+      "inspiration": {
+        "role": "Technical inspiration",
+        "name": "Eng. Ahmad Mansour",
+        "title": "Software engineer",
+        "bio": "Provided the technical and architectural consultation that helped build a robust, extensible system."
+      },
+      "supporter": {
+        "role": "Supporting entity",
+        "name": "Ibn Rushd Hospital",
+        "title": "Supporting medical institution",
+        "bio": "Provided the support and motivating environment for developing this educational project. Mukhtabir is an independent project developed individually; Ibn Rushd Hospital is a supporting entity only — it is not the operator of the system and bears no responsibility for the scientific content, the operation of the system, or the privacy policy."
+      }
+    },
+    "ai": {
+      "title": "Technical and AI support",
+      "intro": "This system was developed with the aid of the latest AI technologies and advanced coding assistants, which helped accelerate development and ensure code quality:"
+    },
+    "testers": {
+      "title": "Testing and verification team",
+      "intro": "We extend our sincere thanks and appreciation to the physicians who contributed to testing the system and verifying its scientific content, ensuring high quality and reliability of the educational material presented. Names are listed in alphabetical order:",
+      "names": [
+        "Dr. Aya Kseibi",
+        "Dr. Ayham Shaykha",
+        "Dr. Ibrahim Tarsha",
+        "Dr. Shvan Shamsi",
+        "Dr. Zilal Al-Waw",
+        "Dr. Muhammad Nidal Abdul-Wahhab",
+        "Dr. Muhammad Nour Al-Sayed",
+        "Dr. Hadiyatullah Malas"
+      ]
+    },
+    "tech": {
+      "title": "Technical stack",
+      "intro": "Every technology in this system was chosen after weighing performance, security, ease of maintenance, and the ability to run in a self-contained local environment without external cloud services.",
+      "frontend": {
+        "title": "Frontend",
+        "intro": "The interactive presentation layer — built on Vue components with centralised state, client-side routing, and an instant build tool."
+      },
+      "backend": {
+        "title": "Backend",
+        "intro": "The service layer — Django and Django REST Framework provide a complete REST API, with a ready-made admin panel and tabular data processing."
+      },
+      "database": {
+        "title": "Database and storage",
+        "intro": "The data layer — a local SQLite database with advanced performance tuning, and flexible JSON storage for dynamic data."
+      },
+      "security": {
+        "title": "Security and privacy",
+        "intro": "The protection layer — strong password hashing, request-forgery protection, rate limiting, and secure cookies."
+      },
+      "items": {
+        "vue": "The core frontend framework — Composition API with single-file components.",
+        "pinia": "Centralised state management with full support for themes and cross-store synchronisation.",
+        "router": "Client-side routing, route guards, and lazy loading of components.",
+        "vite": "A very fast build tool with instant hot-module replacement during development and smart chunking.",
+        "chartjs": "Charting library for analytics, leaderboards, and verification distribution.",
+        "markdown": "Rich authoring of questions and explanations in Markdown, with live preview.",
+        "icons": "Lightweight SVG icons, visually consistent across every screen.",
+        "django": "A full web framework with a built-in ORM and a ready-made admin panel.",
+        "drf": "Builds the REST API, with serialisation, rate limiting, and authentication.",
+        "filter": "Advanced filtering of datasets directly from queries.",
+        "jazzmin": "A modern customisation layer for the data-admin panel, themed to match the app.",
+        "dotenv": "Safe management of environment variables outside the source code.",
+        "pandas": "Bulk import and export of Excel, CSV, and JSON tables.",
+        "sqlite": "A lightweight file-based database — no separate server, no complex maintenance.",
+        "wal": "Write-Ahead Logging mode for better concurrent reads while writing.",
+        "orm": "The database abstraction layer, with automatic protection against SQL injection.",
+        "json": "Flexible JSON fields for answers and other dynamic data.",
+        "files": "Local storage for images, backups, and exported files.",
+        "pbkdf2": "Password hashing with the PBKDF2-SHA256 algorithm and a unique salt per user.",
+        "csrf": "Full protection against request-forgery attacks via session-bound tokens.",
+        "session": "Session-based authentication, with secure server-side storage.",
+        "throttle": "Per-endpoint rate limiting to prevent abuse.",
+        "cookies": "HttpOnly and SameSite cookies, protecting against XSS."
+      }
+    },
+    "stats": {
+      "title": "The system in numbers",
+      "categories": { "value": "18+", "label": "Medical categories" },
+      "questions": { "value": "∞", "label": "Addable questions" },
+      "themes": { "value": "4", "label": "Visual themes" },
+      "files": { "value": "100+", "label": "Source files" }
+    },
+    "a11y": {
+      "title": "Accessibility",
+      "intro": "We believe medical education should be available to everyone. We designed the system according to the Web Content Accessibility Guidelines (WCAG 2.1) to ensure a smooth experience for all users:",
+      "keyboard": {
+        "title": "Keyboard support",
+        "description": "All functions are available via keyboard shortcuts for fast navigation."
+      },
+      "screenReaders": {
+        "title": "Screen readers",
+        "description": "All interactive elements carry appropriate ARIA labels."
+      },
+      "contrast": {
+        "title": "Adequate colour contrast",
+        "description": "All themes meet WCAG AA colour-contrast standards."
+      },
+      "touchTargets": {
+        "title": "Large touch targets",
+        "description": "All buttons are at least 44×44 pixels for ease of use."
+      }
+    },
+    "contact": {
+      "title": "Contact us",
+      "intro": "We welcome all inquiries, feedback, and suggestions that help develop and improve the system. You can reach us directly through the email below.",
+      "entity": {
+        "label": "Entity",
+        "value": "Mukhtabir team (independent development initiative)"
+      },
+      "email": {
+        "label": "Email",
+        "value": "hjjarmhmmdali{'@'}gmail.com"
+      },
+      "location": {
+        "label": "Location",
+        "value": "Syria"
+      },
+      "support": {
+        "label": "Technical support",
+        "value": "Available on official working days"
+      }
+    },
+    "disclaimer": {
+      "title": "Important notice",
+      "para1": "The educational content provided in this system is for review and learning purposes only, and is not a substitute for consulting a specialist physician or authoritative scientific references. Always refer to official medical sources and the latest clinical guidelines when making treatment decisions.",
+      "para2": "Mukhtabir is an independent development project. Ibn Rushd Hospital is a supporting entity only — it is not the operator of the system and bears no responsibility for the scientific content, the operation of the system, or the privacy policy.",
+      "para3Before": "The system is subject to Syrian Law No. 12 of 2024 on the Protection of Electronic Personal Data, and we are guided by the principles of the EU General Data Protection Regulation (GDPR) where possible. For more details, please review the",
+      "privacyLink": "privacy policy"
+    },
+    "footer": {
+      "madeWith": "Made with passion to serve the psychiatric medical community",
+      "copyright": "© {year} All rights reserved — Mukhtabir"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "content": {
+    "manual": {
+      "title": "Complete user manual",
+      "badgeSections": "{count} sections",
+      "badgeVersion": "Version {version}",
+      "lead": "Everything you need to know about Mukhtabir for managing psychiatry questions and exams. This manual is your sole reference — from your first sign-in to mastering every feature.",
+      "tocTitle": "Manual contents",
+      "footerNote": "You have now mastered Mukhtabir. We wish you a fruitful and enjoyable learning experience.",
+      "loading": "Loading user manual…",
+      "loadFailed": "Failed to load the user manual. Please reload the page."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "lastUpdateBadge": "Last updated: {date}",
+      "effectiveBadge": "Effective",
+      "tocTitle": "Policy contents",
+      "summaryTitle": "Quick summary",
+      "contactTitle": "Contact us",
+      "footerNote": "By using Mukhtabir, you agree to the terms of this privacy policy.",
+      "footerDisclaimer": "This policy is provided \"as is\" within the limits of our resources and capabilities, and we do our best to comply with applicable laws.",
+      "loading": "Loading privacy policy…",
+      "loadFailed": "Failed to load the privacy policy. Please reload the page."
+    },
+    "about": {
+      "title": "About us"
+    }
+  }
+}

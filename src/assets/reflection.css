@@ -1,0 +1,52 @@
+/* frontend/src/assets/reflection.css
+   FEATURE (reflection-augmented SRS) — reflection prompt shown on
+   wrong answers in study mode. Extracted from QuestionDisplay.vue. */
+
+.reflection-prompt {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: color-mix(in srgb, var(--color-warning) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-warning) 40%, var(--color-border));
+  border-radius: var(--radius-md);
+}
+.reflection-prompt__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+.reflection-prompt__hint {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  margin-inline-start: auto;
+}
+.reflection-prompt__buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-xs);
+}
+.reflection-prompt__btn {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  transition: background 0.15s ease;
+}
+.reflection-prompt__btn:hover {
+  background: var(--color-bg-alt);
+}
+.reflection-prompt--done {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: color-mix(in srgb, var(--color-success) 10%, transparent);
+  border-color: color-mix(in srgb, var(--color-success) 40%, var(--color-border));
+  color: var(--color-success);
+  font-size: var(--font-size-sm);
+}

@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-prettier"
+  ],
+  "rules": {
+    "declaration-property-value-disallowed-list": {
+      "/color/": ["#", "rgb", "rgba", "hsl", "hsla"]
+    },
+    "declaration-property-value-allowed-list": {
+      "/^padding/": ["/var\\(--space-/", "0", "auto", "inherit", "initial", "unset"],
+      "/^margin/": ["/var\\(--space-/", "0", "auto", "inherit", "initial", "unset"],
+      "/^gap/": ["/var\\(--space-/", "0", "auto", "inherit", "initial", "unset"],
+      "/^z-index/": ["/var\\(--z-/", "auto", "inherit", "initial", "unset"]
+    },
+    "unit-allowed-list": ["rem", "em", "%", "px", "s", "deg", "ms", "vw", "vh", "vmin", "vmax", "fr", "ch", "dvh", "svh", "lvh"]
+  },
+  "ignoreFiles": [
+    "**/tokens.css",
+    "**/node_modules/**"
+  ]
+}

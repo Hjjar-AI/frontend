@@ -1,0 +1,56 @@
+/* frontend/src/assets/buttons.css */
+/* Buttons: primary, secondary, icon buttons, loading, ripple */
+
+.base-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+  font-weight: var(--font-weight-semibold); border-radius: var(--radius-pill); border: none; cursor: pointer;
+  transition: background var(--motion-base), color var(--motion-base), transform var(--motion-fast);
+  font-family: inherit; min-height: var(--control-height); position: relative; overflow: hidden;
+}
+
+.base-button::after {
+  content: '';
+  position: absolute; top: var(--ripple-y, 50%); left: var(--ripple-x, 50%);
+  width: 0; height: 0; border-radius: 50%; background: color-mix(in srgb, var(--color-on-primary) 40%, transparent);
+  transform: translate(-50%, -50%); opacity: 0; pointer-events: none;
+}
+.base-button--ripple::after { animation: ripple-effect 0.6s ease-out; }
+@keyframes ripple-effect { 0% { width: 0; height: 0; opacity: 0.5; } 100% { width: 500px; height: 500px; opacity: 0; } }
+.base-button:active:not(:disabled) { transform: scale(0.97); }
+.base-button--small { padding: 0.3rem 0.9rem; font-size: var(--font-size-sm); min-height: var(--control-height-compact); }
+.base-button--medium { padding: 0.6rem 1.4rem; font-size: var(--font-size-base); }
+.base-button--large { padding: 0.8rem 1.8rem; font-size: var(--font-size-lg); }
+.base-button--primary { background: var(--color-primary); color: var(--color-on-primary); }
+.base-button--primary:hover:not(:disabled) { background: var(--color-primary-dark); }
+.base-button--secondary { background: var(--color-bg-card); color: var(--color-text-primary); border: var(--border-width) solid var(--color-border); }
+.base-button--secondary:hover:not(:disabled) { background: var(--color-bg-alt); }
+.base-button--success { background: var(--color-success); color: var(--color-on-success); }
+.base-button--success:hover:not(:disabled) { background: var(--color-success-dark); }
+.base-button--danger { background: var(--color-danger); color: var(--color-on-danger); }
+.base-button--danger:hover:not(:disabled) { background: var(--color-danger-dark); }
+.base-button--warning { background: var(--color-warning); color: var(--color-on-warning); }
+.base-button--warning:hover:not(:disabled) { background: var(--color-warning-dark); }
+.base-button--info { background: var(--color-info); color: var(--color-on-info); }
+.base-button--info:hover:not(:disabled) { background: var(--color-info-dark); }
+.base-button--outline { background: transparent; color: var(--color-text-primary); border: var(--border-width-strong) solid var(--color-border); }
+.base-button--outline:hover:not(:disabled) { background: var(--color-bg-alt); }
+.base-button:disabled { opacity: var(--opacity-disabled); cursor: not-allowed; box-shadow: none; transform: none; }
+.base-button--loading { pointer-events: none; min-width: var(--control-height); }
+
+/* Spinner (used by buttons) */
+.spinner { display: inline-block; width: 1em; height: 1em; border: 2px solid currentColor; border-inline-end-color: transparent; border-radius: var(--radius-circle); animation: spin 0.6s linear infinite; }
+.spin-icon { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Icon button */
+.btn-icon { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs); background: var(--color-bg-card); color: var(--color-text-secondary); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-pill); padding: 0.3rem 0.8rem; min-height: var(--control-height-compact); min-width: var(--control-height-compact); cursor: pointer; font-size: var(--font-size-sm); font-family: var(--font-family-base); transition: background var(--motion-fast), color var(--motion-fast), border-color var(--motion-fast), transform var(--motion-fast); }
+.btn-icon:hover:not(:disabled):not(.loading) { background: var(--color-bg-alt); color: var(--color-primary); border-color: var(--color-primary); }
+.btn-icon:active:not(:disabled):not(.loading) { transform: scale(0.95); }
+.btn-icon:disabled, .btn-icon.loading { opacity: var(--opacity-disabled); cursor: not-allowed; pointer-events: none; }
+.btn-icon.text-danger { color: var(--color-danger); }
+.btn-icon.text-danger:hover:not(:disabled):not(.loading) { background: color-mix(in srgb, var(--color-danger) 10%, transparent); border-color: var(--color-danger); color: var(--color-danger-dark); }
+
+
+.btn-icon--compact { min-height: 44px; min-width: 44px; padding: 0.15rem 0.5rem; font-size: var(--font-size-xs); }
+
+.btn-icon:focus-visible, .base-button:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }

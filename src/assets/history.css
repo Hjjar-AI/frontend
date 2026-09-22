@@ -1,0 +1,4 @@
+/* frontend/src/assets/history.css
+/* History */
+.history-page { padding: var(--space-lg) 0; }
+.history-table-wrap { overflow-x: auto; }

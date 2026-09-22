@@ -1,0 +1,89 @@
+/* frontend/src/assets/index.css */
+
+@import './tokens.css';
+@import './fonts.css';
+@import './icons.css';
+@import './animations.css';
+
+@import './reset.css';
+@import './base.css';
+@import './typography.css';
+@import './layout.css';
+@import './utilities.css';
+@import './alerts.css';
+@import './dialogs.css';
+@import './bulk.css';
+@import './uploads.css';
+@import './errors.css';
+@import './shell.css';
+@import './navigation.css';
+@import './mobile.css';
+@import './progress.css';
+@import './moderation.css';
+@import './badges.css';
+@import './cards.css';
+@import './empty.css';
+@import './pagination.css';
+
+/* Questions — split into 3 files. Kept global because the question
+   list, editor, and filter components are reachable from the
+   Dashboard, the review queue, the mistake notebook, and the
+   bookmarks page. */
+@import './questions.css';
+@import './editor.css';
+@import './filters.css';
+
+@import './testing.css';
+@import './markdown.css';
+
+/* Case-based question chains + reflection prompt */
+@import './cases.css';
+@import './reflection.css';
+
+/* Dashboard styles. Kept global — the Dashboard is the home page for
+   every authenticated user. */
+@import './dashboard.css';
+
+/* Admin shell. Kept global — the admin.css file carries rules that
+   several admin pages share, and a lazy-loaded admin view pulling it
+   in would race with the desktop navbar's own admin-related styles. */
+@import './admin.css';
+@import './adminComponents.css';
+
+/* Feature pack kept global — dashboard, navbar, and cross-page
+   components depend on these. */
+@import './notebook.css';
+@import './confidence.css';
+@import './streak.css';
+@import './groups.css';
+@import './questionImage.css';
+@import './heatmap.css';
+
+@import './forms.css';
+@import './buttons.css';
+@import './tables.css';
+@import './states.css';
+@import './transitions.css';
+@import './skeleton.css';
+
+@import './print.css';
+
+/* End of consolidated imports */
+
+/* ============================================================
+   i18n font override.
+
+   `applyLocaleToDOM` (in src/i18n/helpers/direction.js) sets
+   `data-locale` on <html> during boot, and the inline <script>
+   in index.html sets it even earlier so the first paint is
+   already in the correct locale.
+
+   Selector specificity: `html[data-locale="en"][data-theme]`
+   has specificity (0, 2, 0). The `:root` block in tokens.css
+   has (0, 1, 0). The compound selector wins regardless of
+   source order.
+   ============================================================ */
+html[data-locale="en"][data-theme] {
+  --font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-family-heading: 'Outfit', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}

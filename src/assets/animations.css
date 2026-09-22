@@ -1,0 +1,90 @@
+/* frontend/src/assets/animations.css */
+/* Standardized motion primitives */
+
+/* NOTE ON NAMING:
+   - "slide-down-out" is an ENTRANCE animation (element slides down into view)
+   - "slide-up-in" is an EXIT animation (element slides up out of view)
+   The naming follows the pattern: {direction}-{entrance/exit}
+   where "out" means "appearing outward" and "in" means "disappearing inward".
+   This is consistent with the appear-out/appear-in naming below. */
+
+/* Slide down/up for accordions and dropdowns */
+@keyframes slide-down-out {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes slide-up-in {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+/* Modal / dropdown "appear" (scale + translateY) */
+@keyframes appear-out {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes appear-in {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(0.95) translateY(10px); }
+}
+
+/* Overlay fade */
+@keyframes fade-out {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fade-in {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* Time-up overlay: snappy entrance */
+@keyframes urgent-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* List item stagger */
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide down (for banners, toggles, dropdowns) */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Utility classes for entrances and exits */
+.modal-enter-active { animation: appear-out var(--motion-base-out); }
+.modal-leave-active { animation: appear-in var(--motion-fast-in); }
+
+
+
+
+
+
+.overlay-fade-enter-active { animation: urgent-in var(--motion-fast-out); }
+.overlay-fade-leave-active { animation: fade-in var(--motion-fast-in); }
+
+/* Stagger list
+   NOTE: Items beyond the 10th all share the same 0.3s delay.
+   This prevents excessively long stagger sequences for large lists. */
+.stagger-list > * {
+  animation: card-enter var(--motion-base-out) both;
+}
+.stagger-list > *:nth-child(1)  { animation-delay: 0s; }
+.stagger-list > *:nth-child(2)  { animation-delay: 0.03s; }
+.stagger-list > *:nth-child(3)  { animation-delay: 0.06s; }
+.stagger-list > *:nth-child(4)  { animation-delay: 0.09s; }
+.stagger-list > *:nth-child(5)  { animation-delay: 0.12s; }
+.stagger-list > *:nth-child(6)  { animation-delay: 0.15s; }
+.stagger-list > *:nth-child(7)  { animation-delay: 0.18s; }
+.stagger-list > *:nth-child(8)  { animation-delay: 0.21s; }
+.stagger-list > *:nth-child(9)  { animation-delay: 0.24s; }
+.stagger-list > *:nth-child(10) { animation-delay: 0.27s; }
+.stagger-list > *:nth-child(n+11) { animation-delay: 0.3s; }

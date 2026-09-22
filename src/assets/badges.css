@@ -1,0 +1,52 @@
+.badge {
+  padding: 0.2rem 0.6rem; border-radius: var(--radius-pill);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap; max-width: 220px; overflow: hidden; text-overflow: ellipsis;
+  display: inline-flex; align-items: center; gap: var(--space-xs);
+  letter-spacing: var(--letter-spacing-badge);
+}
+.badge-success { background: var(--color-success); color: var(--color-on-success); }
+.badge-danger { background: var(--color-danger); color: var(--color-on-danger); }
+.badge-info { background: var(--color-info); color: var(--color-on-info); }
+.badge-warning { background: var(--color-warning); color: var(--color-on-warning); }
+.badge-secondary { background: var(--color-text-muted); color: var(--color-text-inverse); }
+.badge--small { padding: 0.1rem 0.4rem; font-size: var(--font-size-xs); }
+
+.status-badge {
+  display: inline-flex; align-items: center; gap: var(--space-xs); padding: 0.15em 0.7em; border-radius: var(--radius-pill);
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); white-space: nowrap; border: 1px solid transparent;
+}
+.status-badge.badge-success { background: var(--color-success); border-color: var(--color-success-dark); }
+.status-badge.badge-danger { background: var(--color-danger); border-color: var(--color-danger-dark); }
+.status-badge.badge-warning { background: var(--color-warning); border-color: var(--color-warning-dark); }
+.status-badge.badge-info { background: var(--color-info); border-color: var(--color-info-dark); }
+.status-badge.badge-secondary { background: var(--color-text-muted); border-color: var(--color-text-secondary); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: var(--space-2xs);
+  background: var(--color-bg-alt); border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-pill); padding: 0.08rem 0.5rem; font-size: var(--font-size-xs);
+  color: var(--color-text-secondary); white-space: nowrap;
+}
+.chip--primary { background: var(--color-primary-light); color: var(--color-primary-dark); border-color: var(--color-primary); }
+.chip__remove { background: none; border: none; cursor: pointer; font-size: var(--font-size-xs); color: var(--color-text-muted); display: inline-flex; align-items: center; padding: 0; line-height: 1; }
+.chip__remove:hover { color: var(--color-danger); }
+
+.icon-hero { width: 64px; height: 64px; border-radius: var(--radius-circle); display: grid; place-items: center; font-size: var(--icon-xl); background: color-mix(in srgb, currentColor 12%, transparent); color: var(--color-primary); }
+.icon-hero--lg { width: 96px; height: 96px; font-size: var(--icon-2xl); }
+.icon-hero--sm { width: 48px; height: 48px; font-size: var(--icon-lg); }
+
+.difficulty-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.6rem; border-radius: var(--radius-pill); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); white-space: nowrap; }
+.difficulty-badge__dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.difficulty-badge--easy { background: color-mix(in srgb, var(--color-success) 15%, transparent); color: var(--color-success-dark); }
+.difficulty-badge--easy .difficulty-badge__dot { background: var(--color-success); }
+.difficulty-badge--medium { background: color-mix(in srgb, var(--color-warning) 15%, transparent); color: var(--color-warning-dark); }
+.difficulty-badge--medium .difficulty-badge__dot { background: var(--color-warning); }
+.difficulty-badge--hard { background: color-mix(in srgb, var(--color-danger) 15%, transparent); color: var(--color-danger-dark); }
+.difficulty-badge--hard .difficulty-badge__dot { background: var(--color-danger); }
+
+.difficulty-dot { display: inline-block; width: 10px; height: 10px; border-radius: var(--radius-circle); margin-inline-end: var(--space-2xs); vertical-align: middle; }
+.difficulty-dot--easy { background: var(--color-success); }
+.difficulty-dot--medium { background: var(--color-warning); }
+.difficulty-dot--hard { background: var(--color-danger); }

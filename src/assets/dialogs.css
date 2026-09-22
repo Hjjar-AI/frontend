@@ -1,0 +1,34 @@
+.dialog-content {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+.dialog-icon {
+  font-size: var(--icon-2xl);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.dialog-icon.danger { color: var(--color-danger); }
+.dialog-icon.warning { color: var(--color-warning); }
+.dialog-icon.default { color: var(--color-info); }
+.dialog-message {
+  margin: 0;
+  line-height: 1.6;
+}
+.dialog-input { margin-top: var(--space-md); }
+
+.base-modal-overlay { position: fixed; inset: 0; background: var(--color-overlay); backdrop-filter: blur(4px); z-index: var(--z-modal-overlay); display: flex; align-items: center; justify-content: center; padding: var(--space-md); }
+.base-modal { background: var(--color-bg-card); border-radius: var(--radius-lg); width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: var(--elevation-3); }
+.base-modal--sm { max-width: 400px; }
+.base-modal--md { max-width: 600px; }
+.base-modal--lg { max-width: 800px; }
+.base-modal__header { display: flex; align-items: center; justify-content: space-between; padding: var(--space-lg); border-bottom: var(--border-width) solid var(--color-border); flex-shrink: 0; }
+.base-modal__title { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); margin: 0; padding-bottom: var(--space-xs); border-bottom: var(--border-width-strong) solid var(--color-primary); }
+.base-modal__close { background: none; border: none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: var(--color-text-muted); width: var(--control-height); height: var(--control-height); display: flex; align-items: center; justify-content: center; border-radius: var(--radius-circle); transition: background var(--motion-fast-out), color var(--motion-fast-out); }
+.base-modal__close:hover { background: var(--color-bg-alt); color: var(--color-danger); }
+.base-modal__body { padding: var(--space-lg); overflow-y: auto; flex: 1; min-height: 0; }
+.base-modal__footer { padding: var(--space-md) var(--space-lg); border-top: var(--border-width) solid var(--color-border); display: flex; justify-content: flex-end; gap: var(--space-sm); flex-shrink: 0; }
+@media (max-width: 768px) {
+  .base-modal-overlay { align-items: flex-end; padding: 0; }
+  .base-modal { border-radius: var(--radius-lg) var(--radius-lg) 0 0; max-height: 85vh; }
+}

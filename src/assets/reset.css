@@ -1,0 +1,61 @@
+/* frontend/src/assets/reset.css */
+/*
+  Reset layer. Imported first in index.css, before base.css and every
+  component stylesheet, so component rules win without specificity
+  fights.
+
+  REPLACES the previous contents, which were a verbatim duplicate of
+  print.css (the whole @media print { ... } block). The real print
+  rules are imported later in index.css and remain there; the reset
+  layer the codebase assumes has never actually shipped until now.
+
+  DELIBERATELY MINIMAL
+  --------------------
+  Only the rules the codebase depends on. A "modern reset" that also
+  zeroes list padding, h1–h6 margins, and button backgrounds would
+  change vertical rhythm and list indentation in several places that
+  rely on the browser defaults today. Everything else is left alone;
+  each component's own stylesheet is authoritative for its own
+  elements.
+
+  WHAT IS HERE AND WHY
+
+    * { box-sizing: border-box }
+      Browser default is content-box, so every element combining a
+      `width` with `padding`/`border` (e.g. `.form-control`,
+      `.base-input__field`, `.base-select__field`, the weight-editor
+      number inputs) currently computes wider than its container
+      and overflows by roughly the padding + border amount. This
+      rule makes declared widths the actual rendered widths.
+
+    html { overflow-x: hidden; scrollbar-gutter: stable }
+      `overflow-x: hidden` makes <html> the viewport scroll container
+      (per CSS Overflow 3, the other axis computes to auto), which is
+      what the sticky navbar positioning and the modal scroll-lock in
+      BaseModal.vue both assume.
+      `scrollbar-gutter: stable` reserves the scrollbar gutter at all
+      times, so opening a modal (which sets overflow: hidden on <html>)
+      does not shift page content sideways. BaseModal.vue's
+      acquireLock() comment documents the same assumption.
+
+    body { margin: 0 }
+      Browsers default body to 8px margin. The app's `#app {
+      min-height: 100vh }` in shell.css assumes zero — with the
+      default 8px top margin, the app has always rendered 8px inset
+      from the viewport edges with an unintended extra scrollbar.
+*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+body {
+  margin: 0;
+}
