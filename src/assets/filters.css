@@ -1,6 +1,6 @@
 .filter-bar {
   background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-md);
   margin-bottom: var(--space-md);
@@ -80,7 +80,7 @@
   inset-inline-start: 0;
   inset-inline-end: 0;
   background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-top: none;
   border-radius: 0 0 var(--radius-md) var(--radius-md);
   box-shadow: var(--shadow-md);
@@ -115,7 +115,7 @@
   gap: var(--space-sm);
   padding: var(--space-xs) var(--space-md);
   background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-card));
-  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  border: var(--border-width) solid color-mix(in srgb, var(--color-primary) 30%, transparent);
   border-radius: var(--radius-pill);
   font-size: var(--font-size-sm);
   margin-bottom: var(--space-md);
@@ -144,10 +144,24 @@
 .last-viewed-clear:hover { color: var(--color-danger); background: var(--color-bg-alt); }
 .filter-chips { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-md); }
 .filter-chips .chip button {
-  background: none; border: none; cursor: pointer; padding: 0;
-  color: inherit; display: inline-flex; align-items: center;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  inline-size: 1.15rem;
+  block-size: 1.15rem;
+  margin-inline-end: -0.25rem;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-circle);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.9em;
+  line-height: 1;
 }
-.filter-chips .chip button:hover { color: var(--color-danger); }
+.filter-chips .chip button .bi::before { vertical-align: 0; }
+.filter-chips .chip button:hover { background: color-mix(in srgb, var(--color-danger) 12%, transparent); color: var(--color-danger); }
+.filter-chips .chip button:focus-visible { outline: var(--border-width-strong) solid var(--color-focus-ring); outline-offset: 1px; }
 .clear-all-filters {
   background: none; border: none; color: var(--color-primary);
   cursor: pointer; font-size: var(--font-size-sm);
@@ -159,7 +173,7 @@
 }
 .per-page-select {
   padding: 0.25rem 0.5rem; border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-primary);
+  border: var(--border-width) solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-primary);
 }
 
 .question-link { color: var(--color-primary); font-size: var(--font-size-sm); text-decoration: none; }

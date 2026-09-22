@@ -49,7 +49,10 @@
 
         <div v-if="group.members && group.members.length" class="group-members-list">
           <div v-for="member in group.members" :key="member.id" class="group-member-row">
-            <div class="group-member-row__avatar">
+            <div
+              class="group-member-row__avatar"
+              :class="avatarToneClass(member.id ?? member.username)"
+            >
               {{ (member.full_name || member.username || '?')[0] }}
             </div>
             <div class="group-member-row__info">
@@ -148,6 +151,7 @@ import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import { useGroupStore } from '@/stores/groupStore'
 import { useUserStore } from '@/stores/userStore'
 import { useDialog } from '@/composables/useDialog'
+import { avatarToneClass } from '@/utils/avatar'
 
 const { t } = useI18n()
 

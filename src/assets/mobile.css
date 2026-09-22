@@ -35,12 +35,12 @@
 }
 
 .shortcut-hint { position: fixed; bottom: var(--space-md); inset-inline-start: var(--space-md); z-index: var(--z-sticky); }
-.shortcut-hint__toggle { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius-pill); padding: var(--space-sm) var(--space-md); font-size: var(--font-size-sm); cursor: pointer; display: flex; align-items: center; gap: var(--space-xs); box-shadow: var(--shadow-md); transition: background var(--motion-fast), color var(--motion-fast); min-height: var(--control-height); }
+.shortcut-hint__toggle { background: var(--color-bg-card); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-pill); padding: var(--space-sm) var(--space-md); font-size: var(--font-size-sm); cursor: pointer; display: flex; align-items: center; gap: var(--space-xs); box-shadow: var(--shadow-md); transition: background var(--motion-fast), color var(--motion-fast); min-height: var(--control-height); }
 .shortcut-hint__toggle:hover { background: var(--color-bg-alt); color: var(--color-primary); }
 .shortcut-hint__badge { font-size: var(--font-size-xs); background: var(--color-primary); color: var(--color-on-primary); border-radius: var(--radius-pill); padding: 0.05rem 0.4rem; font-weight: var(--font-weight-bold); }
-.shortcut-hint__panel { position: absolute; bottom: calc(100% + var(--space-sm)); inset-inline-start: 0; min-width: 220px; padding: var(--space-sm); background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; gap: var(--space-xs); }
+.shortcut-hint__panel { position: absolute; bottom: calc(100% + var(--space-sm)); inset-inline-start: 0; min-width: 220px; padding: var(--space-sm); background: var(--color-bg-card); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; gap: var(--space-xs); }
 .shortcut-hint__item { display: flex; align-items: center; gap: var(--space-sm); font-size: var(--font-size-sm); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); }
-.shortcut-hint__item kbd { background: var(--color-bg-alt); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 0.1rem 0.4rem; font-family: var(--font-family-mono); font-size: var(--font-size-xs); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+.shortcut-hint__item kbd { background: var(--color-bg-alt); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-sm); padding: 0.1rem 0.4rem; font-family: var(--font-family-mono); font-size: var(--font-size-xs); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
 .hint-enter-active, .hint-leave-active { transition: opacity var(--motion-fast), transform var(--motion-fast); }
 .hint-enter-from, .hint-leave-to { opacity: 0; transform: translateY(8px); }
 
@@ -120,7 +120,7 @@
   background: color-mix(in srgb, var(--color-bg-card) 90%, transparent);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: 3px 6px;
   padding-bottom: calc(3px + env(safe-area-inset-bottom));
@@ -255,7 +255,7 @@
   border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--color-danger) 8%, transparent);
   color: var(--color-danger);
-  border: 1px solid color-mix(in srgb, var(--color-danger) 20%, transparent);
+  border: var(--border-width) solid color-mix(in srgb, var(--color-danger) 20%, transparent);
   font-family: var(--font-family-base);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);

@@ -19,9 +19,15 @@
   "theme": {
     "label": "Theme",
     "light": "Light",
+    "stone": "Stone",
     "dark": "Dark",
+    "onyx": "Onyx",
     "blossom": "Blossom",
     "fresh": "Fresh",
+    "contrast": "High contrast",
+    "ink": "Ink",
+    "slate": "Slate",
+    "sepia": "Sepia",
     "changed": "Theme changed to {theme}"
   },
 

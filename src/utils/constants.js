@@ -8,7 +8,25 @@ export const FALLBACK_MAX_QUIZ_QUESTIONS = 200
 export const FALLBACK_MAX_CHOICES = 8
 export const FALLBACK_ITEMS_PER_PAGE = 20
 
-export const THEMES = ['light', 'dark', 'blossom', 'fresh']
+export const DEFAULT_THEME = 'stone'
+export const THEMES = [
+  'stone',
+  'dark',
+  'onyx',
+  'blossom',
+  'fresh',
+  'contrast',
+  'ink',
+  'slate',
+  'sepia',
+]
+export const DARK_THEMES = ['dark', 'onyx']
+export const THEME_ALIASES = { light: DEFAULT_THEME }
+
+export function normalizeTheme(theme) {
+  const normalized = THEME_ALIASES[theme] || theme
+  return THEMES.includes(normalized) ? normalized : DEFAULT_THEME
+}
 
 export const ROLES = {
   ADMIN: 'admin',

@@ -4,27 +4,31 @@
 //
 // BOOT-TIME COORDINATION
 // ----------------------
-// The initial value of `currentTheme` here is `'light'`, but the
+// The initial value of `currentTheme` here is the Stone default, but the
 // actual DOM `data-theme` attribute is written by an inline script
 // in index.html BEFORE any CSS paints. That script reads
 // `localStorage['theme']` and sets `<html data-theme>` so the very
-// first paint is already on the correct theme (no light flash on
-// reload for dark / blossom / fresh users).
+// first paint is already on the correct theme (no default-theme flash).
 //
 // `loadSavedTheme()` below runs from main.js after the i18n and
 // pinia setup, and syncs the reactive ref to match what the
 // bootstrap script already wrote. If a caller imports this module
 // and reads `currentTheme.value` before `loadSavedTheme()` runs,
-// the value it sees is `'light'` — reading `document.documentElement
+// the value it sees is `'stone'` — reading `document.documentElement
 // .dataset.theme` is the correct way to see the actual active theme
 // in that window.
 
 import { ref, computed } from 'vue'
 import { i18n } from '@/i18n'
-import { THEMES } from '@/utils/constants'
+import {
+  DARK_THEMES,
+  DEFAULT_THEME,
+  THEMES,
+  normalizeTheme,
+} from '@/utils/constants'
 import { storageService } from '@/services/storageService'
 
-const currentTheme = ref('light')
+const currentTheme = ref(DEFAULT_THEME)
 
 function translateTheme(theme) {
   return i18n.global.t(`theme.${theme}`)
@@ -42,7 +46,7 @@ function announceTheme(theme) {
 export function applyTheme(theme) {
   // Two guards, both cheap and both necessary.
   //
-  // 1. Unknown theme → fall back to 'light'. The value came from
+  // 1. Unknown theme → fall back to Stone. The value came from
   //    user input or a caller bug; THEMES is the source of truth
   //    for what the CSS actually styles.
   //
@@ -59,7 +63,7 @@ export function applyTheme(theme) {
   // removes the transition class runs later, when `applying` is
   // already `false`. Removing it makes the control flow obvious
   // without changing behavior.
-  if (!THEMES.includes(theme)) theme = 'light'
+  theme = normalizeTheme(theme)
   if (currentTheme.value === theme) return
 
   document.documentElement.classList.add('theme-transition')
@@ -80,19 +84,23 @@ export function getThemeLabel(theme) {
 
 export function loadSavedTheme() {
   const saved = storageService.getItem('theme')
-  if (saved && THEMES.includes(saved)) {
-    if (currentTheme.value !== saved) {
-      currentTheme.value = saved
-      document.documentElement.setAttribute('data-theme', saved)
+  if (saved) {
+    const normalized = normalizeTheme(saved)
+    if (currentTheme.value !== normalized) {
+      currentTheme.value = normalized
+      document.documentElement.setAttribute('data-theme', normalized)
     }
+    // Persist the canonical name when migrating the former `light`
+    // value, or when recovering from an unknown stored value.
+    if (saved !== normalized) storageService.setItem('theme', normalized)
   } else {
-    currentTheme.value = 'light'
-    document.documentElement.setAttribute('data-theme', 'light')
+    currentTheme.value = DEFAULT_THEME
+    document.documentElement.setAttribute('data-theme', DEFAULT_THEME)
   }
 }
 
 export function useTheme() {
-  const isDark = computed(() => currentTheme.value === 'dark')
+  const isDark = computed(() => DARK_THEMES.includes(currentTheme.value))
 
   return {
     currentTheme,

@@ -32,7 +32,7 @@
 .streak-chip--zero {
   background: var(--color-bg-alt);
   color: var(--color-text-muted);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
 }
 .streak-chip--zero:hover {
   transform: none;
@@ -63,7 +63,7 @@
     var(--color-bg-card)
   );
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--color-streak-start) 30%, transparent);
+  border: var(--border-width) solid color-mix(in srgb, var(--color-streak-start) 30%, transparent);
   border-inline-start: 4px solid var(--color-streak-end);
   margin-bottom: var(--space-lg);
 }

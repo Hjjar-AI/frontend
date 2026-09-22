@@ -44,37 +44,33 @@
      -----------
      `html[data-theme]` has specificity (0, 1, 1) — an element plus an
      attribute selector — which is strictly greater than the (0, 1, 0)
-     of every theme block in tokens.css (`[data-theme="dark"]`,
-     `[data-theme="blossom"]`, `[data-theme="fresh"]`, and `:root` for
-     the default). The bare `html` selector covers the case where the
-     attribute is missing entirely.
+     of every theme block in tokens.css. The bare `html` selector
+     covers the case where the attribute is missing entirely.
 
-     The values below are the LIGHT theme's values copied from
-     tokens.css. If a future edit changes a light-theme value in
-     tokens.css, mirror it here — this block is deliberately a
-     static snapshot, not a `var()` alias, because a `var()` alias
-     would resolve against whatever tokens.css is currently
-     defining and reintroduce the exact problem this block solves. */
+     The semantic print colors below reference immutable
+     `--color-print-*` tokens from tokens.css. Screen themes never
+     override those tokens, so print stays stable without maintaining
+     a second hand-copied palette. */
   html,
   html[data-theme] {
-    --color-primary: #6a3f24;
+    --color-primary: var(--color-print-primary);
     --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
     --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
     --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
 
-    --color-success: #2f5543;
+    --color-success: var(--color-print-success);
     --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
     --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
 
-    --color-danger: #7d342f;
+    --color-danger: var(--color-print-danger);
     --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
     --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
 
-    --color-warning: #654711;
+    --color-warning: var(--color-print-warning);
     --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
     --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
 
-    --color-info: #285166;
+    --color-info: var(--color-print-info);
     --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
     --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
 
@@ -161,7 +157,7 @@
   .stat-tile,
   .review-item {
     box-shadow: none !important;
-    border: 1px solid var(--color-border) !important;
+    border: var(--border-width) solid var(--color-border) !important;
     break-inside: avoid;
     page-break-inside: avoid;
   }
@@ -198,7 +194,7 @@
 
   .print-table th,
   .print-table td {
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-border);
     padding: 0.5rem;
     text-align: start;
   }
@@ -252,7 +248,7 @@
 
   .table-shared th,
   .table-shared td {
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-border);
     padding: 0.4rem;
     text-align: start;
   }

@@ -47,10 +47,15 @@ const { currentTheme, applyTheme, THEMES } = useTheme()
 const { isOpen, rootRef, close, toggle } = useDropdown()
 
 const themeIcons = {
-  light: 'bi bi-sun-fill',
+  stone: 'bi bi-gem',
   dark: 'bi bi-moon-fill',
+  onyx: 'bi bi-moon-stars-fill',
   blossom: 'bi bi-flower1',
   fresh: 'bi bi-tree-fill',
+  contrast: 'bi bi-circle-half',
+  ink: 'bi bi-pen-fill',
+  slate: 'bi bi-cloud-fill',
+  sepia: 'bi bi-book-fill',
 }
 const currentThemeIcon = computed(() => themeIcons[currentTheme.value] || 'bi bi-palette')
 

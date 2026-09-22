@@ -27,7 +27,6 @@ declare global {
   const getCurrentScope: typeof import('vue').getCurrentScope
   const getCurrentWatcher: typeof import('vue').getCurrentWatcher
   const getThemeLabel: typeof import('./composables/useTheme.js').getThemeLabel
-  const getters: typeof import('./stores/toastStore.js').getters
   const h: typeof import('vue').h
   const inject: typeof import('vue').inject
   const invalidateCacheByPrefix: typeof import('./composables/useCrudActions.js').invalidateCacheByPrefix
@@ -37,7 +36,6 @@ declare global {
   const isRef: typeof import('vue').isRef
   const isShallow: typeof import('vue').isShallow
   const loadSavedTheme: typeof import('./composables/useTheme.js').loadSavedTheme
-  const makeReset: typeof import('./stores/storeHelpers.js').makeReset
   const mapActions: typeof import('pinia').mapActions
   const mapGetters: typeof import('pinia').mapGetters
   const mapState: typeof import('pinia').mapState
@@ -65,43 +63,26 @@ declare global {
   const reactive: typeof import('vue').reactive
   const readonly: typeof import('vue').readonly
   const ref: typeof import('vue').ref
-  const resetAllStores: typeof import('./stores/resetAllStores.js').resetAllStores
   const resolveComponent: typeof import('vue').resolveComponent
   const setActivePinia: typeof import('pinia').setActivePinia
   const setMapStoreSuffix: typeof import('pinia').setMapStoreSuffix
   const shallowReactive: typeof import('vue').shallowReactive
   const shallowReadonly: typeof import('vue').shallowReadonly
   const shallowRef: typeof import('vue').shallowRef
-  const standardGetters: typeof import('./stores/storeHelpers.js').standardGetters
-  const standardState: typeof import('./stores/storeHelpers.js').standardState
   const storeToRefs: typeof import('pinia').storeToRefs
-  const stores: typeof import('./stores/index.js').default
-  const subResourceGetters: typeof import('./stores/storeHelpers.js').subResourceGetters
-  const subResourceState: typeof import('./stores/storeHelpers.js').subResourceState
   const toRaw: typeof import('vue').toRaw
   const toRef: typeof import('vue').toRef
   const toRefs: typeof import('vue').toRefs
   const toValue: typeof import('vue').toValue
   const triggerRef: typeof import('vue').triggerRef
   const unref: typeof import('vue').unref
-  const useActiveUserStore: typeof import('./stores/activeUserStore.js').useActiveUserStore
-  const useAdminDatabaseStore: typeof import('./stores/adminDatabaseStore.js').useAdminDatabaseStore
-  const useAdminSettingsStore: typeof import('./stores/adminSettingsStore.js').useAdminSettingsStore
-  const useAdminVerificationStatsStore: typeof import('./stores/adminVerificationStatsStore.js').useAdminVerificationStatsStore
   const useAnalyticsCharts: typeof import('./composables/useAnalyticsCharts.js').useAnalyticsCharts
-  const useAnalyticsStore: typeof import('./stores/analyticsStore.js').useAnalyticsStore
   const useAnswerSubmission: typeof import('./composables/useAnswerSubmission.js').useAnswerSubmission
   const useAsyncState: typeof import('./composables/composableHelpers.js').useAsyncState
   const useAttrs: typeof import('vue').useAttrs
-  const useAuthStore: typeof import('./stores/authStore.js').useAuthStore
   const useAutoRefresh: typeof import('./composables/useAutoRefresh.js').useAutoRefresh
-  const useBlueprintStore: typeof import('./stores/blueprintStore.js').useBlueprintStore
-  const useBookmarkStore: typeof import('./stores/bookmarkStore.js').useBookmarkStore
-  const useBulkActions: typeof import('./composables/useBulkActions.js').useBulkActions
-  const useCategoryStore: typeof import('./stores/categoryStore.js').useCategoryStore
   const useChartPalette: typeof import('./composables/useChartPalette.js').useChartPalette
   const useClickOutside: typeof import('./composables/useClickOutside.js').useClickOutside
-  const useConfigStore: typeof import('./stores/configStore.js').useConfigStore
   const useContentLoader: typeof import('./composables/useContentLoader.js').useContentLoader
   const useCountUp: typeof import('./composables/useCountUp.js').useCountUp
   const useCrudActions: typeof import('./composables/useCrudActions.js').useCrudActions
@@ -111,22 +92,16 @@ declare global {
   const useDialog: typeof import('./composables/useDialog.js').useDialog
   const useDirection: typeof import('./composables/useDirection.js').useDirection
   const useDropdown: typeof import('./composables/useDropdown.js').useDropdown
-  const useFlagStore: typeof import('./stores/flagStore.js').useFlagStore
   const useFocusReturn: typeof import('./composables/useFocusReturn.js').useFocusReturn
-  const useGroupStore: typeof import('./stores/groupStore.js').useGroupStore
   const useI18n: typeof import('vue-i18n').useI18n
   const useId: typeof import('vue').useId
   const useLink: typeof import('vue-router').useLink
-  const useMasterExamAttemptStore: typeof import('./stores/masterExamAttemptStore.js').useMasterExamAttemptStore
-  const useMasterExamStore: typeof import('./stores/masterExamStore.js').useMasterExamStore
   const useMediaQuery: typeof import('./composables/useMediaQuery.js').useMediaQuery
   const useModalStack: typeof import('./composables/useModalStack.js').useModalStack
   const useModel: typeof import('vue').useModel
   const useNotify: typeof import('./composables/useNotify.js').useNotify
   const useOnline: typeof import('./composables/useOnline.js').useOnline
   const usePagination: typeof import('./composables/usePagination.js').usePagination
-  const usePreferencesStore: typeof import('./stores/preferencesStore.js').usePreferencesStore
-  const useQuestionStore: typeof import('./stores/questionStore.js').useQuestionStore
   const useRecentItems: typeof import('./composables/useRecentItems.js').useRecentItems
   const useRotatingContent: typeof import('./composables/useRotatingContent.js').useRotatingContent
   const useRoute: typeof import('vue-router').useRoute
@@ -135,18 +110,12 @@ declare global {
   const useSelection: typeof import('./composables/useSelection.js').useSelection
   const useSlots: typeof import('vue').useSlots
   const useSound: typeof import('./composables/useSound.js').useSound
-  const useStudyPlannerStore: typeof import('./stores/studyPlannerStore.js').useStudyPlannerStore
   const useSubmitGuard: typeof import('./composables/useSubmitGuard.js').useSubmitGuard
   const useTemplateRef: typeof import('vue').useTemplateRef
-  const useTestHistoryStore: typeof import('./stores/testHistoryStore.js').useTestHistoryStore
   const useTestNavigation: typeof import('./composables/useTestNavigation.js').useTestNavigation
   const useTestPage: typeof import('./composables/useTestPage.js').useTestPage
-  const useTestSessionStore: typeof import('./stores/testSessionStore.js').useTestSessionStore
   const useTheme: typeof import('./composables/useTheme.js').useTheme
   const useTimer: typeof import('./composables/useTimer.js').useTimer
-  const useToastStore: typeof import('./stores/toastStore.js').useToastStore
-  const useUserStore: typeof import('./stores/userStore.js').useUserStore
-  const useWrongAnswerStore: typeof import('./stores/wrongAnswerStore.js').useWrongAnswerStore
   const watch: typeof import('vue').watch
   const watchEffect: typeof import('vue').watchEffect
   const watchPostEffect: typeof import('vue').watchPostEffect

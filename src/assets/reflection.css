@@ -6,7 +6,7 @@
   margin-top: var(--space-lg);
   padding: var(--space-md);
   background: color-mix(in srgb, var(--color-warning) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-warning) 40%, var(--color-border));
+  border: var(--border-width) solid color-mix(in srgb, var(--color-warning) 40%, var(--color-border));
   border-radius: var(--radius-md);
 }
 .reflection-prompt__header {
@@ -28,7 +28,7 @@
 .reflection-prompt__btn {
   padding: var(--space-sm) var(--space-md);
   background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-family: inherit;

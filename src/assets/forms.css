@@ -72,9 +72,8 @@ input[type="date"] {
   border-radius: var(--radius-md); padding: 0.6rem 0.8rem; font-family: var(--font-family-base); font-size: var(--font-size-base); color: var(--color-text-primary);
 }
 input[type="date"]:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 var(--focus-ring-width) var(--color-primary-glow); }
-[data-theme="dark"] input[type="date"] { color-scheme: dark; }
-[data-theme="blossom"] input[type="date"] { color-scheme: light; }
-[data-theme="fresh"] input[type="date"] { color-scheme: light; }
+[data-theme="dark"] input[type="date"],
+[data-theme="onyx"] input[type="date"] { color-scheme: dark; }
 
 /* ── Base input — text / password / email / search ──────────────── */
 .base-input { display: flex; flex-direction: column; gap: 0; width: 100%; }
@@ -335,7 +334,7 @@ input[type="date"]:focus { outline: none; border-color: var(--color-primary); bo
 .base-checkbox:focus-within { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
 .base-checkbox--disabled { opacity: var(--opacity-disabled); cursor: not-allowed; }
 .base-checkbox__input { position: absolute; opacity: 0; width: 0; height: 0; }
-.base-checkbox__checkmark { width: 22px; height: 22px; border: 2px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg-card); display: flex; align-items: center; justify-content: center; transition: border var(--motion-fast), background var(--motion-fast); flex-shrink: 0; }
+.base-checkbox__checkmark { width: 22px; height: 22px; border: var(--border-width-strong) solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg-card); display: flex; align-items: center; justify-content: center; transition: border var(--motion-fast), background var(--motion-fast); flex-shrink: 0; }
 .base-checkbox__input:checked + .base-checkbox__checkmark { background: var(--color-primary); border-color: var(--color-primary); }
 .base-checkbox__input:checked + .base-checkbox__checkmark::after { content: ''; display: block; width: 6px; height: 10px; border: solid var(--color-on-primary); border-width: 0 2px 2px 0; transform: rotate(45deg); margin-top: -2px; }
 .base-checkbox__input:indeterminate + .base-checkbox__checkmark { background: var(--color-primary); border-color: var(--color-primary); }
@@ -349,7 +348,7 @@ input[type="date"]:focus { outline: none; border-color: var(--color-primary); bo
 .base-radio:focus-within { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
 .base-radio--disabled { opacity: var(--opacity-disabled); cursor: not-allowed; }
 .base-radio__input { position: absolute; opacity: 0; width: 0; height: 0; }
-.base-radio__circle { width: 22px; height: 22px; border: 2px solid var(--color-border); border-radius: var(--radius-circle); background: var(--color-bg-card); display: flex; align-items: center; justify-content: center; transition: border var(--motion-fast), background var(--motion-fast); flex-shrink: 0; }
+.base-radio__circle { width: 22px; height: 22px; border: var(--border-width-strong) solid var(--color-border); border-radius: var(--radius-circle); background: var(--color-bg-card); display: flex; align-items: center; justify-content: center; transition: border var(--motion-fast), background var(--motion-fast); flex-shrink: 0; }
 .base-radio__input:checked + .base-radio__circle { background: var(--color-primary); border-color: var(--color-primary); }
 .base-radio__input:checked + .base-radio__circle::after { content: ''; width: 10px; height: 10px; background: var(--color-on-primary); border-radius: var(--radius-circle); }
 .base-radio__input:focus-visible + .base-radio__circle { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
@@ -506,7 +505,7 @@ input[type="date"]:focus { outline: none; border-color: var(--color-primary); bo
   align-items: center;
   gap: var(--space-xs);
   background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-pill);
   padding: 0.3rem 0.8rem;
   color: var(--color-primary);
@@ -616,7 +615,7 @@ input[type="date"]:focus { outline: none; border-color: var(--color-primary); bo
   padding: 1px var(--space-2xs);
   border-radius: var(--radius-sm);
   background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
 }
 .source-grid-picker__clear {
   background: none;
@@ -636,7 +635,7 @@ input[type="date"]:focus { outline: none; border-color: var(--color-primary); bo
   overflow-y: auto;
   padding: var(--space-xs);
   background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
 }
 .source-grid-picker__grid--single {
@@ -674,7 +673,7 @@ input[type="date"]:focus { outline: none; border-color: var(--color-primary); bo
   justify-content: center;
   width: 18px;
   height: 18px;
-  border: 2px solid var(--color-border);
+  border: var(--border-width-strong) solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-bg-card);
   font-size: 0.7rem;
@@ -713,7 +712,7 @@ input[type="date"]:focus { outline: none; border-color: var(--color-primary); bo
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-pill);
   padding: 0 0.4rem;
   min-width: 1.6em;

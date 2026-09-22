@@ -41,7 +41,10 @@
             :class="{ 'user-picker__item--active': selectedUser && selectedUser.id === u.id }"
             @click="selectUser(u)"
           >
-            <span class="user-picker__avatar">
+            <span
+              class="user-picker__avatar"
+              :class="avatarToneClass(u.id ?? u.username)"
+            >
               {{ (u.full_name || u.username || '?')[0] }}
             </span>
             <span class="user-picker__identity">
@@ -193,6 +196,7 @@ import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import { useUserOverrideEditor } from '../composables/useUserOverrideEditor'
+import { avatarToneClass } from '@/utils/avatar'
 
 const props = defineProps({
   capabilityGroups: { type: Array, required: true },

@@ -86,4 +86,8 @@
 html[data-locale="en"][data-theme] {
   --font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-family-heading: 'Outfit', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --letter-spacing-heading: -0.01em;
+  --letter-spacing-badge: 0.02em;
+  --letter-spacing-label: 0.03em;
+  --letter-spacing-caps: 0.05em;
 }

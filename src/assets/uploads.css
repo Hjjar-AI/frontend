@@ -41,6 +41,6 @@ margin: 0 auto;
 display: flex;
 gap: var(--space-sm);
 margin: var(--space-lg) 0;
-border-bottom: 2px solid var(--color-border);
+border-bottom: var(--border-width-strong) solid var(--color-border);
 padding-bottom: var(--space-sm);
 }

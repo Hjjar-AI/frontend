@@ -18,3 +18,11 @@
 }
 
 blockquote { hanging-punctuation: first allow-end last; }
+
+/* Deterministic, theme-aware tones for avatars in dense user lists. */
+.avatar-tone-0 { --avatar-color: var(--color-avatar-0); }
+.avatar-tone-1 { --avatar-color: var(--color-avatar-1); }
+.avatar-tone-2 { --avatar-color: var(--color-avatar-2); }
+.avatar-tone-3 { --avatar-color: var(--color-avatar-3); }
+.avatar-tone-4 { --avatar-color: var(--color-avatar-4); }
+.avatar-tone-5 { --avatar-color: var(--color-avatar-5); }

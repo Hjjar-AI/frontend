@@ -56,7 +56,10 @@
               <div class="user-card__header">
                 <div
                   class="user-card__avatar"
-                  :class="user.is_active ? '' : 'user-card__avatar--inactive'"
+                  :class="[
+                    avatarToneClass(user.id ?? user.username),
+                    { 'user-card__avatar--inactive': !user.is_active },
+                  ]"
                 >
                   {{ (user.full_name || user.username || '?')[0] }}
                 </div>
@@ -233,6 +236,7 @@ import { useConfigStore } from '@/stores/configStore'
 import { roleLabelFor, roleBadgeVariantFor } from '@/utils/roleDisplay'
 import { formatCellValue } from '@/utils/formatCellValue'
 import { daysUntilExpiry } from '@/utils/formatters'
+import { avatarToneClass } from '@/utils/avatar'
 
 const { t } = useI18n()
 

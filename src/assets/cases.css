@@ -6,7 +6,7 @@
 /* ── QuestionDisplay.vue — case stem panel ──────────────────────── */
 .case-stem-panel {
   background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-inline-start: 4px solid var(--color-primary);
   border-radius: var(--radius-md);
   padding: var(--space-md);
@@ -30,7 +30,7 @@
 .question-card__case {
   margin-bottom: var(--space-md);
   background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-inline-start: 4px solid var(--color-primary);
   border-radius: var(--radius-sm);
   padding: var(--space-sm) var(--space-md);
@@ -73,7 +73,7 @@
   margin-bottom: var(--space-lg);
   padding: var(--space-md);
   background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
 }
 .question-form__case-summary {
