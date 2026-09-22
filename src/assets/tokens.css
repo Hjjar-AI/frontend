@@ -34,17 +34,17 @@
   /* ----- CORE COLOURS -----
      `light` is retained as a compatibility alias for persisted
      preferences from before the default palette was named Stone. */
-  --color-print-primary: #6a3f24;
-  --color-print-success: #2f5543;
-  --color-print-danger: #7d342f;
-  --color-print-warning: #654711;
-  --color-print-info: #285166;
+  --color-print-primary: #7a3f20;
+  --color-print-success: #2b6547;
+  --color-print-danger: #913a32;
+  --color-print-warning: #755200;
+  --color-print-info: #285e78;
 
   --color-primary: var(--color-print-primary);
-  --color-tint-base: #ddd4c7;
+  --color-tint-base: #d9cab9;
   /* A subdued, palette-tinted replacement for pure white on coloured
      controls. It avoids glare while retaining accessible contrast. */
-  --color-light-foreground: #e8e0d6;
+  --color-light-foreground: #eee3d6;
   --color-strong-weight: 70%;
   --color-glow-weight: 20%;
   --color-primary-light: color-mix(in srgb, var(--color-primary) 45%, var(--color-tint-base));
@@ -72,15 +72,15 @@
   --color-info-soft-text: var(--color-info-dark);
 
   /* ----- BACKGROUNDS (STONE THEME) ----- */
-  --color-bg-body: #c9c0b2;
-  --color-bg-card: #ddd4c7;
-  --color-bg-alt: #d2c8ba;
+  --color-bg-body: #c4b29f;
+  --color-bg-card: #d9cab9;
+  --color-bg-alt: #cbbbaa;
   --color-bg-overlay: color-mix(in srgb, var(--color-bg-card) 94%, transparent);
 
   /* ----- TEXT COLOURS ----- */
-  --color-text-primary: #27221e;
-  --color-text-secondary: #463d35;
-  --color-text-muted: #55483d;
+  --color-text-primary: #2d211a;
+  --color-text-secondary: #50382d;
+  --color-text-muted: #574035;
 
   --color-border: color-mix(in srgb, var(--color-text-muted) 30%, transparent);
   --color-overlay: rgba(0, 0, 0, 0.58);
@@ -274,12 +274,12 @@
   --color-tint-base: #f2ede5;
   --color-light-foreground: #e2ddd5;
   --color-strong-weight: 92%;
-  --color-primary: #d6a064;
-  --color-success: #78ad91;
-  --color-danger: #d17c6c;
+  --color-primary: #e6a15b;
+  --color-success: #68b68b;
+  --color-danger: #df7769;
   /* Warning stays yellow while the brand accent remains warm gold. */
-  --color-warning: #e8cf45;
-  --color-info: #6dacc9;
+  --color-warning: #e6cf45;
+  --color-info: #64afd2;
 
   --color-bg-body: #0d1218;
   --color-bg-card: #18212a;
@@ -336,21 +336,21 @@
 
 /* ===== BLOSSOM THEME ===== */
 [data-theme="blossom"] {
-  --color-tint-base: #e1ccd6;
-  --color-light-foreground: #e9dde3;
-  --color-primary: #7f3455;
-  --color-success: #315447;
-  --color-danger: #843445;
-  --color-warning: #664812;
-  --color-info: #34516c;
+  --color-tint-base: #e2b9cb;
+  --color-light-foreground: #f1e2e9;
+  --color-primary: #9b285c;
+  --color-success: #24614f;
+  --color-danger: #a82746;
+  --color-warning: #775000;
+  --color-info: #315f92;
 
-  --color-bg-body: #d3bcc7;
-  --color-bg-card: #e1ccd6;
-  --color-bg-alt: #d9c3ce;
+  --color-bg-body: #d2a8bb;
+  --color-bg-card: #e2b9cb;
+  --color-bg-alt: #d6a6bb;
 
-  --color-text-primary: #34212b;
-  --color-text-secondary: #573a49;
-  --color-text-muted: #60414f;
+  --color-text-primary: #351622;
+  --color-text-secondary: #5d293d;
+  --color-text-muted: #66364a;
 
   --color-on-primary: var(--color-light-foreground);
   --color-on-success: var(--color-light-foreground);
@@ -377,21 +377,21 @@
 
 /* ===== FRESH THEME ===== */
 [data-theme="fresh"] {
-  --color-tint-base: #ced9ce;
-  --color-light-foreground: #e1e9e2;
-  --color-primary: #285434;
-  --color-success: #245639;
-  --color-danger: #79372f;
-  --color-warning: #5f4c10;
-  --color-info: #295468;
+  --color-tint-base: #c4ddc8;
+  --color-light-foreground: #e4f0e6;
+  --color-primary: #176b42;
+  --color-success: #1f754c;
+  --color-danger: #9b3f37;
+  --color-warning: #745600;
+  --color-info: #17657c;
 
-  --color-bg-body: #b9c8ba;
-  --color-bg-card: #ced9ce;
-  --color-bg-alt: #c3d0c4;
+  --color-bg-body: #aed0b6;
+  --color-bg-card: #c4ddc8;
+  --color-bg-alt: #b2d1b8;
 
-  --color-text-primary: #182b20;
-  --color-text-secondary: #304a39;
-  --color-text-muted: #3b5141;
+  --color-text-primary: #12291c;
+  --color-text-secondary: #294c37;
+  --color-text-muted: #355840;
 
   --color-on-primary: var(--color-light-foreground);
   --color-on-success: var(--color-light-foreground);
@@ -463,21 +463,21 @@
 
 /* ===== INK THEME ===== */
 [data-theme="ink"] {
-  --color-tint-base: #e4e4e4;
-  --color-light-foreground: #e6e6e3;
-  --color-primary: #2b2b2b;
-  --color-success: #2f6e46;
-  --color-danger: #a13a2f;
-  --color-warning: #8a5a12;
-  --color-info: #2f5f7a;
+  --color-tint-base: #deded9;
+  --color-light-foreground: #e8e8e4;
+  --color-primary: #252525;
+  --color-success: #236b43;
+  --color-danger: #a33128;
+  --color-warning: #805500;
+  --color-info: #2a5f7e;
 
-  --color-bg-body: #d7d7d3;
-  --color-bg-card: #e6e6e3;
-  --color-bg-alt: #ddddda;
+  --color-bg-body: #d0d0cc;
+  --color-bg-card: #deded9;
+  --color-bg-alt: #d2d2cd;
 
-  --color-text-primary: #16161a;
-  --color-text-secondary: #3f3f42;
-  --color-text-muted: #6b6b6f;
+  --color-text-primary: #171719;
+  --color-text-secondary: #3a3a3d;
+  --color-text-muted: #545459;
 
   --color-streak-start: #9b4a28;
   --color-streak-end: #78351f;
@@ -495,21 +495,21 @@
 
 /* ===== SLATE THEME ===== */
 [data-theme="slate"] {
-  --color-tint-base: #d7dde3;
-  --color-light-foreground: #e2e5e8;
-  --color-primary: #35516b;
-  --color-success: #2b5c46;
-  --color-danger: #7a3530;
-  --color-warning: #6b5015;
-  --color-info: #5c4f74;
+  --color-tint-base: #c6d3e0;
+  --color-light-foreground: #e5edf4;
+  --color-primary: #285f8d;
+  --color-success: #27654c;
+  --color-danger: #94433d;
+  --color-warning: #735700;
+  --color-info: #684d97;
 
-  --color-bg-body: #b7c1cb;
-  --color-bg-card: #d7dde3;
-  --color-bg-alt: #c7d0d9;
+  --color-bg-body: #aebfd1;
+  --color-bg-card: #c6d3e0;
+  --color-bg-alt: #b4c4d4;
 
-  --color-text-primary: #1c2833;
-  --color-text-secondary: #3a4b59;
-  --color-text-muted: #4c5d6b;
+  --color-text-primary: #14283a;
+  --color-text-secondary: #304d66;
+  --color-text-muted: #354f66;
 
   --color-streak-start: #8a4825;
   --color-streak-end: #753820;
@@ -527,22 +527,22 @@
 
 /* ===== SEPIA THEME ===== */
 [data-theme="sepia"] {
-  --color-tint-base: #ecd9b8;
-  --color-light-foreground: #eadbbf;
-  --color-primary: #7a4620;
-  --color-success: #3c6b42;
-  --color-danger: #8a3a2c;
+  --color-tint-base: #e8d09a;
+  --color-light-foreground: #f0e2c6;
+  --color-primary: #8a4318;
+  --color-success: #416b2b;
+  --color-danger: #9b3324;
   /* Darkened from the proposal so warning text clears 4.5:1 on cards. */
-  --color-warning: #6f530b;
-  --color-info: #35637a;
+  --color-warning: #705100;
+  --color-info: #2e627e;
 
-  --color-bg-body: #dcc79a;
-  --color-bg-card: #f0e2c0;
-  --color-bg-alt: #e6d6ac;
+  --color-bg-body: #d8be86;
+  --color-bg-card: #e8d09a;
+  --color-bg-alt: #ddbf83;
 
-  --color-text-primary: #3a2a12;
-  --color-text-secondary: #5a4423;
-  --color-text-muted: #6b5530;
+  --color-text-primary: #35220c;
+  --color-text-secondary: #60451f;
+  --color-text-muted: #674a24;
 
   --color-streak-start: #9a4d25;
   --color-streak-end: #78331f;

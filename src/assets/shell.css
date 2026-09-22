@@ -1,4 +1,13 @@
 /* frontend/src/assets/shell.css */
+html,
+body,
+#app,
+.layout,
+.layout__main {
+  background-color: var(--color-bg-body);
+  color: var(--color-text-primary);
+}
+html, body { min-height: 100%; }
 .layout { display: flex; flex-direction: column; min-height: 100vh; }
 .layout__main { flex: 1; padding: var(--space-sm) var(--space-md) var(--space-md); margin-top: var(--space-xs); }
 @media (max-width: 768px) { .layout__main { padding-top: var(--space-xs); padding-bottom: calc(76px + env(safe-area-inset-bottom)); } }
