@@ -42,6 +42,9 @@
 
   --color-primary: var(--color-print-primary);
   --color-tint-base: #ddd4c7;
+  /* A subdued, palette-tinted replacement for pure white on coloured
+     controls. It avoids glare while retaining accessible contrast. */
+  --color-light-foreground: #e8e0d6;
   --color-strong-weight: 70%;
   --color-glow-weight: 20%;
   --color-primary-light: color-mix(in srgb, var(--color-primary) 45%, var(--color-tint-base));
@@ -83,22 +86,22 @@
   --color-overlay: rgba(0, 0, 0, 0.58);
 
   /* ----- CONTRAST-SAFE "ON" COLORS ----- */
-  --color-on-primary: #fffaf3;
-  --color-on-success: #fffaf3;
-  --color-on-danger: #fffaf3;
-  --color-on-warning: #fffaf3;
-  --color-on-info: #fffaf3;
+  --color-on-primary: var(--color-light-foreground);
+  --color-on-success: var(--color-light-foreground);
+  --color-on-danger: var(--color-light-foreground);
+  --color-on-warning: var(--color-light-foreground);
+  --color-on-info: var(--color-light-foreground);
   --color-on-primary-light: var(--color-text-primary);
   --color-on-muted: var(--color-on-primary);
 
   /* ----- TEXT HELPERS ----- */
   --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
-  --color-text-inverse: #fffaf3;
+  --color-text-inverse: var(--color-light-foreground);
 
   /* ----- MISC ----- */
   --color-streak-start: #a1542d;
   --color-streak-end: #7f3026;
-  --color-on-streak: #fffaf3;
+  --color-on-streak: var(--color-light-foreground);
   --color-rank-gold: #6b510d;
   --color-rank-silver: #515b65;
   --color-rank-bronze: #70401f;
@@ -269,6 +272,7 @@
 [data-theme="dark"],
 [data-theme="onyx"] {
   --color-tint-base: #f2ede5;
+  --color-light-foreground: #e2ddd5;
   --color-strong-weight: 92%;
   --color-primary: #d6a064;
   --color-success: #78ad91;
@@ -281,7 +285,7 @@
   --color-bg-card: #18212a;
   --color-bg-alt: #222d38;
 
-  --color-text-primary: #ece7df;
+  --color-text-primary: var(--color-light-foreground);
   --color-text-secondary: #c9c1b6;
   --color-text-muted: #a9a196;
 
@@ -301,7 +305,7 @@
   --color-warning-soft-text: var(--color-warning);
   --color-info-soft-text: var(--color-info);
 
-  --color-text-inverse: #f4f1eb;
+  --color-text-inverse: var(--color-light-foreground);
   --color-streak-start: #e49a54;
   --color-streak-end: #d87945;
   --color-on-streak: #26180c;
@@ -333,6 +337,7 @@
 /* ===== BLOSSOM THEME ===== */
 [data-theme="blossom"] {
   --color-tint-base: #e1ccd6;
+  --color-light-foreground: #e9dde3;
   --color-primary: #7f3455;
   --color-success: #315447;
   --color-danger: #843445;
@@ -347,14 +352,14 @@
   --color-text-secondary: #573a49;
   --color-text-muted: #60414f;
 
-  --color-on-primary: #fff8fb;
-  --color-on-success: #fff8fb;
-  --color-on-danger: #fff8fb;
-  --color-on-warning: #fff8fb;
-  --color-on-info: #fff8fb;
+  --color-on-primary: var(--color-light-foreground);
+  --color-on-success: var(--color-light-foreground);
+  --color-on-danger: var(--color-light-foreground);
+  --color-on-warning: var(--color-light-foreground);
+  --color-on-info: var(--color-light-foreground);
   --color-on-primary-light: var(--color-text-primary);
 
-  --color-text-inverse: #fff8fb;
+  --color-text-inverse: var(--color-light-foreground);
 
   --color-streak-start: #a44b63;
   --color-streak-end: #7e294b;
@@ -373,6 +378,7 @@
 /* ===== FRESH THEME ===== */
 [data-theme="fresh"] {
   --color-tint-base: #ced9ce;
+  --color-light-foreground: #e1e9e2;
   --color-primary: #285434;
   --color-success: #245639;
   --color-danger: #79372f;
@@ -387,14 +393,14 @@
   --color-text-secondary: #304a39;
   --color-text-muted: #3b5141;
 
-  --color-on-primary: #f7fff8;
-  --color-on-success: #f7fff8;
-  --color-on-danger: #f7fff8;
-  --color-on-warning: #f7fff8;
-  --color-on-info: #f7fff8;
+  --color-on-primary: var(--color-light-foreground);
+  --color-on-success: var(--color-light-foreground);
+  --color-on-danger: var(--color-light-foreground);
+  --color-on-warning: var(--color-light-foreground);
+  --color-on-info: var(--color-light-foreground);
   --color-on-primary-light: var(--color-text-primary);
 
-  --color-text-inverse: #f7fff8;
+  --color-text-inverse: var(--color-light-foreground);
 
   --color-streak-start: #9a5428;
   --color-streak-end: #763b25;
@@ -412,35 +418,36 @@
 
 /* ===== HIGH-CONTRAST THEME =====
    Every solid semantic color has at least 7:1 contrast against its
-   white foreground. Meaning still remains paired with text/icons. */
+   soft-white foreground. Meaning still remains paired with text/icons. */
 [data-theme="contrast"] {
-  --color-tint-base: #ffffff;
+  --color-tint-base: #e6e6e6;
+  --color-light-foreground: #e6e6e6;
   --color-glow-weight: 55%;
   --color-primary: #1d3a8f;
-  --color-success: #145d31;
-  --color-danger: #a3121f;
-  --color-warning: #704800;
-  --color-info: #075e75;
+  --color-success: #104d28;
+  --color-danger: #8f0f1b;
+  --color-warning: #5d3b00;
+  --color-info: #064e62;
 
-  --color-bg-body: #f0f0f0;
-  --color-bg-card: #ffffff;
-  --color-bg-alt: #e6e6e6;
+  --color-bg-body: #d6d6d6;
+  --color-bg-card: #e6e6e6;
+  --color-bg-alt: #dedede;
 
   --color-text-primary: #0a0a0a;
   --color-text-secondary: #262626;
   --color-text-muted: #4d4d4d;
 
-  --color-on-primary: #ffffff;
-  --color-on-success: #ffffff;
-  --color-on-danger: #ffffff;
-  --color-on-warning: #ffffff;
-  --color-on-info: #ffffff;
+  --color-on-primary: var(--color-light-foreground);
+  --color-on-success: var(--color-light-foreground);
+  --color-on-danger: var(--color-light-foreground);
+  --color-on-warning: var(--color-light-foreground);
+  --color-on-info: var(--color-light-foreground);
   --color-on-primary-light: var(--color-text-primary);
-  --color-text-inverse: #ffffff;
+  --color-text-inverse: var(--color-light-foreground);
 
   --color-streak-start: #9b2c15;
   --color-streak-end: #7f1d1d;
-  --color-on-streak: #ffffff;
+  --color-on-streak: var(--color-light-foreground);
   --color-rank-gold: #6b5000;
   --color-rank-silver: #444b53;
   --color-rank-bronze: #6f3b18;
@@ -457,15 +464,16 @@
 /* ===== INK THEME ===== */
 [data-theme="ink"] {
   --color-tint-base: #e4e4e4;
+  --color-light-foreground: #e6e6e3;
   --color-primary: #2b2b2b;
   --color-success: #2f6e46;
   --color-danger: #a13a2f;
   --color-warning: #8a5a12;
   --color-info: #2f5f7a;
 
-  --color-bg-body: #f5f5f3;
-  --color-bg-card: #ffffff;
-  --color-bg-alt: #ececeb;
+  --color-bg-body: #d7d7d3;
+  --color-bg-card: #e6e6e3;
+  --color-bg-alt: #ddddda;
 
   --color-text-primary: #16161a;
   --color-text-secondary: #3f3f42;
@@ -488,6 +496,7 @@
 /* ===== SLATE THEME ===== */
 [data-theme="slate"] {
   --color-tint-base: #d7dde3;
+  --color-light-foreground: #e2e5e8;
   --color-primary: #35516b;
   --color-success: #2b5c46;
   --color-danger: #7a3530;
@@ -519,6 +528,7 @@
 /* ===== SEPIA THEME ===== */
 [data-theme="sepia"] {
   --color-tint-base: #ecd9b8;
+  --color-light-foreground: #eadbbf;
   --color-primary: #7a4620;
   --color-success: #3c6b42;
   --color-danger: #8a3a2c;
