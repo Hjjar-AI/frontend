@@ -29,8 +29,8 @@
               <BaseInput v-model="editForm.endDate" :label="t('planner.endDate')" type="date" />
             </FormGrid>
             <div class="form-actions">
-              <BaseButton variant="primary" @click="savePlan" :loading="store.isLoading">{{ t('planner.save') }}</BaseButton>
-              <BaseButton variant="danger" @click="deletePlan" :loading="store.isLoading">{{ t('planner.delete') }}</BaseButton>
+              <BaseButton variant="primary" :loading="store.isLoading" @click="savePlan">{{ t('planner.save') }}</BaseButton>
+              <BaseButton variant="danger" :loading="store.isLoading" @click="deletePlan">{{ t('planner.delete') }}</BaseButton>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@
 
 <script setup>
 import '@/assets/profile.css'
-import { ref, computed, onMounted, reactive } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { useStudyPlannerStore } from '@/stores/studyPlannerStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useDialog } from '@/composables/useDialog'

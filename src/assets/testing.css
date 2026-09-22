@@ -25,9 +25,26 @@
   margin-bottom: var(--space-sm);
 }
 
+.question-display__header {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+.question-display__text {
+  flex: 1 1 32rem;
+  min-width: 0;
+  margin: 0;
+}
+.question-display__text .base-markdown {
+  margin-inline-end: auto;
+  text-align: start;
+}
+
 .test-results { padding: var(--space-lg) 0; max-width: var(--content-base); margin: 0 auto; }
 .test-results__summary { text-align: center; margin-bottom: var(--space-xl); }
-.test-tag { background: var(--color-primary-light); padding: 0.2rem 0.8rem; border-radius: var(--radius-pill); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); }
+.test-tag { background: var(--color-primary-light); color: var(--color-on-primary-light); padding: 0.2rem 0.8rem; border-radius: var(--radius-pill); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); }
 .test-results__score { margin: var(--space-md) 0; }
 .score-number { font-size: var(--font-size-display); font-weight: var(--font-weight-extrabold); display: block; line-height: var(--line-height-numeral); font-variant-numeric: tabular-nums; }
 .score-percent { font-size: var(--font-size-2xl); display: block; line-height: var(--line-height-numeral); font-variant-numeric: tabular-nums; }
@@ -65,7 +82,6 @@
 .resume-box { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-sm); background: var(--color-bg-alt); padding: var(--space-md); border-radius: var(--radius-md); margin-bottom: var(--space-lg); }
 
 .setup-form { display: flex; flex-direction: column; gap: var(--space-md); }
-.form-actions { margin-top: var(--space-lg); text-align: center; }
 .no-questions-hint {
   color: var(--color-warning);
   font-size: var(--font-size-sm);
@@ -149,12 +165,11 @@
   width: 100%;
   gap: var(--space-sm);
 }
-.question-card__choice span {
+.question-card__choice-text {
   line-height: 1.6;
   flex: 1;
-}
-.question-card__choice input[type="radio"] {
-  margin-inline-end: var(--space-sm);
+  min-width: 0;
+  text-align: start;
 }
 
 /* Compact numbered navigation shared by test runners. */

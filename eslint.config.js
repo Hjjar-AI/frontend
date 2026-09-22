@@ -93,6 +93,22 @@ export default [
     },
   },
 
+  // Route views and a few application-shell components intentionally
+  // use concise, single-word names. They are never registered as native
+  // custom elements, so the multi-word collision rule adds no value.
+  {
+    files: [
+      'src/features/**/views/*.vue',
+      'src/components/common/Layout.vue',
+      'src/components/common/Timer.vue',
+      'src/components/layout/Footer.vue',
+      'src/components/layout/Navbar.vue',
+    ],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
+
   // This ensures Prettier's structural rules take precedence over Vue template formatting
   eslintConfigPrettier
 ]

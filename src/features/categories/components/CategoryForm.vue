@@ -67,7 +67,21 @@ const editMode = ref(false)
 const editingId = ref(null)
 const nameError = ref('')
 
-const colorPresets = ['#667eea','#11998e','#dc3545','#f093fb','#ffc107','#764ba2','#fd7e14','#20c997','#6c757d','#17a2b8','#e83e8c','#28a745','#d63384']
+const DEFAULT_CATEGORY_COLOR = '#6a3f24'
+const colorPresets = [
+  DEFAULT_CATEGORY_COLOR,
+  '#285166',
+  '#2f5543',
+  '#7d342f',
+  '#654711',
+  '#51446f',
+  '#7f3455',
+  '#3d625e',
+  '#515b65',
+  '#83513a',
+  '#66465b',
+  '#456044',
+]
 
 const iconOptions = computed(() => [
   { value: 'bi-folder',            label: t('categories.iconFolder') },
@@ -86,7 +100,7 @@ const iconOptions = computed(() => [
   { value: 'bi-exclamation-triangle', label: t('categories.iconEmergency') },
 ])
 
-const form = reactive({ name: '', description: '', color: '#667eea', icon: 'bi-folder' })
+const form = reactive({ name: '', description: '', color: DEFAULT_CATEGORY_COLOR, icon: 'bi-folder' })
 
 function open(category = null) {
   nameError.value = ''
@@ -95,14 +109,14 @@ function open(category = null) {
     editingId.value = category.id
     form.name = category.name
     form.description = category.description || ''
-    form.color = category.color || '#667eea'
+    form.color = category.color || DEFAULT_CATEGORY_COLOR
     form.icon = category.icon || 'bi-folder'
   } else {
     editMode.value = false
     editingId.value = null
     form.name = ''
     form.description = ''
-    form.color = '#667eea'
+    form.color = DEFAULT_CATEGORY_COLOR
     form.icon = 'bi-folder'
   }
   isOpen.value = true

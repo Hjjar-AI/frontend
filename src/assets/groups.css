@@ -110,9 +110,9 @@
   width: 50px;
   text-align: center;
 }
-.leaderboard__rank--gold { color: #d4a017; }
-.leaderboard__rank--silver { color: #9ca3af; }
-.leaderboard__rank--bronze { color: #b45309; }
+.leaderboard__rank--gold { color: var(--color-rank-gold); }
+.leaderboard__rank--silver { color: var(--color-rank-silver); }
+.leaderboard__rank--bronze { color: var(--color-rank-bronze); }
 .leaderboard__name {
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
@@ -131,7 +131,7 @@
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  color: #ff5c39;
+  color: var(--color-streak-end);
   font-weight: var(--font-weight-bold);
   font-variant-numeric: tabular-nums;
 }
@@ -206,7 +206,7 @@
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  color: #ff5c39;
+  color: var(--color-streak-end);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
 }

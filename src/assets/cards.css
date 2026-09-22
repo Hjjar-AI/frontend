@@ -2,7 +2,7 @@
 .card-title__icon { color: var(--color-primary); font-size: var(--icon-md); }
 .card-title__badge { margin-inline-start: auto; }
 
-.action-row { display: flex; gap: var(--space-sm); justify-content: flex-end; padding-top: var(--space-md); border-top: var(--border-width) solid var(--color-border); }
+.action-row { display: flex; flex-wrap: wrap; gap: var(--space-sm); justify-content: flex-end; padding-top: var(--space-md); border-top: var(--border-width) solid var(--color-border); }
 .action-row--start { justify-content: flex-start; }
 .action-row--center { justify-content: center; }
 .action-row--no-border { border-top: none; padding-top: 0; }
@@ -106,6 +106,14 @@ box-shadow: 0 0 0 var(--focus-ring-width) var(--color-focus-ring), var(--shadow-
   flex-direction: column;
   gap: var(--space-xs);
   flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .base-card,
+  .stat-tile { padding: var(--space-md); }
+
+  .action-row > .base-button { flex: 1 1 10rem; }
+  .category-card__actions { flex-wrap: wrap; }
 }
 .user-card__stats {
   display: grid;

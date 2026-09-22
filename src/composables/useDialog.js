@@ -1,7 +1,5 @@
 // frontend/src/composables/useDialog.js
-import { reactive } from 'vue'
 import { createSingletonReactive } from './composableHelpers'
-
 
 const state = createSingletonReactive({
   confirmVisible: false,
@@ -40,14 +38,14 @@ function showNextPrompt() {
 }
 
 export function useDialog() {
-    function confirm(message, variant = 'default') {
+  function confirm(message, variant = 'default') {
     return new Promise((resolve) => {
       confirmQueue.push({ message, variant, resolve })
       showNextConfirm()
     })
   }
 
-    function prompt(message, defaultValue = '') {
+  function prompt(message, defaultValue = '') {
     return new Promise((resolve) => {
       promptQueue.push({ message, defaultValue, resolve })
       showNextPrompt()

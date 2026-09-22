@@ -31,10 +31,10 @@
      `var(--color-*)` in the cascade still resolves against the
      active on-screen theme. In dark mode that means:
 
-       • `--color-border: rgba(150, 170, 200, 0.3)` — a translucent
-         light-blue tuned to a #1e1e2f background. On white paper it
+       • `--color-border` is a translucent tone derived from muted
+         text and tuned to the dark surface. On white paper it
          renders as a barely-visible hairline.
-       • `--color-primary: #f0c28a` — a pale peach meant to pop on
+       • The dark theme's primary is a light amber meant to pop on
          a dark card. On white paper it washes out against the page.
 
      Net effect: printed question sheets and result breakdowns from
@@ -57,24 +57,24 @@
      defining and reintroduce the exact problem this block solves. */
   html,
   html[data-theme] {
-    --color-primary: #c47d3a;
+    --color-primary: #6a3f24;
     --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
     --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
     --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
 
-    --color-success: #558b6f;
+    --color-success: #2f5543;
     --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
     --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
 
-    --color-danger: #b55a4a;
+    --color-danger: #7d342f;
     --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
     --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
 
-    --color-warning: #d49a1f;
+    --color-warning: #654711;
     --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
     --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
 
-    --color-info: #2e8ac0;
+    --color-info: #285166;
     --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
     --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
 
@@ -89,10 +89,8 @@
     --color-border: rgba(0, 0, 0, 0.18);
     --color-overlay: rgba(0, 0, 0, 0.5);
 
-    /* The "on-*" foreground colours are already white in every theme
-       except dark; reasserting them here keeps them correct on white
-       paper where the dark theme's near-black on-colours would show
-       through any remaining accent surface. */
+    /* Reassert light "on-*" foregrounds for print so the dark theme's
+       near-black variants do not carry onto remaining accent surfaces. */
     --color-on-primary: #ffffff;
     --color-on-success: #ffffff;
     --color-on-danger: #ffffff;

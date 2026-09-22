@@ -54,3 +54,11 @@
 .btn-icon--compact { min-height: 44px; min-width: 44px; padding: 0.15rem 0.5rem; font-size: var(--font-size-xs); }
 
 .btn-icon:focus-visible, .base-button:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+
+@media (pointer: coarse) {
+  .base-button--small,
+  .btn-icon {
+    min-height: var(--control-height);
+  }
+  .btn-icon { min-width: var(--control-height); }
+}

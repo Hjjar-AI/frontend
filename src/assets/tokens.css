@@ -30,52 +30,63 @@
   font-size: 18px;
 
   /* ----- CORE COLOURS ----- */
-  --color-primary: #c47d3a;
-  --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
-  --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
+  --color-primary: #6a3f24;
+  --color-tint-base: #ddd4c7;
+  --color-strong-weight: 70%;
+  --color-primary-light: color-mix(in srgb, var(--color-primary) 45%, var(--color-tint-base));
+  --color-primary-dark: color-mix(in srgb, var(--color-primary) var(--color-strong-weight), black);
   --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
 
-  --color-success: #558b6f;
-  --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
-  --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
+  --color-success: #2f5543;
+  --color-success-light: color-mix(in srgb, var(--color-success) 45%, var(--color-tint-base));
+  --color-success-dark: color-mix(in srgb, var(--color-success) var(--color-strong-weight), black);
 
-  --color-danger: #b55a4a;
-  --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
-  --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
+  --color-danger: #7d342f;
+  --color-danger-light: color-mix(in srgb, var(--color-danger) 45%, var(--color-tint-base));
+  --color-danger-dark: color-mix(in srgb, var(--color-danger) var(--color-strong-weight), black);
 
-  --color-warning: #d49a1f;
-  --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
-  --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
+  --color-warning: #654711;
+  --color-warning-light: color-mix(in srgb, var(--color-warning) 45%, var(--color-tint-base));
+  --color-warning-dark: color-mix(in srgb, var(--color-warning) var(--color-strong-weight), black);
 
-  --color-info: #2e8ac0;
-  --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
-  --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
+  --color-info: #285166;
+  --color-info-light: color-mix(in srgb, var(--color-info) 45%, var(--color-tint-base));
+  --color-info-dark: color-mix(in srgb, var(--color-info) var(--color-strong-weight), black);
 
-  /* ----- BACKGROUNDS (LIGHT THEME) – darkened for eye comfort ----- */
-  --color-bg-body: #d5cdbc;
-  --color-bg-card: #e8dfd2;
-  --color-bg-alt: #dfd5c7;
+  /* ----- BACKGROUNDS (STONE THEME) ----- */
+  --color-bg-body: #c9c0b2;
+  --color-bg-card: #ddd4c7;
+  --color-bg-alt: #d2c8ba;
+  --color-bg-overlay: color-mix(in srgb, var(--color-bg-card) 94%, transparent);
 
   /* ----- TEXT COLOURS ----- */
-  --color-text-primary: #3b2a1f;
-  --color-text-secondary: #5a4a38;
-  --color-text-muted: #8b7355;
+  --color-text-primary: #27221e;
+  --color-text-secondary: #463d35;
+  --color-text-muted: #55483d;
 
-  --color-border: rgba(210, 180, 140, 0.35);
-  --color-overlay: rgba(0, 0, 0, 0.5);
+  --color-border: color-mix(in srgb, var(--color-text-muted) 30%, transparent);
+  --color-overlay: rgba(0, 0, 0, 0.58);
 
   /* ----- CONTRAST-SAFE "ON" COLORS ----- */
-  --color-on-primary: #fff;
-  --color-on-success: #fff;
-  --color-on-danger: #fff;
-  --color-on-warning: #fff;
-  --color-on-info: #fff;
+  --color-on-primary: #fffaf3;
+  --color-on-success: #fffaf3;
+  --color-on-danger: #fffaf3;
+  --color-on-warning: #fffaf3;
+  --color-on-info: #fffaf3;
+  --color-on-primary-light: var(--color-text-primary);
+  --color-on-muted: var(--color-on-primary);
 
   /* ----- TEXT HELPERS ----- */
   --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
-  --color-text-inverse: #fff;
+  --color-text-inverse: #fffaf3;
 
   /* ----- MISC ----- */
+  --color-streak-start: #a1542d;
+  --color-streak-end: #7f3026;
+  --color-on-streak: #fffaf3;
+  --color-rank-gold: #6b510d;
+  --color-rank-silver: #515b65;
+  --color-rank-bronze: #70401f;
   --opacity-disabled: 0.5;
   --color-focus-ring: var(--color-primary);
   --focus-ring-width: 3px;
@@ -220,46 +231,35 @@
 
 /* ===== DARK THEME ===== */
 [data-theme="dark"] {
-  --color-primary: #f0c28a;
-  --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
-  --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
-  --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
+  --color-tint-base: #f2ede5;
+  --color-strong-weight: 92%;
+  --color-primary: #d6a064;
+  --color-success: #78ad91;
+  --color-danger: #d17c6c;
+  --color-warning: #e0b45a;
+  --color-info: #6dacc9;
 
-  --color-success: #7eb09e;
-  --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
-  --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
+  --color-bg-body: #0d1218;
+  --color-bg-card: #18212a;
+  --color-bg-alt: #222d38;
 
-  --color-danger: #c97e6a;
-  --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
-  --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
+  --color-text-primary: #ece7df;
+  --color-text-secondary: #c9c1b6;
+  --color-text-muted: #a9a196;
 
-  --color-warning: #f4b942;
-  --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
-  --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
+  --color-overlay: rgba(0, 0, 0, 0.74);
 
-  --color-info: #4facfe;
-  --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
-  --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
+  --color-on-primary: #26180c;
+  --color-on-success: #10261b;
+  --color-on-danger: #2a1512;
+  --color-on-warning: #251a08;
+  --color-on-info: #10202a;
+  --color-on-primary-light: #3a2817;
 
-  --color-bg-body: #0f0f1a;
-  --color-bg-card: #1e1e2f;
-  --color-bg-alt: #2a2a3e;
-
-  --color-text-primary: #e8e8ee;
-  --color-text-secondary: #c0c0d0;
-  --color-text-muted: #b0b0c0;
-
-  --color-border: rgba(150, 170, 200, 0.3);
-  --color-overlay: rgba(0, 0, 0, 0.7);
-
-  --color-on-primary: #241303;
-  --color-on-success: #1a2f24;
-  --color-on-danger: #2f1a16;
-  --color-on-warning: #241303;
-  --color-on-info: #0f1f2f;
-
-  --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
-  --color-text-inverse: #fff;
+  --color-text-inverse: #f4f1eb;
+  --color-rank-gold: #e0ba4f;
+  --color-rank-silver: #aeb8c2;
+  --color-rank-bronze: #cf8550;
 
   --elevation-1: 0 4px 12px rgba(0, 0, 0, 0.4);
   --elevation-2: 0 8px 24px rgba(0, 0, 0, 0.5);
@@ -267,52 +267,33 @@
   --elevation-4: 0 20px 40px rgba(0, 0, 0, 0.7);
 
   color-scheme: dark;
-  scrollbar-color: var(--color-primary) var(--color-bg-alt);
 }
 
-/* ===== BLOSSOM THEME – backgrounds darkened ===== */
+/* ===== BLOSSOM THEME ===== */
 [data-theme="blossom"] {
-  --color-primary: #c47088;
-  --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
-  --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
-  --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
+  --color-tint-base: #e1ccd6;
+  --color-primary: #7f3455;
+  --color-success: #315447;
+  --color-danger: #843445;
+  --color-warning: #664812;
+  --color-info: #34516c;
 
-  --color-success: #5a8a78;
-  --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
-  --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
+  --color-bg-body: #d3bcc7;
+  --color-bg-card: #e1ccd6;
+  --color-bg-alt: #d9c3ce;
 
-  --color-danger: #b55a4a;
-  --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
-  --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
+  --color-text-primary: #34212b;
+  --color-text-secondary: #573a49;
+  --color-text-muted: #60414f;
 
-  --color-warning: #d49a1f;
-  --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
-  --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
+  --color-on-primary: #fff8fb;
+  --color-on-success: #fff8fb;
+  --color-on-danger: #fff8fb;
+  --color-on-warning: #fff8fb;
+  --color-on-info: #fff8fb;
+  --color-on-primary-light: var(--color-text-primary);
 
-  --color-info: #2e8ac0;
-  --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
-  --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
-
-  /* Darkened backgrounds */
-  --color-bg-body: #e0d0d8;
-  --color-bg-card: #ece0e4;
-  --color-bg-alt: #e4d6de;
-
-  --color-text-primary: #4a2232;
-  --color-text-secondary: #6a4a5a;
-  --color-text-muted: #7a5a6a;
-
-  --color-border: rgba(210, 140, 160, 0.3);
-  --color-overlay: rgba(0, 0, 0, 0.5);
-
-  --color-on-primary: #fff;
-  --color-on-success: #fff;
-  --color-on-danger: #fff;
-  --color-on-warning: #fff;
-  --color-on-info: #fff;
-
-  --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
-  --color-text-inverse: #fff;
+  --color-text-inverse: #fff8fb;
 
   --elevation-1: 0 4px 12px rgba(0,0,0,0.06);
   --elevation-2: 0 8px 24px rgba(0,0,0,0.1);
@@ -320,52 +301,33 @@
   --elevation-4: 0 20px 40px rgba(0,0,0,0.18);
 
   color-scheme: light;
-  scrollbar-color: var(--color-primary) var(--color-bg-alt);
 }
 
-/* ===== FRESH THEME – backgrounds darkened ===== */
+/* ===== FRESH THEME ===== */
 [data-theme="fresh"] {
-  --color-primary: #3e8a3e;
-  --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
-  --color-primary-dark: color-mix(in srgb, var(--color-primary) 70%, black);
-  --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
+  --color-tint-base: #ced9ce;
+  --color-primary: #285434;
+  --color-success: #245639;
+  --color-danger: #79372f;
+  --color-warning: #5f4c10;
+  --color-info: #295468;
 
-  --color-success: #2a6a2a;
-  --color-success-light: color-mix(in srgb, var(--color-success) 60%, white);
-  --color-success-dark: color-mix(in srgb, var(--color-success) 70%, black);
+  --color-bg-body: #b9c8ba;
+  --color-bg-card: #ced9ce;
+  --color-bg-alt: #c3d0c4;
 
-  --color-danger: #a05030;
-  --color-danger-light: color-mix(in srgb, var(--color-danger) 60%, white);
-  --color-danger-dark: color-mix(in srgb, var(--color-danger) 70%, black);
+  --color-text-primary: #182b20;
+  --color-text-secondary: #304a39;
+  --color-text-muted: #3b5141;
 
-  --color-warning: #908030;
-  --color-warning-light: color-mix(in srgb, var(--color-warning) 60%, white);
-  --color-warning-dark: color-mix(in srgb, var(--color-warning) 70%, black);
+  --color-on-primary: #f7fff8;
+  --color-on-success: #f7fff8;
+  --color-on-danger: #f7fff8;
+  --color-on-warning: #f7fff8;
+  --color-on-info: #f7fff8;
+  --color-on-primary-light: var(--color-text-primary);
 
-  --color-info: #3078a0;
-  --color-info-light: color-mix(in srgb, var(--color-info) 60%, white);
-  --color-info-dark: color-mix(in srgb, var(--color-info) 70%, black);
-
-  /* Darkened backgrounds */
-  --color-bg-body: #ccd8cc;
-  --color-bg-card: #dee6de;
-  --color-bg-alt: #d2ddd2;
-
-  --color-text-primary: #1f4f1f;
-  --color-text-secondary: #3f6f3f;
-  --color-text-muted: #5f8f5f;
-
-  --color-border: rgba(80, 120, 80, 0.3);
-  --color-overlay: rgba(0, 0, 0, 0.5);
-
-  --color-on-primary: #fff;
-  --color-on-success: #fff;
-  --color-on-danger: #fff;
-  --color-on-warning: #fff;
-  --color-on-info: #fff;
-
-  --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
-  --color-text-inverse: #fff;
+  --color-text-inverse: #f7fff8;
 
   --elevation-1: 0 4px 12px rgba(0,0,0,0.06);
   --elevation-2: 0 8px 24px rgba(0,0,0,0.1);
@@ -373,6 +335,31 @@
   --elevation-4: 0 20px 40px rgba(0,0,0,0.18);
 
   color-scheme: light;
+}
+
+/* Recompute every derived colour on the themed root. Custom property
+   formulas inherited from :root retain that element's inputs, so this
+   shared rule is what lets the four palettes reuse one derivation model
+   without copying it into every theme block. */
+:root[data-theme] {
+  --color-primary-light: color-mix(in srgb, var(--color-primary) 45%, var(--color-tint-base));
+  --color-primary-dark: color-mix(in srgb, var(--color-primary) var(--color-strong-weight), black);
+  --color-primary-glow: color-mix(in srgb, var(--color-primary) 20%, transparent);
+  --color-success-light: color-mix(in srgb, var(--color-success) 45%, var(--color-tint-base));
+  --color-success-dark: color-mix(in srgb, var(--color-success) var(--color-strong-weight), black);
+  --color-danger-light: color-mix(in srgb, var(--color-danger) 45%, var(--color-tint-base));
+  --color-danger-dark: color-mix(in srgb, var(--color-danger) var(--color-strong-weight), black);
+  --color-warning-light: color-mix(in srgb, var(--color-warning) 45%, var(--color-tint-base));
+  --color-warning-dark: color-mix(in srgb, var(--color-warning) var(--color-strong-weight), black);
+  --color-info-light: color-mix(in srgb, var(--color-info) 45%, var(--color-tint-base));
+  --color-info-dark: color-mix(in srgb, var(--color-info) var(--color-strong-weight), black);
+  --color-bg-overlay: color-mix(in srgb, var(--color-bg-card) 94%, transparent);
+  --color-border: color-mix(in srgb, var(--color-text-muted) 30%, transparent);
+  --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
+  --color-on-muted: var(--color-on-primary);
+  --color-focus-ring: var(--color-primary);
+  --color-selected: var(--color-primary);
+  --color-selected-highlight: var(--color-primary-light);
   scrollbar-color: var(--color-primary) var(--color-bg-alt);
 }
 

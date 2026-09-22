@@ -7,8 +7,8 @@
   gap: var(--space-2xs);
   padding: 0.25rem 0.7rem;
   border-radius: var(--radius-pill);
-  background: linear-gradient(135deg, #ff8c42, #ff5c39);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-streak-start), var(--color-streak-end));
+  color: var(--color-on-streak);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   cursor: default;
@@ -18,7 +18,7 @@
 }
 .streak-chip:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(255, 92, 57, 0.35);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-streak-end) 35%, transparent);
 }
 .streak-chip__emoji {
   font-size: 1.05em;
@@ -59,12 +59,12 @@
   padding: var(--space-lg);
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, #ff8c42 12%, var(--color-bg-card)),
+    color-mix(in srgb, var(--color-streak-start) 14%, var(--color-bg-card)),
     var(--color-bg-card)
   );
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, #ff8c42 25%, transparent);
-  border-inline-start: 4px solid #ff5c39;
+  border: 1px solid color-mix(in srgb, var(--color-streak-start) 30%, transparent);
+  border-inline-start: 4px solid var(--color-streak-end);
   margin-bottom: var(--space-lg);
 }
 .streak-card--empty {
@@ -75,7 +75,7 @@
 .streak-card__flame {
   font-size: 3.5rem;
   line-height: 1;
-  filter: drop-shadow(0 2px 8px rgba(255, 92, 57, 0.3));
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--color-streak-end) 30%, transparent));
   animation: flame-flicker 3s ease-in-out infinite;
 }
 @keyframes flame-flicker {
@@ -90,7 +90,7 @@
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-extrabold);
   line-height: 1;
-  color: #ff5c39;
+  color: var(--color-streak-end);
   font-variant-numeric: tabular-nums;
 }
 .streak-card__label {

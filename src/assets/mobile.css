@@ -94,37 +94,8 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   Bottom navigation.
-
-   COMPACTION HISTORY
-   ------------------
-   The bar was originally designed at 44×44 per item. A later pass
-   compacted it to "roughly 3/4 the original visual size" by
-   declaring `min-width: 33px; min-height: 33px` alongside 2px/6px
-   padding on `.bottom-nav__item`. Under the browser's default
-   content-box sizing, that computed to a ~45×37 rendered hit area:
-   the declared minimums set the CONTENT box, and padding added to
-   them on top. So while the code looked like a 33px target, the
-   user actually got ~45px wide and ~37px tall — already short of
-   the WCAG 2.5.5 44×44 target vertically, but closer than the
-   numbers suggested.
-
-   Once the reset in `reset.css` lands, `box-sizing: border-box`
-   applies globally and the same declaration would render as an
-   honest 33×33 — a shrink, not a fix. The minimums are therefore
-   bumped to 40×40 here to:
-
-     • preserve the intended compact appearance, and
-     • keep the vertical target close to the current ~37px, and
-     • close most of the WCAG 2.5.5 gap without forcing the bar
-       to its original full height.
-
-   40px is the compromise. If a future accessibility audit requires
-   the full WCAG 2.5.5 minimum, raise both values to 44px; the
-   surrounding offsets in this file and in shell.css
-   (`.layout__main` bottom padding, `.footer` bottom padding,
-   `.scroll-to-top` bottom, `.toast-container` bottom) already leave
-   enough headroom for a 4px increase and do not need to change.
+   Bottom navigation. Items use the shared 44px control height so
+   touch targets stay consistent with buttons and form controls.
 
    RTL notes:
      • `inset-inline-start` / `inset-inline-end` on the outer nav
@@ -171,8 +142,8 @@
   cursor: pointer;
   font-family: var(--font-family-base);
   transition: color var(--motion-fast), background var(--motion-fast), transform var(--motion-fast);
-  min-width: 40px;
-  min-height: 40px;
+  min-width: var(--control-height);
+  min-height: var(--control-height);
   justify-content: center;
 }
 .bottom-nav__item:active {
@@ -193,14 +164,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: var(--radius-md);
-  font-size: 0.65rem;
+  font-size: var(--icon-sm);
   transition: background var(--motion-fast);
 }
 .bottom-nav__label {
-  font-size: 0.45rem;
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   line-height: 1.2;
   white-space: nowrap;

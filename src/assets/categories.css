@@ -1,4 +1,4 @@
-/* frontend/src/assets/categories.css
+/* frontend/src/assets/categories.css */
 
 /* Categories */
 .category-form { display: flex; flex-direction: column; gap: var(--space-md); }
@@ -12,4 +12,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--space-md);
+}
+
+@media (pointer: coarse) {
+  .category-form__preset {
+    width: var(--control-height);
+    height: var(--control-height);
+    min-width: var(--control-height);
+    min-height: var(--control-height);
+  }
 }

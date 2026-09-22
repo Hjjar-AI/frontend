@@ -32,14 +32,8 @@
 
     <div class="question-card__header">
       <div class="question-card__top">
-        <!--
-          Question text — `dir="auto"` on this wrapper is the single
-          correct place. It relies on `BaseMarkdown` (inline mode)
-          rendering as a bare <span> with no `dir` of its own. See the
-          docstring on BaseMarkdown.vue for why that is load-bearing.
-        -->
-        <div class="question-card__title" dir="auto">
-          <span class="question-card__text">
+        <div class="question-card__title">
+          <span class="question-card__text" dir="auto">
             <BaseMarkdown :text="question.question" inline />
           </span>
         </div>
@@ -78,21 +72,14 @@
 
     <div class="question-card__choices">
       <strong>{{ t('questions.choicesLabel') }}:</strong>
-      <!--
-        Choices — `dir="auto"` on each <li> and on no descendant.
-        The number prefix "1." is a bidi-neutral run, so the auto
-        algorithm picks the first strong character of the choice
-        text itself and the whole row aligns to that script.
-      -->
       <ol class="choices-list">
         <li
           v-for="(choice, idx) in choices"
           :key="idx"
           class="choice-item"
           :class="{ 'choice-item--correct': idx + 1 === question.correct_answer }"
-          dir="auto"
         >
-          {{ idx + 1 }}. {{ choice }}
+          <span class="choice-item__text" dir="auto">{{ idx + 1 }}. {{ choice }}</span>
           <i v-if="idx + 1 === question.correct_answer" class="bi bi-check-lg text-success"></i>
         </li>
       </ol>
@@ -126,8 +113,8 @@
         class="star-btn"
         :class="{ active: star <= (userRating || 0) }"
         :disabled="ratingLoading"
-        @click="rate(star)"
         :aria-label="t('questions.ratingAria', { star })"
+        @click="rate(star)"
       >
         <i :class="star <= (userRating || 0) ? 'bi bi-star-fill' : 'bi bi-star'"></i>
       </button>
@@ -206,7 +193,7 @@ const props = defineProps({
   selected: Boolean,
   showSelect: Boolean,
 })
-const emit = defineEmits([
+defineEmits([
   'toggle-select',
   'bookmark',
   'edit',
