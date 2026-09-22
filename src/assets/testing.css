@@ -37,11 +37,6 @@
   min-width: 0;
   margin: 0;
 }
-.question-display__text .base-markdown {
-  margin-inline-end: auto;
-  text-align: start;
-}
-
 .test-results { padding: var(--space-lg) 0; max-width: var(--content-base); margin: 0 auto; }
 .test-results__summary { text-align: center; margin-bottom: var(--space-xl); }
 .test-tag { background: var(--color-primary-light); color: var(--color-on-primary-light); padding: 0.2rem 0.8rem; border-radius: var(--radius-pill); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); }

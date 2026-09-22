@@ -76,6 +76,11 @@
   font-size: var(--font-size-base);
   max-width: 65ch;
 }
+.base-markdown:not(.base-markdown--inline) {
+  width: 100%;
+  margin-inline-end: auto;
+  text-align: start;
+}
 .base-markdown .markdown-image { max-width: 100%; height: auto; }
 .base-markdown .external-link::after {
   content: ' ↗';

@@ -23,7 +23,7 @@
       <i class="bi bi-journal-medical"></i>
       <span>{{ t('tests.caseStemTitle') }}</span>
     </div>
-    <div class="case-stem-panel__body" dir="auto">
+    <div class="case-stem-panel__body">
       <BaseMarkdown :text="stem" />
     </div>
   </div>

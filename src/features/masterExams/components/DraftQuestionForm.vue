@@ -7,6 +7,7 @@
         class="form-control"
         rows="3"
         maxlength="3000"
+        dir="auto"
         required
       ></textarea>
     </BaseField>
@@ -25,6 +26,7 @@
           v-model="form.choices[index]"
           class="form-control"
           maxlength="300"
+          dir="auto"
           :placeholder="t('masterExams.choiceN', { n: index + 1 })"
         />
         <button
@@ -59,7 +61,13 @@
 
     <FormGrid>
       <BaseField v-slot="{ id }" :label="t('questions.explanationLabel')">
-        <textarea :id="id" v-model="form.explanation" class="form-control" rows="2"></textarea>
+        <textarea
+          :id="id"
+          v-model="form.explanation"
+          class="form-control"
+          rows="2"
+          dir="auto"
+        ></textarea>
       </BaseField>
       <BaseField v-slot="{ id }" :label="t('questions.sourceLabel')">
         <input :id="id" v-model="form.source" class="form-control" maxlength="200" />

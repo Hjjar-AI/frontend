@@ -25,7 +25,7 @@
           {{ t('questions.caseQuestionCount', { n: question.case_sibling_count }) }}
         </span>
       </summary>
-      <div class="question-card__case-body" dir="auto">
+      <div class="question-card__case-body">
         <BaseMarkdown :text="question.case.stem" />
       </div>
     </details>

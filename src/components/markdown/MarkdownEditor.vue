@@ -15,6 +15,7 @@
         :value="modelValue"
         :rows="rows"
         :maxlength="maxlength"
+        dir="auto"
         @input="onInput"
         @focus="toolbarVisible = true"
         class="form-control"

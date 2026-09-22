@@ -75,7 +75,14 @@
   font-family: var(--font-family-base); font-size: var(--font-size-base);
 }
 .toggle-indicator { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--color-primary); font-size: var(--font-size-sm); }
-.explanation-text { max-width: 65ch; line-height: var(--line-height-body); margin-top: var(--space-xs); }
+.explanation-text {
+  width: 100%;
+  max-width: 65ch;
+  margin: var(--space-xs) 0 0;
+  margin-inline-end: auto;
+  line-height: var(--line-height-body);
+  text-align: start;
+}
 .explanation-enter-active, .explanation-leave-active { transition: opacity var(--motion-fast), transform var(--motion-fast); }
 .explanation-enter-from, .explanation-leave-to { opacity: 0; transform: translateY(-5px); }
 .question-card__source { margin-top: var(--space-sm); color: var(--color-text-muted); font-size: var(--font-size-sm); }
