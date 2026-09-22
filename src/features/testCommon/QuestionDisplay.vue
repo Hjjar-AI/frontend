@@ -8,6 +8,14 @@
       :class="{ 'question-card--disabled': disabled }"
     >
       <div class="question-card__meta">
+        <!--
+          Question text — the wrapper carries `dir="auto"` and no
+          descendant of it does. `BaseMarkdown` in block mode
+          (default) renders `<div class="base-markdown" dir="auto">`,
+          which is self-sufficient for the block itself; the wrapper
+          here is redundant for block mode but kept because a future
+          switch to `:inline="true"` would need it.
+        -->
         <h4 class="question-card__text" dir="auto">
           <BaseMarkdown :text="question.text" />
         </h4>
@@ -35,16 +43,31 @@
       />
 
       <!--
-        The `disabled` prop disables both the answer radios and the
-        confidence checkbox below. It is set by the master-exam runner
-        while an answer is being saved, so a rapid second click cannot
-        stack a second write on top of the first. The store-level dedup
-        in `masterExamAttemptStore.js` already makes the second call a
-        no-op at the network layer; the disabled binding is the visible
-        half of that contract.
+        CHOICE ROWS — `dir="auto"` on the outer row <div> and on NO
+        descendant.
 
-        Callers that do not pass the prop get the default `false` and
-        the component behaves exactly as before.
+        WHY ONLY THE OUTER DIV
+        ----------------------
+        The row <div> is a block-level box. Its own computed
+        `direction` drives `text-align: start` for the inline
+        content inside the <label>. It is the auto-detection
+        boundary for the choice text, and it must be allowed to see
+        that text — which requires that no element between this
+        <div> and the choice text carries its own `dir` attribute.
+
+        Specifically:
+          • The <span> inside <label> must NOT carry `dir`. If it
+            did, the outer <div> would find no eligible text during
+            its auto-detection pass and would fall back to
+            inheriting direction from <html> — i.e. from the app
+            language, which is the bug we are removing.
+          • The <input type="radio"> carries no text and does not
+            need a `dir`; the auto algorithm ignores elements
+            without text content.
+
+        The `{{ idx + 1 }}.` number prefix is a bidi-neutral run, so
+        the outer <div>'s auto-detection still resolves on the
+        first strong character of the choice text itself.
       -->
       <div class="question-card__choices">
         <div
@@ -52,6 +75,7 @@
           :key="idx"
           class="question-card__choice"
           :class="{ 'question-card__choice--selected': selectedAnswer === idx + 1 }"
+          dir="auto"
         >
           <label>
             <input
@@ -61,9 +85,7 @@
               :disabled="disabled"
               @change="onUserSelect(idx + 1)"
             />
-            <span
-              ><strong>{{ idx + 1 }}.</strong> {{ choice }}</span
-            >
+            <span><strong>{{ idx + 1 }}.</strong> {{ choice }}</span>
           </label>
         </div>
       </div>

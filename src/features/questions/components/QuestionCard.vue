@@ -32,6 +32,12 @@
 
     <div class="question-card__header">
       <div class="question-card__top">
+        <!--
+          Question text — `dir="auto"` on this wrapper is the single
+          correct place. It relies on `BaseMarkdown` (inline mode)
+          rendering as a bare <span> with no `dir` of its own. See the
+          docstring on BaseMarkdown.vue for why that is load-bearing.
+        -->
         <div class="question-card__title" dir="auto">
           <span class="question-card__text">
             <BaseMarkdown :text="question.question" inline />
@@ -72,6 +78,12 @@
 
     <div class="question-card__choices">
       <strong>{{ t('questions.choicesLabel') }}:</strong>
+      <!--
+        Choices — `dir="auto"` on each <li> and on no descendant.
+        The number prefix "1." is a bidi-neutral run, so the auto
+        algorithm picks the first strong character of the choice
+        text itself and the whole row aligns to that script.
+      -->
       <ol class="choices-list">
         <li
           v-for="(choice, idx) in choices"
