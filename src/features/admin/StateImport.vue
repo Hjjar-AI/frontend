@@ -36,6 +36,22 @@
       </p>
     </fieldset>
 
+    <fieldset class="state-import__mode">
+      <legend>{{ t('admin.import.conflictStrategyLabel') }}</legend>
+      <label class="state-import__mode-option">
+        <input v-model="conflictStrategy" type="radio" value="keep_local" />
+        <span><strong>{{ t('admin.import.conflictKeepLocal') }}</strong></span>
+      </label>
+      <label class="state-import__mode-option">
+        <input v-model="conflictStrategy" type="radio" value="use_imported" />
+        <span><strong>{{ t('admin.import.conflictUseImported') }}</strong></span>
+      </label>
+      <label class="state-import__mode-option">
+        <input v-model="conflictStrategy" type="radio" value="review" />
+        <span><strong>{{ t('admin.import.conflictReviewManually') }}</strong></span>
+      </label>
+    </fieldset>
+
     <div class="state-import__actions">
       <BaseButton
         variant="secondary"
@@ -71,11 +87,11 @@
           <span>{{ t('admin.import.stateCountQuestionsCreated') }}</span>
           <strong>{{ previewCounts.questions_created }}</strong>
         </li>
-        <li v-if="mode === 'merge'">
+        <li v-if="previewCounts.questions_skipped">
           <span>{{ t('admin.import.stateCountQuestionsSkipped') }}</span>
           <strong>{{ previewCounts.questions_skipped }}</strong>
         </li>
-        <li v-if="mode === 'replace'">
+        <li v-if="previewCounts.questions_updated">
           <span>{{ t('admin.import.stateCountQuestionsUpdated') }}</span>
           <strong>{{ previewCounts.questions_updated }}</strong>
         </li>
@@ -99,19 +115,26 @@
       :authors="mappingAuthors"
       :users="mappingUsers"
       @confirm="handleMappingConfirm"
-      @cancel="clearPendingMapping"
+      @cancel="clearPendingFlow"
+    />
+    <ConflictResolutionModal
+      v-model:is-open="conflictModalOpen"
+      :conflicts="pendingConflicts"
+      @confirm="handleConflictConfirm"
+      @cancel="clearPendingFlow"
     />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useNotify } from '@/composables/useNotify'
 import { useDialog } from '@/composables/useDialog'
 import { useAdminDatabaseStore } from '@/stores/adminDatabaseStore'
 import { useUserStore } from '@/stores/userStore'
 import DropZone from '@/components/common/DropZone.vue'
 import AuthorMappingModal from './components/AuthorMappingModal.vue'
+import ConflictResolutionModal from './components/ConflictResolutionModal.vue'
 
 const { t } = useI18n()
 
@@ -124,6 +147,7 @@ const emit = defineEmits(['imported'])
 
 const selectedFile = ref(null)
 const mode = ref('merge')
+const conflictStrategy = ref('keep_local')
 const loading = ref(false)
 const previewLoading = ref(false)
 const previewCounts = ref(null)
@@ -131,6 +155,10 @@ const mappingModalOpen = ref(false)
 const mappingAuthors = ref([])
 const mappingUsers = ref([])
 const pendingAdminPassword = ref('')
+const conflictModalOpen = ref(false)
+const pendingConflicts = ref([])
+const pendingUnknowns = ref([])
+const pendingConflictResolutions = ref({})
 
 let cachedUsers = null
 
@@ -156,12 +184,17 @@ function handleFileSelect(file) {
   previewCounts.value = null
 }
 
+watch(mode, (value) => {
+  conflictStrategy.value = value === 'replace' ? 'use_imported' : 'keep_local'
+})
+
 async function preview() {
   if (!selectedFile.value) return
   previewLoading.value = true
   try {
     const res = await databaseStore.importState(selectedFile.value, mode.value, {
-      dryRun: true,
+      analyze: true,
+      conflictStrategy: conflictStrategy.value,
     })
     if (!res) throw new Error(databaseStore.error || t('admin.import.stateFailed'))
     previewCounts.value = res.counts || null
@@ -209,20 +242,27 @@ async function upload() {
   try {
     const analysis = await databaseStore.importState(selectedFile.value, mode.value, {
       analyze: true,
+      conflictStrategy: conflictStrategy.value,
     })
     if (!analysis) throw new Error(databaseStore.error || t('admin.import.stateFailed'))
 
-    const unknowns = analysis.unknown_authors || []
+    pendingUnknowns.value = analysis.unknown_authors || []
+    pendingConflicts.value = analysis.conflicts || []
+    pendingAdminPassword.value = adminPassword
 
-    if (unknowns.length > 0) {
-      mappingAuthors.value = unknowns
+    if (conflictStrategy.value === 'review' && pendingConflicts.value.length > 0) {
+      conflictModalOpen.value = true
+      return
+    }
+
+    if (pendingUnknowns.value.length > 0) {
+      mappingAuthors.value = pendingUnknowns.value
       mappingUsers.value = await loadUsersForMapping()
-      pendingAdminPassword.value = adminPassword
       mappingModalOpen.value = true
       return
     }
 
-    await completeImport({}, adminPassword)
+    await completeImport({}, adminPassword, {})
   } catch (err) {
     notify(err?.message || t('admin.import.stateFailed'), 'error')
   } finally {
@@ -237,10 +277,20 @@ function clearPendingMapping() {
   pendingAdminPassword.value = ''
 }
 
-async function completeImport(mapping, adminPassword) {
+function clearPendingFlow() {
+  clearPendingMapping()
+  conflictModalOpen.value = false
+  pendingConflicts.value = []
+  pendingUnknowns.value = []
+  pendingConflictResolutions.value = {}
+}
+
+async function completeImport(mapping, adminPassword, conflictResolutions = {}) {
   const res = await databaseStore.importState(selectedFile.value, mode.value, {
     mapping,
     adminPassword,
+    conflictStrategy: conflictStrategy.value,
+    conflictResolutions,
   })
   if (!res) throw new Error(databaseStore.error || t('admin.import.stateFailed'))
 
@@ -255,10 +305,32 @@ async function completeImport(mapping, adminPassword) {
 
 async function handleMappingConfirm(mapping) {
   const adminPassword = pendingAdminPassword.value
-  clearPendingMapping()
+  const conflictResolutions = { ...pendingConflictResolutions.value }
+  clearPendingFlow()
   loading.value = true
   try {
-    await completeImport(mapping, adminPassword)
+    await completeImport(mapping, adminPassword, conflictResolutions)
+  } catch (err) {
+    notify(err?.message || t('admin.import.stateFailed'), 'error')
+  } finally {
+    loading.value = false
+  }
+}
+
+async function handleConflictConfirm(resolutions) {
+  conflictModalOpen.value = false
+  pendingConflictResolutions.value = resolutions
+  if (pendingUnknowns.value.length > 0) {
+    mappingAuthors.value = pendingUnknowns.value
+    mappingUsers.value = await loadUsersForMapping()
+    mappingModalOpen.value = true
+    return
+  }
+  const adminPassword = pendingAdminPassword.value
+  loading.value = true
+  try {
+    await completeImport({}, adminPassword, resolutions)
+    clearPendingFlow()
   } catch (err) {
     notify(err?.message || t('admin.import.stateFailed'), 'error')
   } finally {

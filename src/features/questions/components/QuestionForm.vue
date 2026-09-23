@@ -123,13 +123,115 @@
         :maxlength="3000"
       />
 
-      <BaseField
-        :label="t('questions.sourceLabel')"
-        id="q-source"
-        :hint="t('questions.sourcePlaceholder')"
-      >
-        <input id="q-source" v-model="form.source" class="form-control" maxlength="200" />
-      </BaseField>
+      <details class="question-form__case-section">
+        <summary class="question-form__case-summary">
+          <i class="bi bi-book"></i>
+          <span>{{ t('questions.provenanceSection') }}</span>
+        </summary>
+        <FormGrid>
+          <BaseField
+            :label="t('questions.sourceLabel')"
+            id="q-source"
+            :hint="t('questions.sourcePlaceholder')"
+          >
+            <input id="q-source" v-model="form.source" class="form-control" maxlength="200" />
+          </BaseField>
+          <BaseField
+            :label="t('questions.sourceDocumentLabel')"
+            id="q-source-document"
+            :hint="t('questions.sourceDocumentHint')"
+          >
+            <input
+              id="q-source-document"
+              v-model="form.source_document"
+              class="form-control"
+              maxlength="500"
+              :placeholder="t('questions.sourceDocumentPlaceholder')"
+            />
+          </BaseField>
+          <BaseField :label="t('questions.sourcePageLabel')" id="q-source-page">
+            <input
+              id="q-source-page"
+              v-model="form.source_page"
+              class="form-control"
+              type="number"
+              min="1"
+              step="1"
+              :placeholder="t('questions.sourcePagePlaceholder')"
+            />
+          </BaseField>
+        </FormGrid>
+      </details>
+
+      <details class="question-form__case-section">
+        <summary class="question-form__case-summary">
+          <i class="bi bi-translate"></i>
+          <span>{{ t('questions.translationsSection') }}</span>
+          <span v-if="translationCount" class="question-form__case-badge">
+            {{ translationCount }}
+          </span>
+        </summary>
+        <p class="text-muted question-form__case-hint">
+          {{ t('questions.translationsHint') }}
+        </p>
+        <div class="question-form__translation-add">
+          <BaseField :label="t('questions.translationLocaleLabel')">
+            <input
+              v-model.trim="translationLocale"
+              class="form-control"
+              maxlength="6"
+              :placeholder="t('questions.translationLocalePlaceholder')"
+              @keyup.enter.prevent="addTranslation"
+            />
+          </BaseField>
+          <BaseButton type="button" variant="secondary" @click="addTranslation">
+            <i class="bi bi-plus-lg"></i> {{ t('questions.translationAdd') }}
+          </BaseButton>
+        </div>
+
+        <section
+          v-for="(translation, locale) in form.translations"
+          :key="locale"
+          class="question-form__translation"
+        >
+          <header class="question-form__translation-header">
+            <strong>{{ locale }}</strong>
+            <BaseButton
+              type="button"
+              variant="danger"
+              size="small"
+              @click="removeTranslation(locale)"
+            >
+              <i class="bi bi-trash"></i> {{ t('common.delete') }}
+            </BaseButton>
+          </header>
+          <MarkdownEditor
+            v-model="translation.question"
+            :id="`q-translation-${locale}-question`"
+            :label="t('questions.translationQuestionLabel')"
+            :maxlength="3000"
+          />
+          <div class="question-form__translation-choices">
+            <BaseField
+              v-for="(_, index) in form.choices"
+              :key="`${locale}-${index}`"
+              :label="t('questions.choiceN', { n: index + 1 })"
+            >
+              <input
+                v-model="translation.choices[index]"
+                class="form-control"
+                maxlength="1000"
+              />
+            </BaseField>
+          </div>
+          <MarkdownEditor
+            v-model="translation.explanation"
+            :id="`q-translation-${locale}-explanation`"
+            :label="t('questions.translationExplanationLabel')"
+            :maxlength="3000"
+          />
+        </section>
+      </details>
 
       <div v-if="form.verified_by" class="verification-info">
         <span
@@ -219,6 +321,9 @@ const form = reactive({
   correct_answer: 1,
   explanation: '',
   source: '',
+  source_document: '',
+  source_page: '',
+  translations: {},
   tags: '',
   difficulty: 'medium',
   category_id: null,
@@ -233,6 +338,9 @@ const form = reactive({
   case_key: '',
   case_stem: '',
 })
+
+const translationLocale = ref('')
+const translationCount = computed(() => Object.keys(form.translations).length)
 
 watch(
   () => props.loading,
@@ -253,6 +361,19 @@ onMounted(async () => {
     form.correct_answer = props.question.correct_answer || 1
     form.explanation = props.question.explanation || ''
     form.source = props.question.source || ''
+    form.source_document = props.question.source_document || ''
+    form.source_page = props.question.source_page || ''
+    form.translations = Object.fromEntries(
+      Object.entries(props.question.translations || {}).map(([locale, content]) => [
+        locale,
+        {
+          question: content?.question || '',
+          choices: [...(content?.choices || [])],
+          explanation: content?.explanation || '',
+        },
+      ]),
+    )
+    syncTranslationChoices()
     form.tags = Array.isArray(props.question.tags)
       ? props.question.tags.join(', ')
       : props.question.tags || ''
@@ -271,6 +392,76 @@ onMounted(async () => {
   // degrades to a plain text input.
   await caseStore.fetchList({ limit: 100 })
 })
+
+watch(
+  () => form.choices.length,
+  () => syncTranslationChoices(),
+)
+
+function normalizeLocale(value) {
+  const parts = String(value || '').trim().replaceAll('_', '-').split('-')
+  if (parts.length < 1 || parts.length > 2) return ''
+  if (parts.length === 1) return parts[0].toLowerCase()
+  return `${parts[0].toLowerCase()}-${parts[1].toUpperCase()}`
+}
+
+function syncTranslationChoices() {
+  for (const translation of Object.values(form.translations)) {
+    if (!Array.isArray(translation.choices)) translation.choices = []
+    while (translation.choices.length < form.choices.length) translation.choices.push('')
+    if (translation.choices.length > form.choices.length) {
+      translation.choices.splice(form.choices.length)
+    }
+  }
+}
+
+function addTranslation() {
+  const locale = normalizeLocale(translationLocale.value)
+  if (!/^[a-z]{2,3}(?:-[A-Z]{2})?$/.test(locale)) {
+    notify(t('questions.translationLocaleInvalid'), 'error')
+    return
+  }
+  if (!form.translations[locale]) {
+    form.translations[locale] = {
+      question: '',
+      choices: Array(form.choices.length).fill(''),
+      explanation: '',
+    }
+  }
+  translationLocale.value = ''
+}
+
+function removeTranslation(locale) {
+  delete form.translations[locale]
+}
+
+function buildTranslations() {
+  const output = {}
+  for (const [locale, content] of Object.entries(form.translations)) {
+    const question = String(content.question || '').trim()
+    const explanation = String(content.explanation || '').trim()
+    const choices = (content.choices || [])
+      .slice(0, form.choices.length)
+      .map((choice) => String(choice || '').trim())
+    const hasChoices = choices.some(Boolean)
+    const hasContent = question || explanation || hasChoices
+    if (!hasContent) continue
+    if (!question) {
+      notify(t('questions.translationQuestionRequired', { locale }), 'error')
+      return null
+    }
+    if (hasChoices && choices.some((choice) => !choice)) {
+      notify(t('questions.translationChoicesIncomplete', { locale }), 'error')
+      return null
+    }
+    output[locale] = {
+      question,
+      choices: hasChoices ? choices : [],
+      explanation,
+    }
+  }
+  return output
+}
 
 function validateImageFile(file) {
   const result = validateFile(file, {
@@ -344,12 +535,21 @@ async function handleSubmit() {
     return
   }
 
+  const translations = buildTranslations()
+  if (translations === null) {
+    showSplash.value = false
+    return
+  }
+
   const payload = {
     question: form.question,
     choices: filteredChoices,
     correct_answer: remappedCorrectAnswer,
     explanation: form.explanation,
     source: form.source,
+    source_document: form.source_document || null,
+    source_page: form.source_page ? Number(form.source_page) : null,
+    translations,
     tags: form.tags,
     difficulty: form.difficulty,
     category:

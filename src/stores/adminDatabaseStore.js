@@ -5,7 +5,7 @@ import { useCrudActions } from '@/composables/useCrudActions'
 import { standardState, standardGetters, makeReset } from '@/stores/storeHelpers'
 
 export const useAdminDatabaseStore = defineStore('adminDatabase', {
-  state: () => standardState({ databaseInfo: null, backups: [] }),
+  state: () => standardState({ databaseInfo: null, backups: [], qualityReport: null }),
   getters: {
     ...standardGetters,
   },
@@ -73,12 +73,32 @@ export const useAdminDatabaseStore = defineStore('adminDatabase', {
       })
     },
 
-    exportStateUrl(includeImages = true, verifiedOnly = false, format = 'json') {
-      return adminService.exportStateUrl(includeImages, verifiedOnly, format)
+    exportStateUrl(includeImages = true, verifiedOnly = false, format = 'json', filters = {}) {
+      return adminService.exportStateUrl(includeImages, verifiedOnly, format, filters)
     },
 
-    exportState(includeImages = true, verifiedOnly = false, format = 'json') {
-      return adminService.exportState(includeImages, verifiedOnly, format)
+    exportState(includeImages = true, verifiedOnly = false, format = 'json', filters = {}) {
+      return adminService.exportState(includeImages, verifiedOnly, format, filters)
+    },
+
+    async fetchDataQualityReport() {
+      return await useCrudActions(this).wrap(() => adminService.getDataQualityReport(), {
+        errorMsgFallbackKey: 'admin.database.qualityLoadFailed',
+        suppressErrorToast: true,
+        onSuccess: (report) => {
+          this.qualityReport = report
+        },
+      })
+    },
+
+    async flagDataQualityIssues() {
+      return await useCrudActions(this).wrap(() => adminService.flagDataQualityIssues(), {
+        errorMsgFallbackKey: 'admin.database.qualityFlagFailed',
+        suppressErrorToast: true,
+        onSuccess: (result) => {
+          this.qualityReport = result
+        },
+      })
     },
 
     exportUrl(format, options = {}) {
@@ -89,6 +109,12 @@ export const useAdminDatabaseStore = defineStore('adminDatabase', {
       return adminService.exportPdf(options, requestOptions)
     },
 
-    reset: makeReset({ databaseInfo: null, backups: [], status: 'idle', error: null }),
+    reset: makeReset({
+      databaseInfo: null,
+      backups: [],
+      qualityReport: null,
+      status: 'idle',
+      error: null,
+    }),
   },
 })

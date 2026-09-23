@@ -47,6 +47,17 @@
           </table>
         </BaseCard>
         <div>
+          <BaseCard>
+            <h4 class="card-title">
+              <i class="card-title__icon bi bi-funnel"></i>
+              {{ t('admin.database.filtersTitle') }}
+            </h4>
+            <p class="text-muted state-export-card__description">
+              {{ t('admin.database.filtersSharedHint') }}
+            </p>
+            <ExportFilters v-model="exportFilters" />
+          </BaseCard>
+
           <BaseCard class="state-export-card">
             <h4 class="card-title">
               <i class="card-title__icon bi bi-box-seam"></i>
@@ -77,7 +88,9 @@
               {{ t('admin.database.exportTitle') }}
             </h4>
 
-            <ExportFilters v-model="exportFilters" />
+            <p class="text-muted state-export-card__description">
+              {{ t('admin.database.editableExportDesc') }}
+            </p>
 
             <ExportButtons
               :url-builder="buildExportUrl"
@@ -92,6 +105,9 @@
               <i class="card-title__icon bi bi-life-preserver"></i>
               {{ t('admin.database.backupTitle') }}
             </h4>
+            <p class="text-muted state-export-card__description">
+              {{ t('admin.database.backupDesc') }}
+            </p>
             <div class="d-flex gap-1 flex-wrap mb-2">
               <BaseButton
                 variant="primary"
@@ -123,6 +139,70 @@
                   {{ t('admin.database.restoreButton') }}
                 </BaseButton>
               </div>
+            </div>
+          </BaseCard>
+
+          <BaseCard class="quality-card">
+            <h4 class="card-title">
+              <i class="card-title__icon bi bi-clipboard-check"></i>
+              {{ t('admin.database.qualityTitle') }}
+            </h4>
+            <p class="text-muted state-export-card__description">
+              {{ t('admin.database.qualityDesc') }}
+            </p>
+            <div class="d-flex gap-1 flex-wrap mb-2">
+              <BaseButton
+                variant="secondary"
+                :loading="qualityLoading"
+                @click="loadQualityReport"
+              >
+                <i class="bi bi-search"></i> {{ t('admin.database.qualityScan') }}
+              </BaseButton>
+              <BaseButton
+                variant="warning"
+                :disabled="!qualityReport?.summary?.questions_with_issues"
+                :loading="qualityFlagging"
+                @click="flagQualityIssues"
+              >
+                <i class="bi bi-flag"></i> {{ t('admin.database.qualityCreateFlags') }}
+              </BaseButton>
+            </div>
+
+            <div v-if="qualityReport" class="quality-report">
+              <p class="quality-report__summary">
+                {{
+                  t('admin.database.qualitySummary', {
+                    scanned: qualityReport.summary?.questions_scanned || 0,
+                    affected: qualityReport.summary?.questions_with_issues || 0,
+                  })
+                }}
+              </p>
+              <div class="quality-report__counts">
+                <span v-for="entry in qualityIssueCounts" :key="entry.code" class="badge">
+                  {{ qualityIssueLabel(entry.code) }}: {{ entry.count }}
+                </span>
+              </div>
+              <div v-if="qualityReport.items?.length" class="quality-report__list">
+                <article
+                  v-for="item in qualityReport.items.slice(0, 50)"
+                  :key="item.uuid"
+                  class="quality-report__item"
+                >
+                  <RouterLink :to="{ name: 'QuestionEdit', params: { id: item.id } }">
+                    {{ item.question }}
+                  </RouterLink>
+                  <span class="text-muted">
+                    {{ item.issues.map((issue) => qualityIssueLabel(issue.code)).join(', ') }}
+                  </span>
+                  <span v-if="item.has_open_quality_flag" class="badge badge-warning">
+                    {{ t('admin.database.qualityAlreadyFlagged') }}
+                  </span>
+                </article>
+                <p v-if="qualityReport.items.length > 50" class="text-muted">
+                  {{ t('admin.database.qualityShowingFirst', { count: 50 }) }}
+                </p>
+              </div>
+              <p v-else class="text-success">{{ t('admin.database.qualityClean') }}</p>
             </div>
           </BaseCard>
           <BaseCard class="danger-zone">
@@ -229,6 +309,15 @@ const adminPassword = ref('')
 const restoreModalOpen = ref(false)
 const restoreTargetName = ref('')
 const restorePassword = ref('')
+const qualityLoading = ref(false)
+const qualityFlagging = ref(false)
+const qualityReport = computed(() => adminDatabaseStore.qualityReport)
+const qualityIssueCounts = computed(() =>
+  Object.entries(qualityReport.value?.summary?.issue_counts || {}).map(([code, count]) => ({
+    code,
+    count,
+  })),
+)
 
 // ── Export filters + title ────────────────────────────────────────
 //
@@ -325,7 +414,12 @@ async function exportState(includeImages, format = 'json') {
     'info',
   )
   try {
-    const response = await adminDatabaseStore.exportState(includeImages, false, format)
+    const response = await adminDatabaseStore.exportState(
+      includeImages,
+      false,
+      format,
+      exportFilterParams.value,
+    )
     const blob =
       response.data instanceof Blob
         ? response.data
@@ -335,10 +429,42 @@ async function exportState(includeImages, format = 'json') {
                 ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 : 'application/json',
           })
-    const filename = getResponseFilename(response) || `questions_state.${format}`
+    const filename = getResponseFilename(response) || `question_bank_package.${format}`
     downloadBlob(blob, filename)
   } catch (error) {
     notify(error?.message || t('common.networkError'), 'error')
+  }
+}
+
+function qualityIssueLabel(code) {
+  return t(`admin.database.qualityIssue.${code}`)
+}
+
+async function loadQualityReport() {
+  qualityLoading.value = true
+  try {
+    const report = await adminDatabaseStore.fetchDataQualityReport()
+    if (!report) throw new Error(adminDatabaseStore.error || t('admin.database.qualityLoadFailed'))
+  } catch (error) {
+    notify(error?.message || t('admin.database.qualityLoadFailed'), 'error')
+  } finally {
+    qualityLoading.value = false
+  }
+}
+
+async function flagQualityIssues() {
+  qualityFlagging.value = true
+  try {
+    const report = await adminDatabaseStore.flagDataQualityIssues()
+    if (!report) throw new Error(adminDatabaseStore.error || t('admin.database.qualityFlagFailed'))
+    notify(
+      t('admin.database.qualityFlagsCreated', { count: report.flags_created || 0 }),
+      'success',
+    )
+  } catch (error) {
+    notify(error?.message || t('admin.database.qualityFlagFailed'), 'error')
+  } finally {
+    qualityFlagging.value = false
   }
 }
 

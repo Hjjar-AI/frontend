@@ -9,7 +9,7 @@
     >
       <div class="question-display__header">
         <h4 class="question-display__text">
-          <BaseMarkdown :text="question.text" />
+          <BaseMarkdown :text="displayQuestion.text" />
         </h4>
         <template v-if="showVerification">
           <BaseBadge
@@ -36,7 +36,7 @@
 
       <div class="question-card__choices">
         <div
-          v-for="(choice, idx) in question.choices"
+          v-for="(choice, idx) in displayQuestion.choices"
           :key="idx"
           class="question-card__choice"
           :class="{ 'question-card__choice--selected': selectedAnswer === idx + 1 }"
@@ -111,12 +111,13 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import BaseMarkdown from '@/components/markdown/BaseMarkdown.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
+import { localizedQuestion } from '@/utils/localizedQuestion'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const props = defineProps({
   question: { type: Object, required: true },
@@ -139,6 +140,7 @@ const emit = defineEmits(['answer', 'confidence', 'reflection'])
 const selectedAnswer = ref(props.initialAnswer)
 const isConfident = ref(props.initialConfidence === undefined ? true : props.initialConfidence)
 const pickedReason = ref(null)
+const displayQuestion = computed(() => localizedQuestion(props.question, locale.value))
 
 watch(
   () => props.question?.id,

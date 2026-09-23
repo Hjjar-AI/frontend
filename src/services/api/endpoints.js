@@ -202,6 +202,7 @@ export const ENDPOINTS = {
     IMPORT_TELEGRAM: '/database/import/telegram/',
     EXPORT_STATE: '/database/export/state/',
     IMPORT_STATE: '/database/import/state/',
+    DATA_QUALITY: '/database/data-quality/',
     EXPORT: (format) => `/database/export/${format}/`,
     EXPORT_VERIFIED: (format) => `/database/export/${format}/verified/`,
   },

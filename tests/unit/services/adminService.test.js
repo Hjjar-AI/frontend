@@ -196,6 +196,19 @@ describe('adminService — state envelope', () => {
     expect(adminService.exportStateUrl(true, false, 'xlsx')).toContain('format=xlsx')
   })
 
+  it('exportState forwards selection filters to portable packages', async () => {
+    await adminService.exportState(true, false, 'json', {
+      difficulty: 'hard',
+      category_ids: '4,7',
+    })
+
+    expect(apiClient.get).toHaveBeenCalledWith('/database/export/state/', {
+      params: { difficulty: 'hard', category_ids: '4,7' },
+      responseType: 'blob',
+      rawResponse: true,
+    })
+  })
+
   it('importState sends the required FormData fields', async () => {
     const file = new File(['{}'], 'state.json', { type: 'application/json' })
     await adminService.importState(file, 'merge', {})
@@ -221,6 +234,27 @@ describe('adminService — state envelope', () => {
     expect(body.get('analyze')).toBe('true')
     expect(JSON.parse(body.get('mapping'))).toEqual({ Ali: { action: 'stub' } })
     expect(body.get('admin_password')).toBe('secret')
+  })
+
+  it('importState forwards the conflict policy and per-question resolutions', async () => {
+    const file = new File(['{}'], 'package.json')
+    const resolutions = { 'question-uuid': 'use_imported' }
+    await adminService.importState(file, 'merge', {
+      conflictStrategy: 'review',
+      conflictResolutions: resolutions,
+    })
+
+    const [, body] = apiClient.post.mock.calls[0]
+    expect(body.get('conflict_strategy')).toBe('review')
+    expect(JSON.parse(body.get('conflict_resolutions'))).toEqual(resolutions)
+  })
+
+  it('loads and flags data-quality issues', async () => {
+    await adminService.getDataQualityReport()
+    await adminService.flagDataQualityIssues()
+
+    expect(apiClient.get).toHaveBeenCalledWith('/database/data-quality/')
+    expect(apiClient.post).toHaveBeenCalledWith('/database/data-quality/')
   })
 })
 

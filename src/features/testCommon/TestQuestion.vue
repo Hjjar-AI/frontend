@@ -27,7 +27,7 @@
 
     <template v-if="question">
       <QuestionDisplay
-        :question="question"
+        :question="displayQuestion"
         :initial-answer="selectedAnswer"
         :initial-confidence="confidenceForCurrent"
         :show-reflection-prompt="showReflectionPrompt"
@@ -37,8 +37,8 @@
       />
 
       <ExplanationSection
-        v-if="mode === 'study' && question.explanation && store.hasAnswer(store.currentIndex)"
-        :explanation="question.explanation"
+        v-if="mode === 'study' && displayQuestion.explanation && store.hasAnswer(store.currentIndex)"
+        :explanation="displayQuestion.explanation"
       />
 
       <TestNavigation
@@ -78,8 +78,9 @@ import ShortcutHint from '@/components/common/ShortcutHint.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import { useTestQuestionController } from './composables/useTestQuestionController'
 import { MODES } from './modes'
+import { localizedQuestion } from '@/utils/localizedQuestion'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const props = defineProps({
   mode: { type: String, required: true },
@@ -109,4 +110,6 @@ const {
   pauseSession,
   finish,
 } = useTestQuestionController(() => props.mode)
+
+const displayQuestion = computed(() => localizedQuestion(question.value, locale.value))
 </script>

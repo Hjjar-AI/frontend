@@ -80,7 +80,7 @@ export const adminService = {
     return apiClient.post(ENDPOINTS.DATABASE.IMPORT_TELEGRAM, formData)
   },
 
-  // ── Full questions-data envelope ────────────────────────────────
+  // ── Portable question-bank package ─────────────────────────────
   //
   // exportStateUrl returns a URL string rather than performing the
   // download. The endpoint responds with a FileResponse, which
@@ -93,8 +93,8 @@ export const adminService = {
   // so this no longer carries its own copy of the strip. A deploy
   // that sets `VITE_API_BASE_URL` with a trailing slash no longer
   // produces a `//` between the base and the route.
-  exportStateUrl(includeImages = true, verifiedOnly = false, format = 'json') {
-    const params = new URLSearchParams()
+  exportStateUrl(includeImages = true, verifiedOnly = false, format = 'json', filters = {}) {
+    const params = new URLSearchParams(filters)
     if (!includeImages) params.set('include_images', 'false')
     if (verifiedOnly) params.set('verified_only', 'true')
     if (format === 'xlsx') params.set('format', 'xlsx')
@@ -102,8 +102,8 @@ export const adminService = {
     return `${API_BASE}${ENDPOINTS.DATABASE.EXPORT_STATE}${qs ? '?' + qs : ''}`
   },
 
-  async exportState(includeImages = true, verifiedOnly = false, format = 'json') {
-    const params = {}
+  async exportState(includeImages = true, verifiedOnly = false, format = 'json', filters = {}) {
+    const params = { ...filters }
     if (!includeImages) params.include_images = 'false'
     if (verifiedOnly) params.verified_only = 'true'
     if (format === 'xlsx') params.format = 'xlsx'
@@ -132,7 +132,14 @@ export const adminService = {
   },
 
   async importState(file, mode = 'merge', opts = {}) {
-    const { dryRun = false, analyze = false, mapping = null, adminPassword = '' } = opts
+    const {
+      dryRun = false,
+      analyze = false,
+      mapping = null,
+      adminPassword = '',
+      conflictStrategy = null,
+      conflictResolutions = null,
+    } = opts
 
     const formData = new FormData()
     formData.append('file', file)
@@ -146,8 +153,22 @@ export const adminService = {
     if (adminPassword) {
       formData.append('admin_password', adminPassword)
     }
+    if (conflictStrategy) {
+      formData.append('conflict_strategy', conflictStrategy)
+    }
+    if (conflictResolutions && Object.keys(conflictResolutions).length > 0) {
+      formData.append('conflict_resolutions', JSON.stringify(conflictResolutions))
+    }
 
     return apiClient.post(ENDPOINTS.DATABASE.IMPORT_STATE, formData)
+  },
+
+  async getDataQualityReport() {
+    return apiClient.get(ENDPOINTS.DATABASE.DATA_QUALITY)
+  },
+
+  async flagDataQualityIssues() {
+    return apiClient.post(ENDPOINTS.DATABASE.DATA_QUALITY)
   },
 
   // ── Active users ────────────────────────────────────────────────

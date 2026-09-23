@@ -34,7 +34,7 @@
       <div class="question-card__top">
         <div class="question-card__title">
           <span class="question-card__text" dir="auto">
-            <BaseMarkdown :text="question.question" inline />
+            <BaseMarkdown :text="displayQuestion.question" inline />
           </span>
         </div>
         <div class="question-card__badges">
@@ -85,7 +85,7 @@
       </ol>
     </div>
 
-    <div v-if="question.explanation" class="question-card__explanation">
+    <div v-if="displayQuestion.explanation" class="question-card__explanation">
       <button
         type="button"
         class="explanation-toggle"
@@ -100,7 +100,7 @@
       </button>
       <Transition name="explanation">
         <p v-if="explanationExpanded" dir="auto" class="explanation-text">
-          {{ question.explanation }}
+          {{ displayQuestion.explanation }}
         </p>
       </Transition>
     </div>
@@ -123,9 +123,18 @@
       </span>
     </div>
 
-    <div v-if="question.source" class="question-card__source">
+    <div
+      v-if="question.source || question.source_document || question.source_page"
+      class="question-card__source"
+    >
       <strong><i class="bi bi-book"></i> {{ t('questions.sourceLabel') }}:</strong>
-      {{ question.source }}
+      <span v-if="question.source">{{ question.source }}</span>
+      <span v-if="question.source_document">
+        · {{ t('questions.sourceDocumentLabel') }}: {{ question.source_document }}
+      </span>
+      <span v-if="question.source_page">
+        · {{ t('questions.sourcePageLabel') }}: {{ question.source_page }}
+      </span>
     </div>
 
     <div class="question-card__meta">
@@ -184,8 +193,9 @@ import QuestionCardActions from './QuestionCardActions.vue'
 import { enqueueRating } from '../composables/useRatingBatcher'
 import { useQuestionStore } from '@/stores/questionStore'
 import { authorRankVariantFor, authorRankIconFor, authorRankLabelFor } from '@/utils/authorRank'
+import { localizedQuestion } from '@/utils/localizedQuestion'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const props = defineProps({
   question: { type: Object, required: true },
@@ -250,7 +260,8 @@ const authorRankLabel = computed(() => {
   return authorRankLabelFor(rank.key, t, rank.label || '')
 })
 
-const choices = computed(() => props.question.choices || [])
+const displayQuestion = computed(() => localizedQuestion(props.question, locale.value))
+const choices = computed(() => displayQuestion.value.choices || [])
 
 async function fetchRating() {
   try {
