@@ -93,18 +93,20 @@ export const adminService = {
   // so this no longer carries its own copy of the strip. A deploy
   // that sets `VITE_API_BASE_URL` with a trailing slash no longer
   // produces a `//` between the base and the route.
-  exportStateUrl(includeImages = true, verifiedOnly = false) {
+  exportStateUrl(includeImages = true, verifiedOnly = false, format = 'json') {
     const params = new URLSearchParams()
     if (!includeImages) params.set('include_images', 'false')
     if (verifiedOnly) params.set('verified_only', 'true')
+    if (format === 'xlsx') params.set('format', 'xlsx')
     const qs = params.toString()
     return `${API_BASE}${ENDPOINTS.DATABASE.EXPORT_STATE}${qs ? '?' + qs : ''}`
   },
 
-  async exportState(includeImages = true, verifiedOnly = false) {
+  async exportState(includeImages = true, verifiedOnly = false, format = 'json') {
     const params = {}
     if (!includeImages) params.include_images = 'false'
     if (verifiedOnly) params.verified_only = 'true'
+    if (format === 'xlsx') params.format = 'xlsx'
     return apiClient.get(ENDPOINTS.DATABASE.EXPORT_STATE, {
       params,
       responseType: 'blob',

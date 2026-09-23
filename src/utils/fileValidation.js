@@ -13,7 +13,7 @@
 //                             browser treats as a hint.
 //   • SimpleImportTab.vue   — extension check + size check, but only
 //                             in the picked-file handler.
-//   • StateImport.vue       — extension check only, no size check.
+//   • StateImport.vue       — JSON/XLSX extension check only, no size check.
 //
 // The three accept-list formats already differed between the
 // callers: DropZone takes a comma-separated `accept` string

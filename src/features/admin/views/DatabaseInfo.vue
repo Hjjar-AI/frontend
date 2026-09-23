@@ -52,17 +52,19 @@
               <i class="card-title__icon bi bi-box-seam"></i>
               {{ t('admin.database.exportStateTitle') }}
             </h4>
-            <p
-              class="text-muted state-export-card__description"
-            >
+            <p class="text-muted state-export-card__description">
               {{ t('admin.database.exportStateDesc') }}
             </p>
             <div class="export-buttons">
-              <BaseButton variant="primary" @click="exportState(true)">
+              <BaseButton variant="primary" @click="exportState(true, 'xlsx')">
+                <i class="bi bi-file-earmark-spreadsheet"></i>
+                {{ t('admin.database.exportStateExcel') }}
+              </BaseButton>
+              <BaseButton variant="secondary" @click="exportState(true, 'json')">
                 <i class="bi bi-images"></i>
                 {{ t('admin.database.exportStateWithImages') }}
               </BaseButton>
-              <BaseButton variant="secondary" @click="exportState(false)">
+              <BaseButton variant="secondary" @click="exportState(false, 'json')">
                 <i class="bi bi-file-earmark-code"></i>
                 {{ t('admin.database.exportStateWithoutImages') }}
               </BaseButton>
@@ -311,21 +313,29 @@ async function fetchBackups() {
   await adminDatabaseStore.fetchBackups()
 }
 
-async function exportState(includeImages) {
+async function exportState(includeImages, format = 'json') {
   notify(
     t(
-      includeImages
-        ? 'admin.database.exportStateStartedWithImages'
-        : 'admin.database.exportStateStartedWithoutImages',
+      format === 'xlsx'
+        ? 'admin.database.exportStateStartedExcel'
+        : includeImages
+          ? 'admin.database.exportStateStartedWithImages'
+          : 'admin.database.exportStateStartedWithoutImages',
     ),
     'info',
   )
   try {
-    const response = await adminDatabaseStore.exportState(includeImages, false)
-    const blob = response.data instanceof Blob
-      ? response.data
-      : new Blob([response.data], { type: 'application/json' })
-    const filename = getResponseFilename(response) || 'questions_state.json'
+    const response = await adminDatabaseStore.exportState(includeImages, false, format)
+    const blob =
+      response.data instanceof Blob
+        ? response.data
+        : new Blob([response.data], {
+            type:
+              format === 'xlsx'
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/json',
+          })
+    const filename = getResponseFilename(response) || `questions_state.${format}`
     downloadBlob(blob, filename)
   } catch (error) {
     notify(error?.message || t('common.networkError'), 'error')

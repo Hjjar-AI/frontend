@@ -8,7 +8,9 @@ vi.mock('@/services/api/client', () => ({
 import { apiClient } from '@/services/api/client'
 import { adminService } from '@/services/adminService'
 
-beforeEach(() => { vi.clearAllMocks() })
+beforeEach(() => {
+  vi.clearAllMocks()
+})
 
 describe('adminService — users', () => {
   it('listUsers GETs /auth/admin/users/ with params', async () => {
@@ -139,11 +141,10 @@ describe('adminService — database', () => {
     }
     await adminService.exportPdf(options)
 
-    expect(apiClient.post).toHaveBeenCalledWith(
-      expect.stringContaining('/export/pdf/'),
-      options,
-      { responseType: 'blob', rawResponse: true },
-    )
+    expect(apiClient.post).toHaveBeenCalledWith(expect.stringContaining('/export/pdf/'), options, {
+      responseType: 'blob',
+      rawResponse: true,
+    })
   })
 
   it('exportPdf can target the verified-only endpoint', async () => {
@@ -179,6 +180,20 @@ describe('adminService — state envelope', () => {
       responseType: 'blob',
       rawResponse: true,
     })
+  })
+
+  it('exportState requests the full XLSX container when selected', async () => {
+    await adminService.exportState(true, false, 'xlsx')
+
+    expect(apiClient.get).toHaveBeenCalledWith('/database/export/state/', {
+      params: { format: 'xlsx' },
+      responseType: 'blob',
+      rawResponse: true,
+    })
+  })
+
+  it('exportStateUrl includes the XLSX format flag', () => {
+    expect(adminService.exportStateUrl(true, false, 'xlsx')).toContain('format=xlsx')
   })
 
   it('importState sends the required FormData fields', async () => {

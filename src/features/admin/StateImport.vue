@@ -2,11 +2,11 @@
 <template>
   <div class="state-import">
     <DropZone
-      accept=".json"
+      accept=".json,.xlsx"
       :label="t('admin.import.stateLabel')"
       :hint="t('admin.import.stateHint')"
       :disabled="loading"
-      :invalid-type-message-fn="invalidJsonMessage"
+      :invalid-type-message-fn="invalidStateMessage"
       @file-selected="handleFileSelect"
     />
 
@@ -75,6 +75,14 @@
           <span>{{ t('admin.import.stateCountQuestionsSkipped') }}</span>
           <strong>{{ previewCounts.questions_skipped }}</strong>
         </li>
+        <li v-if="mode === 'replace'">
+          <span>{{ t('admin.import.stateCountQuestionsUpdated') }}</span>
+          <strong>{{ previewCounts.questions_updated }}</strong>
+        </li>
+        <li v-if="mode === 'replace'">
+          <span>{{ t('admin.import.stateCountQuestionsDeleted') }}</span>
+          <strong>{{ previewCounts.questions_deleted }}</strong>
+        </li>
         <li>
           <span>{{ t('admin.import.stateCountImages') }}</span>
           <strong>{{ previewCounts.images_imported }}</strong>
@@ -134,12 +142,12 @@ const humanSize = computed(() => {
   return `${(bytes / 1024 / 1024).toFixed(2)} MB`
 })
 
-// DropZone handles the type check via the accept attribute (".json").
+// DropZone handles the type check via the accept attribute.
 // This factory supplies the wording for a rejection. It ignores the
 // extension argument on purpose — the previous implementation
 // always showed the same static message for this surface.
-function invalidJsonMessage() {
-  return t('admin.import.badTelegramType')
+function invalidStateMessage() {
+  return t('admin.import.badStateType')
 }
 
 // The file arrives already validated by DropZone.

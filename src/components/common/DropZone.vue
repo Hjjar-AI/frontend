@@ -65,8 +65,8 @@ const props = defineProps({
   //
   // The prop exists so a caller that already had its own wording for
   // a rejection — e.g. `SimpleImportTab`'s "supported: .xlsx, .xls,
-  // .csv, .json", or `StateImport`'s "please choose a JSON file
-  // only" — keeps that wording now that DropZone validates both
+  // .csv, .json", or `StateImport`'s "please choose a full JSON or
+  // XLSX state file" — keeps that wording now that DropZone validates both
   // picked and dropped files.
   invalidTypeMessageFn: { type: Function, default: null },
 })

@@ -41,8 +41,11 @@
           <div class="author-mapping__identity">
             <i class="bi bi-person-circle"></i>
             <span class="author-mapping__name">{{ author.name }}</span>
-            <span class="author-mapping__count">
+            <span v-if="author.question_count" class="author-mapping__count">
               {{ t('admin.import.mappingQuestionCount', { count: author.question_count }) }}
+            </span>
+            <span v-if="author.case_count" class="author-mapping__count">
+              {{ t('admin.import.mappingCaseCount', { count: author.case_count }) }}
             </span>
           </div>
           <span v-if="author.uuid" class="author-mapping__uuid" :title="author.uuid">

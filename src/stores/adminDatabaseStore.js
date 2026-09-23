@@ -73,12 +73,12 @@ export const useAdminDatabaseStore = defineStore('adminDatabase', {
       })
     },
 
-    exportStateUrl(includeImages = true, verifiedOnly = false) {
-      return adminService.exportStateUrl(includeImages, verifiedOnly)
+    exportStateUrl(includeImages = true, verifiedOnly = false, format = 'json') {
+      return adminService.exportStateUrl(includeImages, verifiedOnly, format)
     },
 
-    exportState(includeImages = true, verifiedOnly = false) {
-      return adminService.exportState(includeImages, verifiedOnly)
+    exportState(includeImages = true, verifiedOnly = false, format = 'json') {
+      return adminService.exportState(includeImages, verifiedOnly, format)
     },
 
     exportUrl(format, options = {}) {
