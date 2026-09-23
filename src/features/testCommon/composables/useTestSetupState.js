@@ -313,6 +313,12 @@ export function useTestSetupState(props, emit, t) {
         titleKey: 'tests.modeExamLabel',
         descKey: 'tests.examDescShort',
       },
+      {
+        value: 'recall',
+        icon: 'bi bi-chat-left-text',
+        titleKey: 'tests.modeRecallLabel',
+        descKey: 'tests.recallDescShort',
+      },
     ],
     mode,
     source,

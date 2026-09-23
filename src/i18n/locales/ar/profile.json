@@ -98,6 +98,7 @@
     "colTime": "الوقت",
     "modeExam": "امتحان",
     "modeStudy": "مذاكرة ذاتية",
-    "modeSelfTest": "اختبار ذاتي"
+    "modeSelfTest": "اختبار ذاتي",
+    "modeRecall": "الإجابة قبل الخيارات"
   }
 }

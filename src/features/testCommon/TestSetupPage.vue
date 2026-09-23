@@ -65,7 +65,7 @@ if (store.sessionId && !store.isActive && store.questionIds.length === 0) {
 function onModeChange(next) {
   if (next === routeMode.value) return
   routeMode.value = next
-  const target = next === 'study' ? '/study' : '/exam'
+  const target = `/${next}`
   if (route.path !== target) {
     router.replace({ path: target, query: route.query })
   }

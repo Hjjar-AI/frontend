@@ -104,6 +104,9 @@ export const ENDPOINTS = {
     ATTEMPT_SUMMARY: '/questions/attempt-summary/',
     SRS_DUE_COUNT: '/questions/srs-due-count/',
     STUDY_NOW: '/questions/study-now/',
+    KNOWLEDGE_MAP: '/questions/knowledge-map/',
+    KNOWLEDGE_OBJECTS: '/questions/knowledge-objects/',
+    KNOWLEDGE_OBJECT: (id) => `/questions/knowledge-objects/${id}/`,
 
     CASES_LIST: '/questions/cases/',
     CASES_DETAIL: (key) => `/questions/cases/${encodeURIComponent(key)}/`,
@@ -158,6 +161,17 @@ export const ENDPOINTS = {
     RESUME: '/study/resume/',
     DISCARD: '/study/discard/',
     STATUS: '/study/status/',
+  },
+
+  RECALL: {
+    START: '/recall/start/recall/',
+    QUESTION: '/recall/question/',
+    ANSWER: '/recall/answer/',
+    RESULTS: '/recall/results/',
+    PAUSE: '/recall/pause/',
+    RESUME: '/recall/resume/',
+    DISCARD: '/recall/discard/',
+    STATUS: '/recall/status/',
   },
 
   BOOKMARKS: {

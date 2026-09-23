@@ -17,6 +17,7 @@
     "srsNothingDue": "No questions are due for review right now",
     "examDescShort": "Timed, no feedback, auto-finish",
     "studyDescShort": "Explanation after each answer, overtime after timer ends",
+    "recallDescShort": "Write your answer before the choices are revealed",
 
     "exam": "Exam",
     "study": "Study",
@@ -27,8 +28,10 @@
 
     "examStart": "Start exam",
     "studyStart": "Start self-study",
+    "recallStart": "Start answer-first review",
     "examResultsTitle": "Exam results",
     "studyResultsTitle": "Self-study results",
+    "recallResultsTitle": "Answer-first results",
     "examFinish": "Finish exam",
     "studyFinish": "Finish self-study",
     "retryLabel": "Try again",
@@ -86,6 +89,15 @@
     "confidence": "I'm confident in my answer",
     "notConfident": "Not confident",
     "confidenceHint": "This question appears in the fragile-knowledge notebook if you aren't confident.",
+    "confidencePrompt": "How confident are you?",
+    "confidenceGuessing": "Guessing",
+    "confidenceUncertain": "Uncertain",
+    "confidenceCertain": "Confident",
+    "recallPrompt": "Write the answer you would give before seeing the options",
+    "recallPlaceholder": "Type your answer or reasoning...",
+    "revealOptions": "Save and reveal options",
+    "recallPrivacyHint": "Your written recall is saved with this attempt for later review.",
+    "recallSaveFailed": "Could not save your written answer.",
 
     "reflectionTitle": "Why did you get it wrong?",
     "reflectionHint": "This helps us schedule the question better.",
@@ -144,6 +156,7 @@
     "setupDesc": "Choose a mode and a source, then start the session.",
     "modeExamLabel": "Exam",
     "modeStudyLabel": "Self-review",
+    "modeRecallLabel": "Answer before options",
      "sourceMultiTag": "{count} tags",
     "categoryPickerEmptyHint": "No category selected — the session will include all categories."
   }

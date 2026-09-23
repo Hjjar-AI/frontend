@@ -17,6 +17,7 @@
     "srsNothingDue": "لا توجد أسئلة مستحقة للمراجعة حالياً",
     "examDescShort": "بمؤقت، بدون شرح فوري، إنهاء تلقائي",
     "studyDescShort": "مع شرح فوري بعد كل إجابة، ووقت إضافي عند انتهاء المؤقت",
+    "recallDescShort": "اكتب إجابتك قبل إظهار الخيارات",
 
     "exam": "امتحان",
     "study": "مذاكرة",
@@ -27,8 +28,10 @@
 
     "examStart": "ابدأ الامتحان",
     "studyStart": "ابدأ المذاكرة ذاتية",
+    "recallStart": "ابدأ المراجعة قبل الخيارات",
     "examResultsTitle": "نتائج الامتحان",
     "studyResultsTitle": "نتائج المذاكرة ذاتية",
+    "recallResultsTitle": "نتائج الإجابة قبل الخيارات",
     "examFinish": "إنهاء الامتحان",
     "studyFinish": "إنهاء المذاكرة ذاتية",
     "retryLabel": "إعادة المحاولة",
@@ -86,6 +89,15 @@
     "confidence": "متأكد من إجابتي",
     "notConfident": "غير متأكد",
     "confidenceHint": "يظهر هذا السؤال في دفتر المعرفة الهشة إذا كنت غير متأكد.",
+    "confidencePrompt": "ما مستوى ثقتك؟",
+    "confidenceGuessing": "تخمين",
+    "confidenceUncertain": "غير متأكد",
+    "confidenceCertain": "واثق",
+    "recallPrompt": "اكتب الإجابة التي ستعطيها قبل رؤية الخيارات",
+    "recallPlaceholder": "اكتب إجابتك أو طريقة تفكيرك...",
+    "revealOptions": "احفظ وأظهر الخيارات",
+    "recallPrivacyHint": "تُحفظ إجابتك المكتوبة مع هذه المحاولة للمراجعة لاحقاً.",
+    "recallSaveFailed": "تعذر حفظ إجابتك المكتوبة.",
 
     "reflectionTitle": "لماذا أخطأت؟",
     "reflectionHint": "سيساعدنا هذا في جدولة هذا السؤال بشكل أفضل.",
@@ -144,6 +156,7 @@
     "setupDesc": "اختر الوضع والمصدر، ثم ابدأ الجلسة.",
     "modeExamLabel": "امتحان",
     "modeStudyLabel": "مراجعة ذاتية",
+    "modeRecallLabel": "الإجابة قبل الخيارات",
     "sourceMultiTag": "{count} وسوم",
     "categoryPickerEmptyHint": "لا يوجد تصنيف محدد — ستشمل الجلسة جميع التصنيفات."
   }

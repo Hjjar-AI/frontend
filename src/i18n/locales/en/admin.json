@@ -199,6 +199,7 @@
         "missing_explanation": "Missing explanation",
         "missing_category": "Missing category",
         "missing_source_document": "Missing source document",
+        "invalid_translations": "Invalid translation data",
         "translation_choice_count_mismatch": "Translation choice mismatch"
       }
     },
@@ -409,9 +410,9 @@
       "statePreviewButton": "Preview",
       "stateDropFirst": "Choose a file first",
       "stateModeLabel": "Import mode",
-      "stateModeMerge": "Merge — add new questions only, keep existing ones",
-      "stateModeReplace": "Replace — update matching questions and remove public questions missing from the file",
-      "stateReplaceWarning": "Public questions absent from this file will be permanently deleted. Matching questions are updated in place, and local drafts absent from the file are kept.",
+      "stateModeMerge": "Merge — add new questions; handle matching questions with the conflict strategy below",
+      "stateModeReplace": "Replace — handle matching questions with the conflict strategy and remove public questions missing from a complete package",
+      "stateReplaceWarning": "Public questions absent from a complete package will be permanently deleted. Matching questions follow the selected conflict strategy, and local drafts absent from the package are kept. Selective packages cannot use replace mode.",
       "statePreviewTitle": "Import preview",
       "stateCountCategories": "Categories (new / updated)",
       "stateCountTags": "New tags",
@@ -421,6 +422,7 @@
       "stateCountQuestionsUpdated": "Matching questions to update",
       "stateCountQuestionsDeleted": "Public questions to delete",
       "stateCountImages": "Images to import",
+      "stateCountConflicts": "Question conflicts",
       "statePreviewHint": "Counts are estimates — they are recomputed inside the atomic transaction. Images are skipped if their base64 payload cannot be decoded.",
       "stateSuccess": "Imported {questions} questions successfully",
       "stateFailed": "Question bank package import failed",

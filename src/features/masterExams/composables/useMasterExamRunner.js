@@ -1,4 +1,5 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { normalizeConfidenceScore } from '@/utils/confidence'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useMasterExamStore } from '@/stores/masterExamStore'
@@ -31,12 +32,12 @@ export function useMasterExamRunner() {
     return raw ? raw.answer : null
   })
 
-  const currentConfidence = ref(true)
+  const currentConfidence = ref(3)
   watch(
     currentSavedAnswer,
     () => {
       const raw = attemptStore.answers[String(attemptStore.currentQuestionId)]
-      currentConfidence.value = raw ? raw.confidence !== false : true
+      currentConfidence.value = normalizeConfidenceScore(raw?.confidence)
     },
     { immediate: true },
   )

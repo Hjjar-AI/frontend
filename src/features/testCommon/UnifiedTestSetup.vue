@@ -183,7 +183,11 @@
         :loading="loading"
         :disabled="!canStart || loading"
       >
-        {{ t(mode === 'exam' ? 'tests.examStart' : 'tests.studyStart') }}
+        {{ t(mode === 'exam'
+          ? 'tests.examStart'
+          : mode === 'recall'
+            ? 'tests.recallStart'
+            : 'tests.studyStart') }}
       </BaseButton>
     </div>
 

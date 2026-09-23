@@ -34,7 +34,35 @@
         loading="lazy"
       />
 
-      <div class="question-card__choices">
+      <div
+        v-if="answerBeforeOptions && !choicesRevealed"
+        class="recall-prompt"
+      >
+        <label class="recall-prompt__label" for="recall-pre-answer">
+          {{ t('tests.recallPrompt') }}
+        </label>
+        <textarea
+          id="recall-pre-answer"
+          v-model="preAnswer"
+          class="form-control recall-prompt__input"
+          rows="3"
+          maxlength="1000"
+          :disabled="disabled"
+          :placeholder="t('tests.recallPlaceholder')"
+          @keydown.ctrl.enter.prevent="revealChoices"
+        ></textarea>
+        <button
+          type="button"
+          class="btn btn-primary recall-prompt__reveal"
+          :disabled="disabled || !preAnswer.trim()"
+          @click="revealChoices"
+        >
+          <i class="bi bi-eye"></i> {{ t('tests.revealOptions') }}
+        </button>
+        <small class="text-muted">{{ t('tests.recallPrivacyHint') }}</small>
+      </div>
+
+      <div v-if="!answerBeforeOptions || choicesRevealed" class="question-card__choices">
         <div
           v-for="(choice, idx) in displayQuestion.choices"
           :key="idx"
@@ -56,19 +84,27 @@
         </div>
       </div>
 
-      <div v-if="selectedAnswer" class="confidence-row">
-        <label class="confidence-toggle">
+      <div v-if="selectedAnswer" class="confidence-row confidence-score">
+        <span class="confidence-score__label">{{ t('tests.confidencePrompt') }}</span>
+        <div class="confidence-score__options" role="radiogroup">
+          <label
+            v-for="option in confidenceOptions"
+            :key="option.value"
+            class="confidence-score__option"
+            :class="{ 'confidence-score__option--active': confidenceScore === option.value }"
+          >
           <input
-            v-model="isConfident"
-            type="checkbox"
+            v-model.number="confidenceScore"
+            type="radio"
+            :value="option.value"
             :disabled="disabled"
             @change="onConfidenceChange"
           />
-          <span class="confidence-toggle__label">
-            <i :class="isConfident ? 'bi bi-emoji-smile' : 'bi bi-emoji-frown'"></i>
-            {{ isConfident ? t('tests.confidence') : t('tests.notConfident') }}
+          <span>
+            <i :class="option.icon"></i> {{ t(option.labelKey) }}
           </span>
-        </label>
+          </label>
+        </div>
         <span v-if="showConfidenceHint" class="confidence-hint">
           <i class="bi bi-info-circle"></i>
           {{ t('tests.confidenceHint') }}
@@ -116,13 +152,17 @@ import BaseMarkdown from '@/components/markdown/BaseMarkdown.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import { localizedQuestion } from '@/utils/localizedQuestion'
+import { normalizeConfidenceScore } from '@/utils/confidence'
 
 const { t, locale } = useI18n()
 
 const props = defineProps({
   question: { type: Object, required: true },
   initialAnswer: { type: Number, default: null },
-  initialConfidence: { type: Boolean, default: true },
+  initialConfidence: { type: [Number, Boolean], default: 3 },
+  answerBeforeOptions: { type: Boolean, default: false },
+  initialPreAnswer: { type: String, default: '' },
+  choicesRevealed: { type: Boolean, default: true },
   showVerification: { type: Boolean, default: true },
   showConfidenceHint: { type: Boolean, default: true },
   showReflectionPrompt: { type: Boolean, default: false },
@@ -135,18 +175,25 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['answer', 'confidence', 'reflection'])
+const emit = defineEmits(['answer', 'confidence', 'reflection', 'reveal'])
 
 const selectedAnswer = ref(props.initialAnswer)
-const isConfident = ref(props.initialConfidence === undefined ? true : props.initialConfidence)
+const confidenceScore = ref(normalizeConfidenceScore(props.initialConfidence))
+const preAnswer = ref(props.initialPreAnswer || '')
 const pickedReason = ref(null)
 const displayQuestion = computed(() => localizedQuestion(props.question, locale.value))
+const confidenceOptions = [
+  { value: 1, icon: 'bi bi-dice-5', labelKey: 'tests.confidenceGuessing' },
+  { value: 2, icon: 'bi bi-question-circle', labelKey: 'tests.confidenceUncertain' },
+  { value: 3, icon: 'bi bi-emoji-smile', labelKey: 'tests.confidenceCertain' },
+]
 
 watch(
   () => props.question?.id,
   () => {
     selectedAnswer.value = props.initialAnswer
-    isConfident.value = props.initialConfidence === undefined ? true : props.initialConfidence
+    confidenceScore.value = normalizeConfidenceScore(props.initialConfidence)
+    preAnswer.value = props.initialPreAnswer || ''
     pickedReason.value = null
   },
 )
@@ -162,7 +209,14 @@ watch(
 watch(
   () => props.initialConfidence,
   (val) => {
-    isConfident.value = val === undefined ? true : val
+    confidenceScore.value = normalizeConfidenceScore(val)
+  },
+)
+
+watch(
+  () => props.initialPreAnswer,
+  (val) => {
+    preAnswer.value = val || ''
   },
 )
 
@@ -171,7 +225,12 @@ function onUserSelect(val) {
 }
 
 function onConfidenceChange() {
-  emit('confidence', isConfident.value)
+  emit('confidence', confidenceScore.value)
+}
+
+function revealChoices() {
+  const clean = preAnswer.value.trim()
+  if (clean) emit('reveal', clean)
 }
 
 function pickReason(reason) {

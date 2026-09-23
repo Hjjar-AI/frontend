@@ -30,14 +30,19 @@
         :question="displayQuestion"
         :initial-answer="selectedAnswer"
         :initial-confidence="confidenceForCurrent"
+        :answer-before-options="mode === 'recall'"
+        :initial-pre-answer="preAnswer"
+        :choices-revealed="choicesRevealed"
+        :disabled="submitting"
         :show-reflection-prompt="showReflectionPrompt"
         @answer="handleAnswer"
         @confidence="handleConfidence"
+        @reveal="handleReveal"
         @reflection="handleReflection"
       />
 
       <ExplanationSection
-        v-if="mode === 'study' && displayQuestion.explanation && store.hasAnswer(store.currentIndex)"
+        v-if="(mode === 'study' || mode === 'recall') && displayQuestion.explanation && store.hasAnswer(store.currentIndex)"
         :explanation="displayQuestion.explanation"
       />
 
@@ -100,9 +105,12 @@ const {
   examTotalSeconds,
   isCritical,
   confidenceForCurrent,
+  preAnswer,
+  choicesRevealed,
   onTimerTick,
   handleAnswer,
   handleConfidence,
+  handleReveal,
   handleReflection,
   goNext,
   goPrevious,

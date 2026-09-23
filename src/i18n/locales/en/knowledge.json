@@ -1,0 +1,27 @@
+{
+  "knowledge": {
+    "title": "Personal knowledge map",
+    "description": "Your mastery is grouped by the precise learning objectives behind the questions—not merely by category or tag.",
+    "total": "Knowledge objects",
+    "mastered": "Mastered",
+    "started": "Started",
+    "average": "Average mastery",
+    "mastery": "Mastery",
+    "coverage": "Coverage",
+    "attempts": "Attempts",
+    "confidence": "Confidence",
+    "review": "Review this concept",
+    "uncategorized": "Uncategorized",
+    "notAvailable": "Not started",
+    "empty": "No knowledge objects yet",
+    "emptyDescription": "Attach questions to knowledge objects to begin building your personal map.",
+    "loadFailed": "Could not load the personal knowledge map.",
+    "status": {
+      "all": "All",
+      "mastered": "Mastered",
+      "developing": "Developing",
+      "needs_work": "Needs work",
+      "unstarted": "Not started"
+    }
+  }
+}

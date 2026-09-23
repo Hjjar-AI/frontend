@@ -1,6 +1,67 @@
 /* frontend/src/assets/confidence.css */
 /* FEATURE #5 — confidence toggle attached to each answer card. */
 
+.confidence-score {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.confidence-score__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.confidence-score__options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-xs);
+  width: 100%;
+}
+
+.confidence-score__option {
+  cursor: pointer;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+  padding: var(--space-sm);
+  text-align: center;
+  transition: border-color var(--motion-fast), background var(--motion-fast);
+}
+
+.confidence-score__option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.confidence-score__option--active {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-card));
+  color: var(--color-primary);
+}
+
+.recall-prompt {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-alt);
+}
+
+.recall-prompt__label {
+  font-weight: var(--font-weight-semibold);
+}
+
+.recall-prompt__input {
+  resize: vertical;
+}
+
+.recall-prompt__reveal {
+  justify-self: start;
+}
+
 .confidence-row {
   display: flex;
   align-items: center;

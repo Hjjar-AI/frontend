@@ -18,6 +18,7 @@ import content from './content.json'
 import analytics from './analytics.json'
 import categories from './categories.json'
 import about from './about.json'
+import knowledge from './knowledge.json'
 
 export default {
   ...common,
@@ -32,4 +33,5 @@ export default {
   ...analytics,
   ...categories,
   ...about,
+  ...knowledge,
 }

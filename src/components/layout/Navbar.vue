@@ -51,6 +51,9 @@
           <router-link to="/bookmarks" class="nav-link">
             <i class="bi bi-bookmark-heart"></i> {{ t('nav.bookmarks') }}
           </router-link>
+          <router-link to="/knowledge-map" class="nav-link">
+            <i class="bi bi-map"></i> {{ t('nav.knowledgeMap') }}
+          </router-link>
         </NavbarDropdown>
 
         <NavbarDropdown
@@ -182,11 +185,11 @@ const longestStreak = computed(() => groupStore.longestStreak)
 const isAdminActive = computed(() => route.path.startsWith('/admin'))
 
 const isTestsActive = computed(() =>
-  ['/exam', '/study', '/master-exams'].some(p => route.path.startsWith(p))
+  ['/exam', '/study', '/recall', '/master-exams'].some(p => route.path.startsWith(p))
 )
 
 const isContentActive = computed(() =>
-  ['/questions', '/categories', '/bookmarks'].some(p => route.path.startsWith(p))
+  ['/questions', '/categories', '/bookmarks', '/knowledge-map'].some(p => route.path.startsWith(p))
 )
 
 const visibleAdminLinks = computed(() =>

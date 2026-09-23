@@ -38,6 +38,9 @@
           </span>
         </div>
         <div class="question-card__badges">
+          <BaseBadge v-if="question.knowledge_object_title" variant="info" status>
+            <i class="bi bi-bullseye"></i> {{ question.knowledge_object_title }}
+          </BaseBadge>
           <BaseBadge v-if="question.case" variant="info" status>
             <i class="bi bi-journal-medical"></i> {{ t('questions.caseBadge') }}
           </BaseBadge>
@@ -163,6 +166,10 @@
       <span v-if="question.updated_at">
         <i class="bi bi-clock-history"></i>
         {{ t('questions.lastUpdated', { date: formatDate(question.updated_at) }) }}
+      </span>
+      <span v-if="question.last_revised_at">
+        <i class="bi bi-calendar-check"></i>
+        {{ t('questions.lastRevised', { date: formatDate(question.last_revised_at) }) }}
       </span>
       <span>
         <i class="bi bi-eye"></i>

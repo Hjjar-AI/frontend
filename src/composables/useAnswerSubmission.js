@@ -10,9 +10,10 @@ export function useAnswerSubmission(store) {
     targetIndex = null,
     confidence = null,
     errorReason = null,
+    preAnswer = null,
   ) {
     const task = tail.then(() =>
-      store.submitAnswer(answer, action, targetIndex, confidence, errorReason)
+      store.submitAnswer(answer, action, targetIndex, confidence, errorReason, preAnswer)
     )
     // Keep the chain alive after a rejection. The caller still receives
     // the rejected promise they can handle — `tail` gets a different,

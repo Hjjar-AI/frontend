@@ -98,6 +98,7 @@
     "colTime": "Time",
     "modeExam": "Exam",
     "modeStudy": "Self-study",
-    "modeSelfTest": "Self-test"
+    "modeSelfTest": "Self-test",
+    "modeRecall": "Answer before options"
   }
 }

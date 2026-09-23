@@ -161,6 +161,12 @@ const routes = [
     component: lazyLoad(() => import('@/features/bookmarks/views/Bookmarks.vue')),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/knowledge-map',
+    name: 'KnowledgeMap',
+    component: lazyLoad(() => import('@/features/knowledge/views/KnowledgeMap.vue')),
+    meta: { requiresAuth: true },
+  },
 
   // ═══════════════════════════════════════════════════════════════════
   // Test setup pages
@@ -179,6 +185,13 @@ const routes = [
     props: { mode: 'study' },
     meta: { requiresAuth: true, capability: 'tests.start' },
   },
+  {
+    path: '/recall',
+    name: 'RecallSetup',
+    component: lazyLoad(() => import('@/features/testCommon/TestSetupPage.vue')),
+    props: { mode: 'recall' },
+    meta: { requiresAuth: true, capability: 'tests.start' },
+  },
 
 
   {
@@ -193,6 +206,13 @@ const routes = [
     name: 'StudyQuestion',
     component: lazyLoad(() => import('@/features/testCommon/TestQuestion.vue')),
     props: { mode: 'study', isPauseSupported: true },
+    meta: { requiresAuth: true, transition: 'slide-forward' },
+  },
+  {
+    path: '/recall/question',
+    name: 'RecallQuestion',
+    component: lazyLoad(() => import('@/features/testCommon/TestQuestion.vue')),
+    props: { mode: 'recall', isPauseSupported: true },
     meta: { requiresAuth: true, transition: 'slide-forward' },
   },
 
@@ -211,6 +231,13 @@ const routes = [
     name: 'StudyResults',
     component: lazyLoad(() => import('@/features/testCommon/TestResultsPage.vue')),
     props: { mode: 'study' },
+    meta: { requiresAuth: true, transition: 'slide-backward' },
+  },
+  {
+    path: '/recall/results',
+    name: 'RecallResults',
+    component: lazyLoad(() => import('@/features/testCommon/TestResultsPage.vue')),
+    props: { mode: 'recall' },
     meta: { requiresAuth: true, transition: 'slide-backward' },
   },
 

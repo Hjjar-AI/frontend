@@ -80,6 +80,9 @@
             <router-link to="/questions/fragile" class="sheet__link" @click="closeSheet">
               <i class="bi bi-shield-slash"></i><span>{{ t('nav.fragile') }}</span>
             </router-link>
+            <router-link to="/knowledge-map" class="sheet__link" @click="closeSheet">
+              <i class="bi bi-map"></i><span>{{ t('nav.knowledgeMap') }}</span>
+            </router-link>
             <router-link to="/groups" class="sheet__link" @click="closeSheet">
               <i class="bi bi-people-fill"></i><span>{{ t('nav.myGroups') }}</span>
             </router-link>
@@ -173,7 +176,7 @@ const showMore = ref(false)
 const { storeFocus, restoreFocus } = useFocusReturn()
 
 const isTestsActive = computed(() =>
-  ['/exam', '/study', '/master-exams'].some(p => route.path.startsWith(p))
+  ['/exam', '/study', '/recall', '/master-exams'].some(p => route.path.startsWith(p))
 )
 
 const isQuestionsActive = computed(() =>

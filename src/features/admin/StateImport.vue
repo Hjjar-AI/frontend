@@ -103,6 +103,10 @@
           <span>{{ t('admin.import.stateCountImages') }}</span>
           <strong>{{ previewCounts.images_imported }}</strong>
         </li>
+        <li v-if="previewConflictCount">
+          <span>{{ t('admin.import.stateCountConflicts') }}</span>
+          <strong>{{ previewConflictCount }}</strong>
+        </li>
       </ul>
       <p class="state-import__preview-hint">
         <i class="bi bi-info-circle"></i>
@@ -151,6 +155,7 @@ const conflictStrategy = ref('keep_local')
 const loading = ref(false)
 const previewLoading = ref(false)
 const previewCounts = ref(null)
+const previewConflictCount = ref(0)
 const mappingModalOpen = ref(false)
 const mappingAuthors = ref([])
 const mappingUsers = ref([])
@@ -182,6 +187,7 @@ function invalidStateMessage() {
 function handleFileSelect(file) {
   selectedFile.value = file
   previewCounts.value = null
+  previewConflictCount.value = 0
 }
 
 watch(mode, (value) => {
@@ -198,9 +204,11 @@ async function preview() {
     })
     if (!res) throw new Error(databaseStore.error || t('admin.import.stateFailed'))
     previewCounts.value = res.counts || null
+    previewConflictCount.value = res.conflict_count || 0
   } catch (err) {
     notify(err?.message || t('admin.import.stateFailed'), 'error')
     previewCounts.value = null
+    previewConflictCount.value = 0
   } finally {
     previewLoading.value = false
   }
@@ -300,6 +308,7 @@ async function completeImport(mapping, adminPassword, conflictResolutions = {}) 
   )
   selectedFile.value = null
   previewCounts.value = null
+  previewConflictCount.value = 0
   emit('imported', res)
 }
 

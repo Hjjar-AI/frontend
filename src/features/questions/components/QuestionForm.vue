@@ -64,6 +64,94 @@
         required
       />
 
+      <details class="question-form__case-section">
+        <summary class="question-form__case-summary">
+          <i class="bi bi-bullseye"></i>
+          <span>{{ t('questions.knowledgeObjectSection') }}</span>
+          <span v-if="selectedKnowledgeObject" class="question-form__case-badge">
+            {{ selectedKnowledgeObject.title }}
+          </span>
+        </summary>
+        <p class="text-muted question-form__case-hint">
+          {{ t('questions.knowledgeObjectHint') }}
+        </p>
+        <FormGrid>
+          <BaseField :label="t('questions.knowledgeObjectLabel')">
+            <select v-model="form.knowledge_object" class="form-control">
+              <option value="">{{ t('questions.noKnowledgeObject') }}</option>
+              <option v-for="item in knowledgeObjects" :key="item.id" :value="item.id">
+                {{ item.title }}
+              </option>
+            </select>
+          </BaseField>
+          <div class="form-group question-form__knowledge-action">
+            <BaseButton
+              type="button"
+              variant="secondary"
+              @click="showKnowledgeCreator = !showKnowledgeCreator"
+            >
+              <i :class="showKnowledgeCreator ? 'bi bi-dash-lg' : 'bi bi-plus-lg'"></i>
+              {{
+                showKnowledgeCreator
+                  ? t('questions.knowledgeObjectCancelCreate')
+                  : t('questions.knowledgeObjectCreate')
+              }}
+            </BaseButton>
+          </div>
+        </FormGrid>
+
+        <div v-if="showKnowledgeCreator" class="question-form__knowledge-creator">
+          <FormGrid>
+            <BaseField :label="t('questions.knowledgeObjectTitle')">
+              <input
+                v-model.trim="knowledgeDraft.title"
+                class="form-control"
+                maxlength="200"
+                :placeholder="t('questions.knowledgeObjectTitlePlaceholder')"
+              />
+            </BaseField>
+            <BaseField :label="t('questions.knowledgeObjectObjective')">
+              <textarea
+                v-model.trim="knowledgeDraft.learning_objective"
+                class="form-control"
+                rows="3"
+                maxlength="3000"
+                :placeholder="t('questions.knowledgeObjectObjectivePlaceholder')"
+              ></textarea>
+            </BaseField>
+          </FormGrid>
+          <BaseField :label="t('questions.knowledgeObjectAnswer')">
+            <textarea
+              v-model.trim="knowledgeDraft.canonical_answer"
+              class="form-control"
+              rows="3"
+              maxlength="3000"
+              :placeholder="t('questions.knowledgeObjectAnswerPlaceholder')"
+            ></textarea>
+          </BaseField>
+          <BaseField
+            :label="t('questions.knowledgeObjectFacts')"
+            :hint="t('questions.knowledgeObjectFactsHint')"
+          >
+            <textarea
+              v-model="knowledgeDraft.key_facts"
+              class="form-control"
+              rows="3"
+              :placeholder="t('questions.knowledgeObjectFactsPlaceholder')"
+            ></textarea>
+          </BaseField>
+          <BaseButton
+            type="button"
+            variant="primary"
+            :loading="creatingKnowledgeObject"
+            @click="createKnowledgeObject"
+          >
+            <i class="bi bi-check-lg"></i>
+            {{ t('questions.knowledgeObjectCreateAndSelect') }}
+          </BaseButton>
+        </div>
+      </details>
+
       <div class="form-group">
         <label>{{ t('questions.imageSection') }}</label>
         <div
@@ -158,6 +246,18 @@
               min="1"
               step="1"
               :placeholder="t('questions.sourcePagePlaceholder')"
+            />
+          </BaseField>
+          <BaseField
+            :label="t('questions.lastRevisedLabel')"
+            id="q-last-revised"
+            :hint="t('questions.lastRevisedHint')"
+          >
+            <input
+              id="q-last-revised"
+              v-model="form.last_revised_at"
+              class="form-control"
+              type="date"
             />
           </BaseField>
         </FormGrid>
@@ -280,6 +380,7 @@ import {
 import { FALLBACK_MAX_CHOICES } from '@/utils/constants'
 import { useNotify } from '@/composables/useNotify'
 import { validateFile, FILE_VALIDATION_REASONS } from '@/utils/fileValidation'
+import { knowledgeService } from '@/services/knowledgeService'
 
 const { t } = useI18n()
 
@@ -304,6 +405,17 @@ const pendingImageFile = ref(null)
 const imagePreview = ref(null)
 const imageCleared = ref(false)
 const isDraggingImage = ref(false)
+const knowledgeObjects = ref([])
+const showKnowledgeCreator = ref(false)
+const creatingKnowledgeObject = ref(false)
+const initialRevisionDate = ref('')
+
+const knowledgeDraft = reactive({
+  title: '',
+  learning_objective: '',
+  canonical_answer: '',
+  key_facts: '',
+})
 
 // Cases for the picker datalist. Populated once on mount; the list
 // is short enough that re-fetching on every render would be wasteful.
@@ -323,6 +435,8 @@ const form = reactive({
   source: '',
   source_document: '',
   source_page: '',
+  knowledge_object: '',
+  last_revised_at: '',
   translations: {},
   tags: '',
   difficulty: 'medium',
@@ -338,6 +452,10 @@ const form = reactive({
   case_key: '',
   case_stem: '',
 })
+
+const selectedKnowledgeObject = computed(() =>
+  knowledgeObjects.value.find((item) => Number(item.id) === Number(form.knowledge_object)),
+)
 
 const translationLocale = ref('')
 const translationCount = computed(() => Object.keys(form.translations).length)
@@ -363,6 +481,9 @@ onMounted(async () => {
     form.source = props.question.source || ''
     form.source_document = props.question.source_document || ''
     form.source_page = props.question.source_page || ''
+    form.knowledge_object = props.question.knowledge_object || ''
+    form.last_revised_at = props.question.last_revised_at || ''
+    initialRevisionDate.value = form.last_revised_at
     form.translations = Object.fromEntries(
       Object.entries(props.question.translations || {}).map(([locale, content]) => [
         locale,
@@ -390,8 +511,59 @@ onMounted(async () => {
 
   // Populate the datalist. Failures are non-fatal — the picker
   // degrades to a plain text input.
-  await caseStore.fetchList({ limit: 100 })
+  await Promise.all([caseStore.fetchList({ limit: 100 }), loadKnowledgeObjects()])
 })
+
+async function loadKnowledgeObjects() {
+  try {
+    const result = await knowledgeService.list({ status: 'active' })
+    knowledgeObjects.value = result?.items || []
+  } catch {
+    knowledgeObjects.value = []
+  }
+}
+
+function lines(value) {
+  return String(value || '')
+    .split('\n')
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
+async function createKnowledgeObject() {
+  if (!knowledgeDraft.title || !knowledgeDraft.learning_objective) {
+    notify(t('questions.knowledgeObjectRequired'), 'error')
+    return
+  }
+
+  creatingKnowledgeObject.value = true
+  try {
+    const created = await knowledgeService.create({
+      title: knowledgeDraft.title,
+      learning_objective: knowledgeDraft.learning_objective,
+      canonical_answer: knowledgeDraft.canonical_answer,
+      key_facts: lines(knowledgeDraft.key_facts),
+      category: form.category_id || null,
+      status: 'active',
+    })
+    knowledgeObjects.value = [...knowledgeObjects.value, created].sort((left, right) =>
+      left.title.localeCompare(right.title),
+    )
+    form.knowledge_object = created.id
+    showKnowledgeCreator.value = false
+    Object.assign(knowledgeDraft, {
+      title: '',
+      learning_objective: '',
+      canonical_answer: '',
+      key_facts: '',
+    })
+    notify(t('questions.knowledgeObjectCreated'), 'success')
+  } catch (error) {
+    notify(error?.message || t('questions.knowledgeObjectCreateFailed'), 'error')
+  } finally {
+    creatingKnowledgeObject.value = false
+  }
+}
 
 watch(
   () => form.choices.length,
@@ -554,6 +726,7 @@ async function handleSubmit() {
     difficulty: form.difficulty,
     category:
       form.category_id === '' || form.category_id === null ? null : Number(form.category_id),
+    knowledge_object: form.knowledge_object ? Number(form.knowledge_object) : null,
     // ── Case linkage ─────────────────────────────────────────────────
     // Emitted under the write-side field name the backend expects.
     // A null/empty case_key detaches the question.
@@ -561,6 +734,10 @@ async function handleSubmit() {
     case_stem: form.case_stem || null,
     __pending_image: pendingImageFile.value,
     __clear_image: imageCleared.value,
+  }
+
+  if (!isEdit.value || form.last_revised_at !== initialRevisionDate.value) {
+    payload.last_revised_at = form.last_revised_at || undefined
   }
 
   emit('save', payload)

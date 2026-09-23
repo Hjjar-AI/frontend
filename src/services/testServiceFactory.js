@@ -6,6 +6,7 @@ export function createTestService(mode) {
   const endpoints = {
     exam: ENDPOINTS.EXAM,
     study: ENDPOINTS.STUDY,
+    recall: ENDPOINTS.RECALL,
   }[mode]
 
   if (!endpoints) throw new Error(`Invalid test mode: ${mode}`)
@@ -19,13 +20,22 @@ export function createTestService(mode) {
       return apiClient.get(endpoints.QUESTION, { params: { session_id: sessionId } })
     },
 
-    submitAnswer(sessionId, answer, action = 'next', targetIndex = null, confidence = null, errorReason = null) {
+    submitAnswer(
+      sessionId,
+      answer,
+      action = 'next',
+      targetIndex = null,
+      confidence = null,
+      errorReason = null,
+      preAnswer = null,
+    ) {
       const payload = { session_id: sessionId, answer, action }
       if (targetIndex !== null) payload.target_index = targetIndex
       if (answer !== null && answer !== undefined) {
-        payload.confidence = confidence === null || confidence === undefined ? true : confidence
+        payload.confidence = confidence === null || confidence === undefined ? 3 : confidence
         if (errorReason) payload.error_reason = errorReason
       }
+      if (preAnswer !== null && preAnswer !== undefined) payload.pre_answer = preAnswer
       return apiClient.post(endpoints.ANSWER, payload)
     },
 

@@ -25,7 +25,9 @@ export function useTestQuestionController(modeRef) {
   const selectedAnswer = ref(null)
   const startTime = ref(null)
   const swipeContainer = ref(null)
-  const confidence = ref(true)
+  const confidence = ref(3)
+  const preAnswer = ref('')
+  const choicesRevealed = ref(false)
   const showReflectionPrompt = ref(false)
   const awaitingReflection = ref(false)
   const tickedRemaining = ref(null)
@@ -52,7 +54,7 @@ export function useTestQuestionController(modeRef) {
 
   const confidenceForCurrent = computed(() => {
     const stored = store.confidence[store.currentIndex]
-    return stored === undefined ? true : stored
+    return stored === undefined ? 3 : stored
   })
 
   function onTimerTick({ remaining }) {
@@ -92,6 +94,8 @@ export function useTestQuestionController(modeRef) {
     question.value = response.question
     selectedAnswer.value = store.answers[store.currentIndex] || null
     confidence.value = confidenceForCurrent.value
+    preAnswer.value = response.saved_pre_answer || ''
+    choicesRevealed.value = mode() !== 'recall' || !response.question?.choices_hidden
     showReflectionPrompt.value = false
     awaitingReflection.value = false
 
@@ -119,6 +123,17 @@ export function useTestQuestionController(modeRef) {
     awaitingReflection.value = false
     if (preferencesStore.soundEffects) playClick()
     saveAnswer()
+  }
+
+  async function handleReveal(value) {
+    const clean = String(value || '').trim()
+    if (!clean || submitting.value) return
+    try {
+      await track(submitAnswer(null, 'same', null, confidence.value, null, clean))
+      await loadQuestion()
+    } catch (error) {
+      notify(error?.message || t('tests.recallSaveFailed'), 'error')
+    }
   }
 
   function scheduleAdvance(questionId, delay) {
@@ -165,7 +180,7 @@ export function useTestQuestionController(modeRef) {
       return
     }
 
-    if (mode() === 'study' && response) {
+    if ((mode() === 'study' || mode() === 'recall') && response) {
       if (response.explanation) question.value.explanation = response.explanation
       if (response.is_correct === false) {
         showReflectionPrompt.value = true
@@ -299,9 +314,12 @@ export function useTestQuestionController(modeRef) {
     examTotalSeconds,
     isCritical,
     confidenceForCurrent,
+    preAnswer,
+    choicesRevealed,
     onTimerTick,
     handleAnswer,
     handleConfidence,
+    handleReveal,
     handleReflection,
     goNext,
     goPrevious,

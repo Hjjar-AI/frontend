@@ -49,4 +49,10 @@ export const MODES = {
     // counting UP as an overtime stopwatch.
     overtime: true,
   },
+  recall: {
+    ...BASE,
+    id: 'recall',
+    resultsTitleKey: 'tests.recallResultsTitle',
+    overtime: true,
+  },
 }

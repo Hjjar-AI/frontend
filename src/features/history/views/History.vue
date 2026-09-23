@@ -139,6 +139,7 @@ function modeLabel(m) {
     exam: 'history.modeExam',
     study: 'history.modeStudy',
     'self-test': 'history.modeSelfTest',
+    recall: 'history.modeRecall',
   }[m]
   return key ? t(key) : m
 }

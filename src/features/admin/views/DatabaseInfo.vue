@@ -437,7 +437,18 @@ async function exportState(includeImages, format = 'json') {
 }
 
 function qualityIssueLabel(code) {
-  return t(`admin.database.qualityIssue.${code}`)
+  const labels = {
+    duplicate_question: t('admin.database.qualityIssue.duplicate_question'),
+    duplicate_choices: t('admin.database.qualityIssue.duplicate_choices'),
+    missing_explanation: t('admin.database.qualityIssue.missing_explanation'),
+    missing_category: t('admin.database.qualityIssue.missing_category'),
+    missing_source_document: t('admin.database.qualityIssue.missing_source_document'),
+    invalid_translations: t('admin.database.qualityIssue.invalid_translations'),
+    translation_choice_count_mismatch: t(
+      'admin.database.qualityIssue.translation_choice_count_mismatch',
+    ),
+  }
+  return labels[code] || code
 }
 
 async function loadQualityReport() {

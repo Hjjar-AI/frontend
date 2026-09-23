@@ -6,6 +6,7 @@ import { useDialog } from '@/composables/useDialog'
 import { useConfigStore } from '@/stores/configStore'
 import { i18n } from '@/i18n'
 import { FALLBACK_MAX_CHOICES } from '@/utils/constants'
+import { normalizeConfidenceScore } from '@/utils/confidence'
 import {
   standardState,
   standardGetters,
@@ -15,7 +16,7 @@ import {
 
 const SESSION_MODE_KEY = 'test_session_mode'
 const SESSION_ID_KEY = 'test_session_id'
-const VALID_MODES = ['exam', 'study']
+const VALID_MODES = ['exam', 'study', 'recall']
 
 // ──────────────────────────────────────────────────────────────────
 // Safe sessionStorage wrappers.
@@ -95,7 +96,7 @@ export const useTestSessionStore = defineStore('testSession', {
     currentQuestionId: (state) => state.questionIds[state.currentIndex] || null,
     currentConfidence: (state) => {
       const idx = state.currentIndex
-      return state.confidence[idx] === undefined ? true : state.confidence[idx]
+      return normalizeConfidenceScore(state.confidence[idx])
     },
   },
   actions: {
@@ -272,7 +273,14 @@ export const useTestSessionStore = defineStore('testSession', {
       })
     },
 
-    async submitAnswer(answer, action = 'next', targetIndex = null, confidence = null, errorReason = null) {
+    async submitAnswer(
+      answer,
+      action = 'next',
+      targetIndex = null,
+      confidence = null,
+      errorReason = null,
+      preAnswer = null,
+    ) {
       if (!this.isActive) return null
       if (answer !== null && answer !== undefined) {
         const configStore = useConfigStore()
@@ -295,12 +303,13 @@ export const useTestSessionStore = defineStore('testSession', {
           targetIndex,
           confidence,
           errorReason,
+          preAnswer,
         )
         if (answer !== undefined && answer !== null) {
           this.answers[requestIndex] = answer
           this.confidence = {
             ...this.confidence,
-            [requestIndex]: confidence === null || confidence === undefined ? true : confidence,
+            [requestIndex]: normalizeConfidenceScore(confidence),
           }
         }
         if (action === 'next') {
@@ -462,12 +471,12 @@ export const useTestSessionStore = defineStore('testSession', {
       const unpackedConfidence = {}
       for (const [idxStr, raw] of Object.entries(rawAnswers)) {
         const idx = Number(idxStr)
-        if (raw && typeof raw === 'object' && 'answer' in raw) {
+        if (raw && typeof raw === 'object' && raw.answer !== null && raw.answer !== undefined) {
           unpackedAnswers[idx] = raw.answer
-          unpackedConfidence[idx] = raw.confidence === undefined ? true : raw.confidence
-        } else {
+          unpackedConfidence[idx] = normalizeConfidenceScore(raw.confidence)
+        } else if (raw !== null && typeof raw !== 'object') {
           unpackedAnswers[idx] = raw
-          unpackedConfidence[idx] = true
+          unpackedConfidence[idx] = 3
         }
       }
       this.answers = unpackedAnswers

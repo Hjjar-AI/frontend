@@ -4,6 +4,7 @@ import { masterExamService } from '@/services/masterExamService'
 import { useCrudActions } from '@/composables/useCrudActions'
 import { useNotify } from '@/composables/useNotify'
 import { i18n } from '@/i18n'
+import { normalizeConfidenceScore } from '@/utils/confidence'
 import {
   standardState,
   standardGetters,
@@ -257,7 +258,7 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
               ...this.answers,
               [String(payload.question.id)]: {
                 answer: payload.saved_answer,
-                confidence: payload.saved_confidence !== false,
+                confidence: normalizeConfidenceScore(payload.saved_confidence),
               },
             }
           }
@@ -271,7 +272,7 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
     // pending returns the first call's promise. See the module-level
     // comment on `_pendingAnswers` for the failure mode this
     // prevents.
-    async submitAnswer(answer, confidence = true) {
+    async submitAnswer(answer, confidence = 3) {
       if (!this.currentQuestionId) return null
       const questionId = this.currentQuestionId
 
@@ -291,6 +292,7 @@ export const useMasterExamAttemptStore = defineStore('masterExamAttempt', {
     async _executeSubmitAnswer(questionId, answer, confidence) {
       const previous = this.answers[String(questionId)]
 
+      confidence = normalizeConfidenceScore(confidence)
       this.answers = {
         ...this.answers,
         [String(questionId)]: { answer, confidence },
