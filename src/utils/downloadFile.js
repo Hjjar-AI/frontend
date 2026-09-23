@@ -33,6 +33,29 @@
 const REVOKE_DELAY_MS = 2000
 
 /**
+ * Read a server-provided attachment filename from Fetch or Axios headers.
+ * Supports both RFC 5987 UTF-8 names and the legacy filename parameter.
+ */
+export function getResponseFilename(response) {
+  const disposition = typeof response?.headers?.get === 'function'
+    ? response.headers.get('content-disposition') || ''
+    : response?.headers?.['content-disposition'] || ''
+  if (!disposition) return null
+
+  const encoded = disposition.match(/filename\*=UTF-8''([^;]+)/i)
+  if (encoded) {
+    try {
+      return decodeURIComponent(encoded[1])
+    } catch {
+      // Fall through to the legacy form.
+    }
+  }
+
+  const legacy = disposition.match(/filename="?([^";]+)"?/i)
+  return legacy ? legacy[1] : null
+}
+
+/**
  * Trigger a download of an in-memory Blob.
  *
  * The object URL is revoked after `REVOKE_DELAY_MS` — never

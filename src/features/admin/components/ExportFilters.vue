@@ -3,7 +3,7 @@
   Filter panel for the flat question export.
 
   Three MULTI-SELECT checkbox grids — difficulty, categories, tags —
-  plus a single search field and a title field. Uses the same
+  plus a search field, a PDF title, and optional PDF front matter. Uses the same
   `SourceGridPicker` component the study setup uses for category
   selection, so the interaction (click the row to toggle, click again
   to unselect, "Clear" link in the section header) is identical
@@ -13,6 +13,10 @@
   --------------------
       {
         title:        '',      // free text, PDF only
+        include_about: false,  // PDF only
+        about_title: '',
+        about_body: '',
+        about_fields: [],
         search:       '',
         difficulties: [],      // array of 'easy' | 'medium' | 'hard'
         category_ids: [],      // array of ints
@@ -51,8 +55,82 @@
         :label="t('admin.database.exportTitleLabel')"
         :placeholder="t('admin.database.exportTitlePlaceholder')"
         :hint="t('admin.database.exportTitleHint')"
-        maxlength="150"
+        :maxlength="150"
       />
+    </div>
+
+    <div class="export-filters__section export-filters__about">
+      <BaseCheckbox
+        :model-value="Boolean(modelValue.include_about)"
+        :label="t('admin.database.includeAboutPage')"
+        @update:model-value="update('include_about', $event)"
+      />
+      <p class="export-filters__field-hint">{{ t('admin.database.includeAboutPageHint') }}</p>
+
+      <div v-if="modelValue.include_about" class="export-filters__about-fields">
+        <BaseInput
+          :model-value="modelValue.about_title"
+          @update:model-value="update('about_title', $event)"
+          :label="t('admin.database.aboutPageTitle')"
+          :placeholder="t('admin.database.aboutPageTitlePlaceholder')"
+          :maxlength="150"
+        />
+
+        <label class="export-filters__textarea-label" for="pdf-about-body">
+          {{ t('admin.database.aboutPageBody') }}
+        </label>
+        <textarea
+          id="pdf-about-body"
+          class="form-control export-filters__textarea"
+          :value="modelValue.about_body"
+          :placeholder="t('admin.database.aboutPageBodyPlaceholder')"
+          maxlength="3000"
+          rows="5"
+          @input="update('about_body', $event.target.value)"
+        ></textarea>
+
+        <div class="export-filters__custom-header">
+          <span>{{ t('admin.database.aboutCustomFields') }}</span>
+          <BaseButton
+            variant="secondary"
+            size="small"
+            :disabled="aboutFields.length >= 10"
+            @click="addAboutField"
+          >
+            <i class="bi bi-plus-lg"></i>
+            {{ t('admin.database.aboutAddField') }}
+          </BaseButton>
+        </div>
+
+        <div
+          v-for="(field, index) in aboutFields"
+          :key="index"
+          class="export-filters__custom-row"
+        >
+          <BaseInput
+            :model-value="field.label"
+            :placeholder="t('admin.database.aboutFieldLabel')"
+            :aria-label="t('admin.database.aboutFieldLabel')"
+            :maxlength="60"
+            @update:model-value="updateAboutField(index, 'label', $event)"
+          />
+          <BaseInput
+            :model-value="field.value"
+            :placeholder="t('admin.database.aboutFieldValue')"
+            :aria-label="t('admin.database.aboutFieldValue')"
+            :maxlength="500"
+            @update:model-value="updateAboutField(index, 'value', $event)"
+          />
+          <BaseButton
+            variant="danger"
+            size="small"
+            :aria-label="t('admin.database.aboutRemoveField')"
+            @click="removeAboutField(index)"
+          >
+            <i class="bi bi-trash"></i>
+          </BaseButton>
+        </div>
+      </div>
     </div>
 
     <div class="export-filters__divider"></div>
@@ -119,6 +197,8 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import BaseInput from '@/components/base/BaseInput.vue'
+import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import SourceGridPicker from '@/components/common/SourceGridPicker.vue'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useTagStore } from '@/stores/tagStore'
@@ -160,6 +240,9 @@ const tagItems = computed(() =>
 
 const categoriesLoading = computed(() => categoryStore.isLoading)
 const tagsLoading = computed(() => tagStore.isLoading)
+const aboutFields = computed(() =>
+  Array.isArray(props.modelValue.about_fields) ? props.modelValue.about_fields : [],
+)
 
 // ── Active-filter state ────────────────────────────────────────────
 //
@@ -172,6 +255,7 @@ const hasActiveFilters = computed(() => {
   const v = props.modelValue
   return Boolean(
     v.title ||
+    v.include_about ||
     v.search ||
     (v.difficulties && v.difficulties.length) ||
     (v.category_ids && v.category_ids.length) ||
@@ -226,9 +310,29 @@ function update(key, value) {
   emit('update:modelValue', { ...props.modelValue, [key]: value })
 }
 
+function addAboutField() {
+  if (aboutFields.value.length >= 10) return
+  update('about_fields', [...aboutFields.value, { label: '', value: '' }])
+}
+
+function updateAboutField(index, key, value) {
+  const fields = aboutFields.value.map((field, current) =>
+    current === index ? { ...field, [key]: value } : field,
+  )
+  update('about_fields', fields)
+}
+
+function removeAboutField(index) {
+  update('about_fields', aboutFields.value.filter((_, current) => current !== index))
+}
+
 function clearAll() {
   emit('update:modelValue', {
     title: '',
+    include_about: false,
+    about_title: '',
+    about_body: '',
+    about_fields: [],
     search: '',
     difficulties: [],
     category_ids: [],

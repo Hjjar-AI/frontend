@@ -18,10 +18,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useNotify } from '@/composables/useNotify'
-import { downloadBlob } from '@/utils/downloadFile'
+import { downloadBlob, getResponseFilename } from '@/utils/downloadFile'
 import { buildExportUrl as appendExportParams } from '@/utils/exportUrl'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const props = defineProps({
   // Builds the export URL for one format. Called as
@@ -37,6 +37,11 @@ const props = defineProps({
   // is responsible for naming. See DatabaseInfo.vue's
   // `exportFilterParams` computed for the reference serializer.
   filterParams: { type: Object, default: () => ({}) },
+
+  // Structured PDF-only options. Supplying pdfRequest switches PDF export to
+  // POST so free text and repeatable custom fields never enter the URL.
+  pdfOptions: { type: Object, default: () => ({}) },
+  pdfRequest: { type: Function, default: null },
 })
 
 const { notify } = useNotify()
@@ -62,37 +67,11 @@ function buildUrl(format) {
     format,
     filterParams: props.filterParams,
     theme: document.documentElement.dataset.theme,
+    locale: locale.value,
   }
   return appendExportParams(props.urlBuilder(format), options)
 }
 
-
-// ── Filename extraction ──────────────────────────────────────────
-//
-// Django's FileResponse sets a `Content-Disposition: attachment;
-// filename="…"` header. We prefer that name over a client-side
-// guess so the timestamp the backend baked into the filename is the
-// one the user sees. Two forms are handled:
-//
-//   • RFC 5987: `filename*=UTF-8''encoded` — used by newer Django
-//     when the filename contains non-ASCII characters.
-//   • Legacy:   `filename="plain"` — used everywhere else.
-function extractFilename(response) {
-  const cd = response.headers.get('content-disposition') || ''
-  if (!cd) return null
-
-  const starMatch = cd.match(/filename\*=UTF-8''([^;]+)/i)
-  if (starMatch) {
-    try {
-      return decodeURIComponent(starMatch[1])
-    } catch {
-      // fall through to the legacy match
-    }
-  }
-
-  const legacyMatch = cd.match(/filename="?([^";]+)"?/i)
-  return legacyMatch ? legacyMatch[1] : null
-}
 
 function defaultFilename(format) {
   const ext = { excel: 'xlsx', csv: 'csv', json: 'json', pdf: 'pdf' }[format] || 'bin'
@@ -129,10 +108,29 @@ async function exportFile(format) {
   const url = buildUrl(format)
 
   try {
+    if (format === 'pdf' && props.pdfRequest) {
+      const filters = { ...props.filterParams }
+      const title = filters.title || ''
+      delete filters.title
+      const response = await props.pdfRequest({
+        title,
+        filters,
+        theme: document.documentElement.dataset.theme,
+        locale: locale.value,
+        front_matter: props.pdfOptions,
+      })
+      const blob = response.data instanceof Blob
+        ? response.data
+        : new Blob([response.data], { type: 'application/pdf' })
+      const filename = getResponseFilename(response) || defaultFilename(format)
+      downloadBlob(blob, filename)
+      return
+    }
+
     const response = await fetch(url, {
       method: 'GET',
       credentials: 'include',
-      headers: { Accept: '*/*' },
+      headers: { Accept: '*/*', 'Accept-Language': locale.value },
     })
 
     if (!response.ok) {
@@ -150,7 +148,7 @@ async function exportFile(format) {
     }
 
     const blob = await response.blob()
-    const filename = extractFilename(response) || defaultFilename(format)
+    const filename = getResponseFilename(response) || defaultFilename(format)
 
     downloadBlob(blob, filename)
   } catch (err) {

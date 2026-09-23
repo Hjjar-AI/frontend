@@ -67,6 +67,7 @@
           :disabled="disabled"
           :readonly="readonly"
           :required="required"
+          :aria-label="ariaLabel || undefined"
           :aria-describedby="error ? `${inputId}-error` : undefined"
           @input="$emit('update:modelValue', $event.target.value)"
           @blur="$emit('blur')"
@@ -101,7 +102,9 @@
         :min="min"
         :max="max"
         :minlength="minlength"
+        :maxlength="maxlength"
         :inputmode="inputmode"
+        :aria-label="ariaLabel || undefined"
         :aria-describedby="error ? `${inputId}-error` : undefined"
         @input="$emit('update:modelValue', $event.target.value)"
         @blur="$emit('blur')"
@@ -150,12 +153,14 @@ const props = defineProps({
   placeholder: { type: String, default: '' },
   error: { type: String, default: '' },
   hint: { type: String, default: '' },
+  ariaLabel: { type: String, default: '' },
   required: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   readonly: { type: Boolean, default: false },
   min: { type: Number, default: undefined },
   max: { type: Number, default: undefined },
   minlength: { type: Number, default: undefined },
+  maxlength: { type: Number, default: undefined },
   inputmode: { type: String, default: undefined },
   id: { type: String, default: '' },
 })

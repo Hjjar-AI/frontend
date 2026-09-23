@@ -276,6 +276,18 @@ describe('client — response interceptor: envelope unwrapping', () => {
     const result = await apiClient.get('/x/')
     expect(result).toEqual([{ a: 1 }, { a: 2 }])
   })
+
+  it('returns the full response when rawResponse is requested', async () => {
+    const blob = new Blob(['pdf'], { type: 'application/pdf' })
+    mocks.rawAxiosImpl.mockImplementation((config) =>
+      Promise.resolve({ data: blob, headers: { test: 'header' }, config }),
+    )
+
+    const result = await apiClient.post('/pdf/', {}, { rawResponse: true })
+
+    expect(result.data).toBe(blob)
+    expect(result.headers.test).toBe('header')
+  })
 })
 
 // ── Error handling ────────────────────────────────────────────────
@@ -401,5 +413,29 @@ describe('fetchCsrfTokenDirect', () => {
     } finally {
       warnSpy.mockRestore()
     }
+  })
+})
+
+describe('client — binary response errors', () => {
+  it('decodes a JSON error blob before normalization', async () => {
+    mocks.rawAxiosImpl.mockImplementation((config) => {
+      if (config.url === '/auth/csrf/') {
+        return Promise.resolve({ data: { token: 't' }, config })
+      }
+      return Promise.reject({
+        response: {
+          status: 400,
+          data: new Blob(
+            [JSON.stringify({ message: 'No questions matched' })],
+            { type: 'application/json' },
+          ),
+        },
+        config,
+      })
+    })
+
+    await expect(
+      apiClient.post('/pdf/', {}, { responseType: 'blob', rawResponse: true }),
+    ).rejects.toMatchObject({ message: 'No questions matched', code: 400 })
   })
 })

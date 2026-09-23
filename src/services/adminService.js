@@ -101,11 +101,32 @@ export const adminService = {
     return `${API_BASE}${ENDPOINTS.DATABASE.EXPORT_STATE}${qs ? '?' + qs : ''}`
   },
 
+  async exportState(includeImages = true, verifiedOnly = false) {
+    const params = {}
+    if (!includeImages) params.include_images = 'false'
+    if (verifiedOnly) params.verified_only = 'true'
+    return apiClient.get(ENDPOINTS.DATABASE.EXPORT_STATE, {
+      params,
+      responseType: 'blob',
+      rawResponse: true,
+    })
+  },
+
   exportUrl(format, { verifiedOnly = false } = {}) {
     const endpoint = verifiedOnly
       ? ENDPOINTS.DATABASE.EXPORT_VERIFIED(format)
       : ENDPOINTS.DATABASE.EXPORT(format)
     return `${API_BASE}${endpoint}`
+  },
+
+  async exportPdf(options = {}, { verifiedOnly = false } = {}) {
+    const endpoint = verifiedOnly
+      ? ENDPOINTS.DATABASE.EXPORT_VERIFIED('pdf')
+      : ENDPOINTS.DATABASE.EXPORT('pdf')
+    return apiClient.post(endpoint, options, {
+      responseType: 'blob',
+      rawResponse: true,
+    })
   },
 
   async importState(file, mode = 'merge', opts = {}) {

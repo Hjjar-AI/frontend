@@ -52,13 +52,16 @@ export async function parseJsonFile(file) {
 
   for (let i = 0; i < limit; i++) {
     const item = items[i]
+    const choices = Array.isArray(item?.choices)
+      ? item.choices
+      : [
+          item?.choice_1, item?.choice_2, item?.choice_3, item?.choice_4,
+          item?.choice_5, item?.choice_6, item?.choice_7, item?.choice_8,
+        ]
     questions.push({
-      question: item.question || '',
-      choices: [
-        item.choice_1, item.choice_2, item.choice_3, item.choice_4,
-        item.choice_5, item.choice_6, item.choice_7, item.choice_8,
-      ].filter(c => c && String(c).trim() !== ''),
-      correctAnswer: parseInt(item.correct_answer, 10) || 1,
+      question: item?.question || '',
+      choices: choices.filter(c => c != null && String(c).trim() !== ''),
+      correctAnswer: parseInt(item?.correct_answer, 10) || 1,
     })
   }
 
@@ -67,43 +70,56 @@ export async function parseJsonFile(file) {
 
 export async function parseCsvFile(file) {
   validateFileSize(file)
+  const previewWasTruncated = file.size > MAX_CSV_PREVIEW_BYTES
   const text = await readFileAsText(file, MAX_CSV_PREVIEW_BYTES)
-  const lines = text.split(/\r?\n/).filter(line => line.trim() !== '')
-
-  if (lines.length < 2) return []
-
-  const parseLine = (line) => {
-    const result = []
-    let current = ''
-    let inQuotes = false
-
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i]
-      if (char === '"') {
-        if (inQuotes && line[i + 1] === '"') {
-          current += '"'
-          i++
-        } else {
-          inQuotes = !inQuotes
-        }
-      } else if (char === ',' && !inQuotes) {
-        result.push(current)
-        current = ''
+  // Parse records in one pass so CR/LF inside a quoted cell remains part of
+  // that cell. Splitting into lines first only resembles CSV and corrupted
+  // RFC-style multiline records.
+  const records = []
+  let row = []
+  let current = ''
+  let inQuotes = false
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i]
+    if (char === '"') {
+      if (inQuotes && text[i + 1] === '"') {
+        current += '"'
+        i++
       } else {
-        current += char
+        inQuotes = !inQuotes
       }
+    } else if (char === ',' && !inQuotes) {
+      row.push(current)
+      current = ''
+    } else if ((char === '\n' || char === '\r') && !inQuotes) {
+      if (char === '\r' && text[i + 1] === '\n') i++
+      row.push(current)
+      if (row.some(cell => cell.trim() !== '')) records.push(row)
+      row = []
+      current = ''
+    } else {
+      current += char
     }
-
-    result.push(current)
-    return result
+  }
+  // A sliced preview can end in the middle of a quoted record. Do not show a
+  // fabricated partial question in that case; the backend still imports the
+  // complete upload.
+  if (!previewWasTruncated || !inQuotes) {
+    row.push(current)
+    if (row.some(cell => cell.trim() !== '')) records.push(row)
   }
 
-  const headers = parseLine(lines[0]).map(h => h.trim().toLowerCase())
+  if (records.length < 2) return []
+
+  const headers = records[0].map((header, index) => {
+    const normalized = header.trim().toLowerCase()
+    return index === 0 ? normalized.replace(/^\uFEFF/, '') : normalized
+  })
   const questions = []
-  const limit = Math.min(lines.length, MAX_PREVIEW_ROWS + 1)
+  const limit = Math.min(records.length, MAX_PREVIEW_ROWS + 1)
 
   for (let i = 1; i < limit; i++) {
-    const values = parseLine(lines[i])
+    const values = records[i]
     const row = {}
     headers.forEach((h, idx) => {
       row[h] = (values[idx] || '').trim()

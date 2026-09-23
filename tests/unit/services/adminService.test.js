@@ -127,6 +127,30 @@ describe('adminService — database', () => {
     expect(url).toBe('/database/import/telegram/')
     expect(body.get('file')).toBe(file)
   })
+
+  it('exportPdf posts structured options and preserves the binary response', async () => {
+    const options = {
+      locale: 'en',
+      front_matter: {
+        enabled: true,
+        heading: 'About us',
+        fields: [{ label: 'Edition', value: '2026' }],
+      },
+    }
+    await adminService.exportPdf(options)
+
+    expect(apiClient.post).toHaveBeenCalledWith(
+      expect.stringContaining('/export/pdf/'),
+      options,
+      { responseType: 'blob', rawResponse: true },
+    )
+  })
+
+  it('exportPdf can target the verified-only endpoint', async () => {
+    await adminService.exportPdf({}, { verifiedOnly: true })
+
+    expect(apiClient.post.mock.calls[0][0]).toContain('/export/pdf/verified/')
+  })
 })
 
 describe('adminService — state envelope', () => {
@@ -145,6 +169,16 @@ describe('adminService — state envelope', () => {
   it('exportStateUrl with verifiedOnly=true sets the flag', () => {
     const url = adminService.exportStateUrl(true, true)
     expect(url).toContain('verified_only=true')
+  })
+
+  it('exportState requests a binary response with explicit flags', async () => {
+    await adminService.exportState(false, true)
+
+    expect(apiClient.get).toHaveBeenCalledWith('/database/export/state/', {
+      params: { include_images: 'false', verified_only: 'true' },
+      responseType: 'blob',
+      rawResponse: true,
+    })
   })
 
   it('importState sends the required FormData fields', async () => {

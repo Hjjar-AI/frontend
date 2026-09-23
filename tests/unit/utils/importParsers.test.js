@@ -39,6 +39,21 @@ describe('parseJsonFile', () => {
     expect(result[0].choices).toEqual(['a', 'c'])
   })
 
+  it('accepts the backend JSON export choices array', async () => {
+    const json = JSON.stringify([{
+      question: 'Exported?',
+      choices: ['one', 'two'],
+      correct_answer: 2,
+    }])
+    const result = await parseJsonFile(makeFile(json, 'export.json'))
+
+    expect(result[0]).toEqual({
+      question: 'Exported?',
+      choices: ['one', 'two'],
+      correctAnswer: 2,
+    })
+  })
+
 it('rejects an oversized file', async () => {
   // The validator reads `file.size` and throws before
   // `readFileAsText` is ever called. Allocating a real 51 MB body
@@ -103,7 +118,8 @@ describe('parseCsvFile — quote handling', () => {
   it('handles a quoted cell containing a newline', async () => {
     const csv = 'question,choice_1,choice_2,correct_answer\n"line1\nline2",x,y,1'
     const result = await parseCsvFile(makeFile(csv, 'q.csv'))
-    expect(result.length).toBeGreaterThanOrEqual(1)
+    expect(result).toHaveLength(1)
+    expect(result[0].question).toBe('line1\nline2')
   })
 
   it('handles a quoted cell that starts with a comma', async () => {
@@ -120,6 +136,14 @@ describe('parseCsvFile — headers', () => {
     expect(result).toHaveLength(1)
     expect(result[0].question).toBe('Q1')
     expect(result[0].correctAnswer).toBe(1)
+  })
+
+  it('strips a UTF-8 BOM from the first header', async () => {
+    const csv = '\uFEFFquestion,choice_1,choice_2,correct_answer\nQ1,a,b,1'
+    const result = await parseCsvFile(makeFile(csv, 'q.csv'))
+
+    expect(result).toHaveLength(1)
+    expect(result[0].question).toBe('Q1')
   })
 
   it('returns an empty array for an empty file', async () => {

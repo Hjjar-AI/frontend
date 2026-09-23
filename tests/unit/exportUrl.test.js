@@ -8,11 +8,13 @@ describe('buildExportUrl', () => {
       format: 'pdf',
       filterParams: { difficulty: ['easy', 'hard'] },
       theme: 'dark',
+      locale: 'en',
     })
 
     const parsed = new URL(url, 'https://example.test')
     expect(parsed.searchParams.get('difficulty')).toBe('easy,hard')
     expect(parsed.searchParams.get('theme')).toBe('dark')
+    expect(parsed.searchParams.get('locale')).toBe('en')
   })
 
   it('does not attach a presentation theme to data exports', () => {
@@ -22,6 +24,16 @@ describe('buildExportUrl', () => {
     })
 
     expect(url).toBe('/api/export/csv/')
+  })
+
+  it('ignores unsupported locales', () => {
+    const url = buildExportUrl('/api/export/pdf/', {
+      format: 'pdf',
+      locale: 'fr',
+    })
+
+    const parsed = new URL(url, 'https://example.test')
+    expect(parsed.searchParams.has('locale')).toBe(false)
   })
 
   it('normalizes unknown PDF themes to Stone', () => {

@@ -237,6 +237,11 @@ client.interceptors.response.use(
   (response) => {
     clearPendingEntry(response.config)
 
+    // Binary downloads need headers (not just response.data) so callers can
+    // honor Content-Disposition. Opt in explicitly to keep the normal API
+    // envelope behavior unchanged everywhere else.
+    if (response.config?.rawResponse) return response
+
     const body = response.data
     if (body && typeof body === 'object' && 'code' in body && 'message' in body) {
       if ('details' in body) {
@@ -268,6 +273,18 @@ client.interceptors.response.use(
         message: i18n.global.t('errors.sessionExpired'),
         code: 401,
       })
+    }
+
+    // Axios honors responseType='blob' even for JSON error envelopes. Decode
+    // that small error blob before normalization so PDF export failures show
+    // the backend's useful message instead of a generic server error.
+    if (error.response?.data instanceof Blob) {
+      try {
+        const text = await error.response.data.text()
+        error.response.data = JSON.parse(text)
+      } catch {
+        // Keep the Blob; normalizeError will use its generic fallback.
+      }
     }
 
     const normalized = normalizeError(error)

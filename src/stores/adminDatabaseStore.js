@@ -77,8 +77,16 @@ export const useAdminDatabaseStore = defineStore('adminDatabase', {
       return adminService.exportStateUrl(includeImages, verifiedOnly)
     },
 
+    exportState(includeImages = true, verifiedOnly = false) {
+      return adminService.exportState(includeImages, verifiedOnly)
+    },
+
     exportUrl(format, options = {}) {
       return adminService.exportUrl(format, options)
+    },
+
+    exportPdf(options = {}, requestOptions = {}) {
+      return adminService.exportPdf(options, requestOptions)
     },
 
     reset: makeReset({ databaseInfo: null, backups: [], status: 'idle', error: null }),

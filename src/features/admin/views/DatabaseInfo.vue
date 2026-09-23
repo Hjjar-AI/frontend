@@ -77,7 +77,12 @@
 
             <ExportFilters v-model="exportFilters" />
 
-            <ExportButtons :url-builder="buildExportUrl" :filter-params="exportFilterParams" />
+            <ExportButtons
+              :url-builder="buildExportUrl"
+              :filter-params="exportFilterParams"
+              :pdf-options="pdfOptions"
+              :pdf-request="requestPdfExport"
+            />
           </BaseCard>
 
           <BaseCard>
@@ -207,7 +212,7 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import { useAdminDatabaseStore } from '@/stores/adminDatabaseStore'
 import { useNotify } from '@/composables/useNotify'
 import { formatDateTime } from '@/utils/formatters'
-import { downloadUrl } from '@/utils/downloadFile'
+import { downloadBlob, getResponseFilename } from '@/utils/downloadFile'
 
 const { t } = useI18n()
 
@@ -232,6 +237,10 @@ const restorePassword = ref('')
 // template and the panel can read it without `?.` chains.
 const exportFilters = ref({
   title: '',
+  include_about: false,
+  about_title: '',
+  about_body: '',
+  about_fields: [],
   search: '',
   difficulties: [],
   category_ids: [],
@@ -275,6 +284,20 @@ const exportFilterParams = computed(() => {
 
 const buildExportUrl = (fmt) => adminDatabaseStore.exportUrl(fmt)
 
+const pdfOptions = computed(() => ({
+  enabled: Boolean(exportFilters.value.include_about),
+  heading: exportFilters.value.about_title || '',
+  body: exportFilters.value.about_body || '',
+  fields: (exportFilters.value.about_fields || [])
+    .map((field) => ({
+      label: String(field?.label || '').trim(),
+      value: String(field?.value || '').trim(),
+    }))
+    .filter((field) => field.label && field.value),
+}))
+
+const requestPdfExport = (options) => adminDatabaseStore.exportPdf(options)
+
 async function loadDbInfo() {
   await adminDatabaseStore.fetchDatabaseInfo()
 }
@@ -288,10 +311,7 @@ async function fetchBackups() {
   await adminDatabaseStore.fetchBackups()
 }
 
-function exportState(includeImages) {
-  // URL construction stays behind the database store boundary.
-  const url = adminDatabaseStore.exportStateUrl(includeImages, false)
-  downloadUrl(url)
+async function exportState(includeImages) {
   notify(
     t(
       includeImages
@@ -300,6 +320,16 @@ function exportState(includeImages) {
     ),
     'info',
   )
+  try {
+    const response = await adminDatabaseStore.exportState(includeImages, false)
+    const blob = response.data instanceof Blob
+      ? response.data
+      : new Blob([response.data], { type: 'application/json' })
+    const filename = getResponseFilename(response) || 'questions_state.json'
+    downloadBlob(blob, filename)
+  } catch (error) {
+    notify(error?.message || t('common.networkError'), 'error')
+  }
 }
 
 function openRestoreModal(name) {

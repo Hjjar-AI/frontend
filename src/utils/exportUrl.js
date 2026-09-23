@@ -6,7 +6,7 @@ import { normalizeTheme } from '@/utils/constants'
  * Theme is sent only for PDFs because it is a browser-local preference and
  * the server cannot otherwise know which palette the user is viewing.
  */
-export function buildExportUrl(baseUrl, { format, filterParams = {}, theme } = {}) {
+export function buildExportUrl(baseUrl, { format, filterParams = {}, theme, locale } = {}) {
   const params = new URLSearchParams()
 
   for (const [key, value] of Object.entries(filterParams || {})) {
@@ -22,6 +22,7 @@ export function buildExportUrl(baseUrl, { format, filterParams = {}, theme } = {
 
   if (format === 'pdf') {
     params.set('theme', normalizeTheme(theme))
+    if (locale === 'ar' || locale === 'en') params.set('locale', locale)
   }
 
   const query = params.toString()
