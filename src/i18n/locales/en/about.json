@@ -75,16 +75,11 @@
     "testers": {
       "title": "Testing and verification team",
       "intro": "We extend our sincere thanks and appreciation to the physicians who contributed to testing the system and verifying its scientific content, ensuring high quality and reliability of the educational material presented. Names are listed in alphabetical order:",
-      "names": [
-        "Dr. Aya Kseibi",
-        "Dr. Ayham Shaykha",
-        "Dr. Ibrahim Tarsha",
-        "Dr. Shvan Shamsi",
-        "Dr. Zilal Al-Waw",
-        "Dr. Muhammad Nidal Abdul-Wahhab",
-        "Dr. Muhammad Nour Al-Sayed",
-        "Dr. Hadiyatullah Malas"
-      ]
+      "groups": {
+        "initial": "Initial testing and content review",
+        "testing": "Testing",
+        "verification": "Verification"
+      }
     },
     "tech": {
       "title": "Technical stack",

@@ -102,17 +102,74 @@
       <!-- Testing Team -->
       <BaseCard variant="success" class="testers-card">
         <h2 class="card-title">
-          <i class="card-title__icon bi bi-clipboard-check"></i> {{ t('about.testers.title') }}
+          <i class="card-title__icon bi bi-clipboard-check"></i>
+          {{ t('about.testers.title') }}
         </h2>
         <p class="section-text">{{ t('about.testers.intro') }}</p>
-        <div class="testers-list">
-          <div class="tester-item" v-for="tester in testerNames" :key="tester">
-            <div class="tester-avatar">
-              <i class="bi bi-person-check"></i>
+
+        <!-- القسم الفرعي 1: اختبار أولي وتدقيق محتوى -->
+        <section class="testers-group">
+          <h3 class="testers-group__title">
+            <span class="testers-group__num">1</span>
+            {{ t('about.testers.groups.initial') }}
+          </h3>
+          <div class="testers-list">
+            <div
+              class="tester-item"
+              v-for="tester in testerGroups.initial"
+              :key="tester"
+            >
+              <div class="tester-avatar">
+                <i class="bi bi-person-check"></i>
+              </div>
+              <span class="tester-name">{{ tester }}</span>
             </div>
-            <span class="tester-name">{{ tester }}</span>
           </div>
-        </div>
+        </section>
+
+        <hr class="testers-divider" />
+
+        <!-- القسم الفرعي 2: اختبار -->
+        <section class="testers-group">
+          <h3 class="testers-group__title">
+            <span class="testers-group__num">2</span>
+            {{ t('about.testers.groups.testing') }}
+          </h3>
+          <div class="testers-list">
+            <div
+              class="tester-item"
+              v-for="tester in testerGroups.testing"
+              :key="tester"
+            >
+              <div class="tester-avatar">
+                <i class="bi bi-person-check"></i>
+              </div>
+              <span class="tester-name">{{ tester }}</span>
+            </div>
+          </div>
+        </section>
+
+        <hr class="testers-divider" />
+
+        <!-- القسم الفرعي 3: تدقيق -->
+        <section class="testers-group">
+          <h3 class="testers-group__title">
+            <span class="testers-group__num">3</span>
+            {{ t('about.testers.groups.verification') }}
+          </h3>
+          <div class="testers-list">
+            <div
+              class="tester-item"
+              v-for="tester in testerGroups.verification"
+              :key="tester"
+            >
+              <div class="tester-avatar">
+                <i class="bi bi-person-check"></i>
+              </div>
+              <span class="tester-name">{{ tester }}</span>
+            </div>
+          </div>
+        </section>
       </BaseCard>
 
       <!-- Technical Stack (upgraded) -->
@@ -275,26 +332,40 @@ const currentYear = computed(() => new Date().getFullYear())
 const AI_TOOLS = ['DeepSeek', 'Claude', 'Qwen Studio', 'Gemini', 'ChatGPT']
 
 const TESTER_NAMES_BY_LOCALE = {
-  ar: [
-    'د. آية كسيبي',
-    'د. أيهم شيخة',
-    'د. إبراهيم طرشه',
-    'د. شفان شمسي',
-    'د. ظلال الواو',
-    'د. محمد نضال عبد الوهاب',
-    'د. محمد نور السيد',
-    'د. هدية الله ملص',
-  ],
-  en: [
-    'Dr. Aya Kseibi',
-    'Dr. Ayham Shaykha',
-    'Dr. Ibrahim Tarsha',
-    'Dr. Shvan Shamsi',
-    'Dr. Zilal Al-Waw',
-    'Dr. Muhammad Nidal Abdul-Wahhab',
-    'Dr. Muhammad Nour Al-Sayed',
-    'Dr. Hadiyatullah Malas',
-  ],
+  ar: {
+    initial: [
+      'د. آية كسيبي',
+      'د. هدية الله ملص',
+    ],
+    testing: [
+      'د. ظلال الواو',
+      'د. أيهم شيخة',
+      'د. إبراهيم طرشه',
+      'د. شفان شمسي',
+      'د. محمد نضال عبد الوهاب',
+      'د. محمد نور السيد',
+    ],
+    verification: [
+      'د. نور الهندي',
+    ],
+  },
+  en: {
+    initial: [
+      'Dr. Aya Kseibi',
+      'Dr. Hadiyatullah Malas',
+    ],
+    testing: [
+      'Dr. Zilal Al-Waw',
+      'Dr. Ayham Shaykha',
+      'Dr. Ibrahim Tarsha',
+      'Dr. Shvan Shamsi',
+      'Dr. Muhammad Nidal Abdul-Wahhab',
+      'Dr. Muhammad Nour Al-Sayed',
+    ],
+    verification: [
+      'Dr. Nour Al-Hindi',
+    ],
+  },
 }
 
 // ── Technical stack data ───────────────────────────────────────────
@@ -342,9 +413,9 @@ const TECH_STACK = {
 
 const aiTools = computed(() => AI_TOOLS)
 
-const testerNames = computed(
-  () => TESTER_NAMES_BY_LOCALE[locale.value] || TESTER_NAMES_BY_LOCALE.ar
-)
+const testerGroups = computed(() => {
+  return TESTER_NAMES_BY_LOCALE[locale.value] || TESTER_NAMES_BY_LOCALE.ar
+})
 
 // ── Static display data ────────────────────────────────────────────
 const features = [
