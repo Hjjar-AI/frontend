@@ -1,18 +1,16 @@
 <!-- frontend/src/components/common/ShortcutHint.vue -->
 <template>
-  <div class="shortcut-hint" aria-live="polite" aria-atomic="true">
-    <button
+  <div ref="rootRef" class="shortcut-hint" aria-live="polite" aria-atomic="true">
+    <BaseIconButton
       class="shortcut-hint__toggle"
-      @click="expanded = !expanded"
-      :aria-expanded="expanded"
-      :title="t('tests.shortcutToggle')"
-      :aria-label="t('tests.shortcutToggle')"
+      icon="bi bi-keyboard"
+      :label="t('tests.shortcutToggle')"
+      :aria-expanded="isOpen"
+      @click.stop="toggle"
     >
-      <i class="bi bi-keyboard"></i>
-      <span class="shortcut-hint__badge">⌨</span>
-    </button>
-    <Transition name="hint">
-      <div v-if="expanded" class="shortcut-hint__panel menu-surface">
+      <template #badge><span class="shortcut-hint__badge">⌨</span></template>
+    </BaseIconButton>
+    <BasePopoverPanel :open="isOpen" panel-class="shortcut-hint__panel" transition="hint">
         <div class="shortcut-hint__item">
           
           <kbd>1</kbd>–<kbd>{{ maxChoiceHint }}</kbd>
@@ -26,16 +24,18 @@
         <div class="shortcut-hint__item">
           <kbd>Esc</kbd> <span>{{ t('tests.shortcutFinish') }}</span>
         </div>
-      </div>
-    </Transition>
+    </BasePopoverPanel>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useConfigStore } from '@/stores/configStore'
 import { useDirection } from '@/composables/useDirection'
 import { FALLBACK_MAX_CHOICES } from '@/utils/constants'
+import { useDropdown } from '@/composables/useDropdown'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
 
 
 const { t } = useI18n()
@@ -43,7 +43,7 @@ const { t } = useI18n()
 const configStore = useConfigStore()
 const { isRTL } = useDirection()
 
-const expanded = ref(false)
+const { isOpen, rootRef, toggle } = useDropdown()
 
 const maxChoiceHint = computed(() => configStore.maxChoices || FALLBACK_MAX_CHOICES)
 

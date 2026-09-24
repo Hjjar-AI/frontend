@@ -1,7 +1,13 @@
 <!-- frontend/src/components/markdown/MarkdownEditor.vue -->
 <template>
-  <div class="form-group markdown-editor">
-    <label :for="id">{{ label }}</label>
+  <BaseField
+    :id="id"
+    class="markdown-editor"
+    :label="label"
+    :required="required"
+    :current-length="charCount"
+    :max-length="maxlength"
+  >
     <div v-show="toolbarVisible" class="toolbar-row">
       <MarkdownToolbar @insert="(action) => insertMarkdown(action)" />
       <router-link to="/manual#markdown" class="markdown-help-link" :title="t('markdown.helpLink')">
@@ -16,33 +22,37 @@
         :rows="rows"
         :maxlength="maxlength"
         dir="auto"
+        class="form-control"
         @input="onInput"
         @focus="toolbarVisible = true"
-        class="form-control"
       ></textarea>
-      <span class="char-count" :class="{ 'char-count--warn': charCount > maxlength - 50 }">
-        {{ charCount }}/{{ maxlength }}
-      </span>
     </div>
     <div class="word-count">
       {{ t('markdown.wordCount', { n: wordCount }) }}
     </div>
     <div class="preview-toggle">
-      <button type="button" class="btn-icon btn-icon--compact" @click="showPreview = !showPreview">
-        <i :class="showPreview ? 'bi bi-pencil' : 'bi bi-eye'"></i>
+      <BaseButton
+        type="button"
+        variant="ghost"
+        size="small"
+        :icon="showPreview ? 'bi bi-pencil' : 'bi bi-eye'"
+        @click="showPreview = !showPreview"
+      >
         {{ showPreview ? t('markdown.edit') : t('markdown.preview') }}
-      </button>
+      </BaseButton>
     </div>
     <div v-if="showPreview" class="markdown-preview">
       <BaseMarkdown :text="modelValue" />
     </div>
-  </div>
+  </BaseField>
 </template>
 
 <script setup>
 import { ref, watch, computed } from 'vue'
 import MarkdownToolbar from '@/components/markdown/MarkdownToolbar.vue'
 import BaseMarkdown from '@/components/markdown/BaseMarkdown.vue'
+import BaseField from '@/components/base/BaseField.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 
 const { t } = useI18n()
@@ -53,6 +63,7 @@ const props = defineProps({
   id: { type: String, required: true },
   rows: { type: Number, default: 3 },
   maxlength: { type: Number, default: 500 },
+  required: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['update:modelValue'])

@@ -39,10 +39,13 @@
         <i class="bi bi-funnel"></i>
         {{ t('admin.database.filtersTitle') }}
       </h4>
-      <button v-if="hasActiveFilters" type="button" class="export-filters__clear" @click="clearAll">
-        <i class="bi bi-x-circle"></i>
-        {{ t('admin.database.filtersClear') }}
-      </button>
+      <BaseButton
+        v-if="hasActiveFilters"
+        variant="ghost"
+        size="small"
+        icon="bi bi-x-circle"
+        @click="clearAll"
+      >{{ t('admin.database.filtersClear') }}</BaseButton>
     </div>
 
     <p class="export-filters__hint">{{ t('admin.database.filtersHint') }}</p>
@@ -51,11 +54,11 @@
     <div class="export-filters__section">
       <BaseInput
         :model-value="modelValue.title"
-        @update:model-value="update('title', $event)"
         :label="t('admin.database.exportTitleLabel')"
         :placeholder="t('admin.database.exportTitlePlaceholder')"
         :hint="t('admin.database.exportTitleHint')"
         :maxlength="150"
+        @update:model-value="update('title', $event)"
       />
     </div>
 
@@ -70,24 +73,22 @@
       <div v-if="modelValue.include_about" class="export-filters__about-fields">
         <BaseInput
           :model-value="modelValue.about_title"
-          @update:model-value="update('about_title', $event)"
           :label="t('admin.database.aboutPageTitle')"
           :placeholder="t('admin.database.aboutPageTitlePlaceholder')"
           :maxlength="150"
+          @update:model-value="update('about_title', $event)"
         />
 
-        <label class="export-filters__textarea-label" for="pdf-about-body">
-          {{ t('admin.database.aboutPageBody') }}
-        </label>
-        <textarea
+        <BaseTextarea
           id="pdf-about-body"
-          class="form-control export-filters__textarea"
-          :value="modelValue.about_body"
+          :model-value="modelValue.about_body"
+          :label="t('admin.database.aboutPageBody')"
           :placeholder="t('admin.database.aboutPageBodyPlaceholder')"
-          maxlength="3000"
-          rows="5"
-          @input="update('about_body', $event.target.value)"
-        ></textarea>
+          :maxlength="3000"
+          :rows="5"
+          show-count
+          @update:model-value="update('about_body', $event)"
+        />
 
         <div class="export-filters__custom-header">
           <span>{{ t('admin.database.aboutCustomFields') }}</span>
@@ -121,14 +122,13 @@
             :maxlength="500"
             @update:model-value="updateAboutField(index, 'value', $event)"
           />
-          <BaseButton
+          <BaseIconButton
             variant="danger"
             size="small"
-            :aria-label="t('admin.database.aboutRemoveField')"
+            icon="bi bi-trash"
+            :label="t('admin.database.aboutRemoveField')"
             @click="removeAboutField(index)"
-          >
-            <i class="bi bi-trash"></i>
-          </BaseButton>
+          />
         </div>
       </div>
     </div>
@@ -139,10 +139,10 @@
     <div class="export-filters__section">
       <BaseInput
         :model-value="modelValue.search"
-        @update:model-value="update('search', $event)"
         :label="t('common.search')"
         :placeholder="t('questions.searchPlaceholder')"
         :hint="t('admin.database.filtersSearchHint')"
+        @update:model-value="update('search', $event)"
       />
     </div>
 
@@ -150,11 +150,11 @@
     <div class="export-filters__section">
       <SourceGridPicker
         :model-value="modelValue.difficulties"
-        @update:model-value="update('difficulties', $event)"
         :items="difficultyItems"
         :multiple="true"
         :label="t('difficulty.label')"
         icon="bi bi-speedometer2"
+        @update:model-value="update('difficulties', $event)"
       />
     </div>
 
@@ -162,13 +162,13 @@
     <div class="export-filters__section">
       <SourceGridPicker
         :model-value="modelValue.category_ids"
-        @update:model-value="update('category_ids', $event)"
         :items="categoryItems"
         :loading="categoriesLoading"
         :multiple="true"
         :label="t('questions.categoryLabel')"
         icon="bi bi-folder2"
         :empty-text="t('categories.empty')"
+        @update:model-value="update('category_ids', $event)"
       />
     </div>
 
@@ -176,13 +176,13 @@
     <div class="export-filters__section">
       <SourceGridPicker
         :model-value="modelValue.tags_filter"
-        @update:model-value="update('tags_filter', $event)"
         :items="tagItems"
         :loading="tagsLoading"
         :multiple="true"
         :label="t('questions.tagsLabel')"
         icon="bi bi-tags"
         :empty-text="t('admin.tags.empty')"
+        @update:model-value="update('tags_filter', $event)"
       />
     </div>
 
@@ -197,8 +197,10 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import BaseInput from '@/components/base/BaseInput.vue'
+import BaseTextarea from '@/components/base/BaseTextarea.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import SourceGridPicker from '@/components/common/SourceGridPicker.vue'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useTagStore } from '@/stores/tagStore'

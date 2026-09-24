@@ -19,12 +19,12 @@
 <template>
   <Layout>
     <PageShell :title="headerTitle" :icon="headerIcon" :page-class="containerClass">
-        <template #badges v-if="headerBadge">
+        <template v-if="headerBadge" #badges>
           <BaseBadge :variant="headerBadge.variant">
             {{ headerBadge.label }}
           </BaseBadge>
         </template>
-        <template #actions v-if="showHeaderActions">
+        <template v-if="showHeaderActions" #actions>
           <div
             v-if="mode === 'mistakes' || mode === 'fragile'"
             class="notebook-page__header-actions"
@@ -64,13 +64,13 @@
           {{ t('questions.lastViewedLink', { id: lastViewedId }) }}
           <DirectionalIcon ltr="bi bi-arrow-left" rtl="bi bi-arrow-right" />
         </router-link>
-        <button
+        <BaseIconButton
           class="last-viewed-clear"
+          icon="bi bi-x"
+          size="small"
+          :label="t('questions.lastViewedClear')"
           @click="clearLastViewed"
-          :aria-label="t('questions.lastViewedClear')"
-        >
-          <i class="bi bi-x"></i>
-        </button>
+        />
       </div>
 
       <ErrorBanner
@@ -93,15 +93,16 @@
       />
 
       <div v-if="mode === 'all' && activeFilterCount > 0" class="filter-chips">
-        <span v-for="chip in filterChips" :key="chip.key" class="chip">
+        <BaseChip
+          v-for="chip in filterChips"
+          :key="chip.key"
+          removable
+          :remove-label="t('common.clear')"
+          @remove="removeFilter(chip.key)"
+        >
           {{ chip.label }}
-          <button @click="removeFilter(chip.key)" :aria-label="t('common.clear')">
-            <i class="bi bi-x"></i>
-          </button>
-        </span>
-        <button class="clear-all-filters" @click="handleReset">
-          {{ t('common.clearAll') }}
-        </button>
+        </BaseChip>
+        <BaseButton variant="ghost" size="small" @click="handleReset">{{ t('common.clearAll') }}</BaseButton>
       </div>
 
       <!-- Meta row with per-page select (all only) -->
@@ -118,15 +119,11 @@
             pages: totalPages,
           }) }}
         </span>
-        <select
-          v-model.number="perPage"
-          @change="handlePerPageChange"
-          class="per-page-select"
-        >
-          <option v-for="opt in PER_PAGE_OPTIONS" :key="opt" :value="opt">
-            {{ opt }}
-          </option>
-        </select>
+        <BaseSelect
+          :model-value="perPage"
+          :options="perPageOptions"
+          @update:model-value="perPage = Number($event); handlePerPageChange()"
+        />
       </div>
 
       <!-- Review-queue bulk verify. -->
@@ -201,8 +198,8 @@
         :empty-icon="emptyIcon"
       >
         <template
-          #emptyActions
           v-if="mode === 'all' && authStore.can('questions.create')"
+          #emptyActions
         >
           <BaseButton variant="primary" @click="router.push('/questions/add')">
             {{ t('questions.emptyAddNow') }}
@@ -261,12 +258,16 @@ import FilterBar from '../components/FilterBar.vue'
 import QuestionCard from '../components/QuestionCard.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
+import BaseSelect from '@/components/base/BaseSelect.vue'
 import Pagination from '@/components/base/BasePagination.vue'
 import { useQuestionListController } from '../composables/useQuestionListController'
 import { PER_PAGE_OPTIONS } from '@/utils/constants'
 
 const { t } = useI18n()
+const perPageOptions = PER_PAGE_OPTIONS.map(value => ({ value, label: String(value) }))
 
 const props = defineProps({
   mode: {

@@ -28,26 +28,24 @@
           {{ conflict.changed_fields.join(', ') }}
         </p>
         <div class="author-mapping__options">
-          <label class="author-mapping__option">
-            <input
-              :name="`conflict-${conflict.uuid}`"
-              type="radio"
-              value="keep_local"
-              :checked="decisions[conflict.uuid] === 'keep_local'"
-              @change="setDecision(conflict.uuid, 'keep_local')"
-            />
+          <BaseRadio
+            class="author-mapping__option"
+            :model-value="decisions[conflict.uuid]"
+            :name="`conflict-${conflict.uuid}`"
+            value="keep_local"
+            @update:model-value="setDecision(conflict.uuid, $event)"
+          >
             <span>{{ t('admin.import.conflictKeepLocal') }}</span>
-          </label>
-          <label class="author-mapping__option">
-            <input
-              :name="`conflict-${conflict.uuid}`"
-              type="radio"
-              value="use_imported"
-              :checked="decisions[conflict.uuid] === 'use_imported'"
-              @change="setDecision(conflict.uuid, 'use_imported')"
-            />
+          </BaseRadio>
+          <BaseRadio
+            class="author-mapping__option"
+            :model-value="decisions[conflict.uuid]"
+            :name="`conflict-${conflict.uuid}`"
+            value="use_imported"
+            @update:model-value="setDecision(conflict.uuid, $event)"
+          >
             <span>{{ t('admin.import.conflictUseImported') }}</span>
-          </label>
+          </BaseRadio>
         </div>
       </div>
     </div>
@@ -66,6 +64,7 @@
 import { ref, watch } from 'vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseRadio from '@/components/base/BaseRadio.vue'
 
 const { t } = useI18n()
 

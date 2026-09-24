@@ -54,22 +54,19 @@
         </div>
 
         <div class="author-mapping__options">
-          <label
+          <BaseRadio
             class="author-mapping__option"
             :class="{ 'author-mapping__option--disabled': !usersAvailable }"
+            :model-value="decisions[author.name].action"
+            :name="`map-${author.name}`"
+            value="user"
+            :disabled="!usersAvailable"
+            @update:model-value="setAction(author.name, $event)"
           >
-            <input
-              type="radio"
-              :name="`map-${author.name}`"
-              value="user"
-              :disabled="!usersAvailable"
-              :checked="decisions[author.name].action === 'user'"
-              @change="setAction(author.name, 'user')"
-            />
             <span class="author-mapping__option-label">
               {{ t('admin.import.mappingActionUser') }}
             </span>
-          </label>
+          </BaseRadio>
           <div v-if="decisions[author.name].action === 'user'" class="author-mapping__user-picker">
             <BaseSelect
               :model-value="decisions[author.name].user_id || ''"
@@ -79,37 +76,35 @@
             />
           </div>
 
-          <label class="author-mapping__option">
-            <input
-              type="radio"
-              :name="`map-${author.name}`"
-              value="stub"
-              :checked="decisions[author.name].action === 'stub'"
-              @change="setAction(author.name, 'stub')"
-            />
+          <BaseRadio
+            class="author-mapping__option"
+            :model-value="decisions[author.name].action"
+            :name="`map-${author.name}`"
+            value="stub"
+            @update:model-value="setAction(author.name, $event)"
+          >
             <span class="author-mapping__option-label">
               {{ t('admin.import.mappingActionStub') }}
               <small class="author-mapping__hint">
                 {{ t('admin.import.mappingActionStubHint') }}
               </small>
             </span>
-          </label>
+          </BaseRadio>
 
-          <label class="author-mapping__option">
-            <input
-              type="radio"
-              :name="`map-${author.name}`"
-              value="null"
-              :checked="decisions[author.name].action === 'null'"
-              @change="setAction(author.name, 'null')"
-            />
+          <BaseRadio
+            class="author-mapping__option"
+            :model-value="decisions[author.name].action"
+            :name="`map-${author.name}`"
+            value="null"
+            @update:model-value="setAction(author.name, $event)"
+          >
             <span class="author-mapping__option-label">
               {{ t('admin.import.mappingActionNull') }}
               <small class="author-mapping__hint">
                 {{ t('admin.import.mappingActionNullHint') }}
               </small>
             </span>
-          </label>
+          </BaseRadio>
         </div>
       </div>
     </div>
@@ -136,6 +131,7 @@ import { ref, computed, watch } from 'vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseRadio from '@/components/base/BaseRadio.vue'
 
 const { t } = useI18n()
 

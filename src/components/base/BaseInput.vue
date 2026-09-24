@@ -1,11 +1,18 @@
 <!-- frontend/src/components/base/BaseInput.vue -->
 <template>
-  <div class="base-input" :class="{ 'base-input--error': error }">
-    <label v-if="label" :for="inputId" class="base-input__label">
-      {{ label }}
-      <span v-if="required" class="base-input__required">*</span>
-    </label>
-
+  <BaseField
+    :id="inputId"
+    class="base-input"
+    :class="{ 'base-input--error': error }"
+    :label="label"
+    :hint="hint"
+    :error="error"
+    :required="required"
+    :disabled="disabled"
+    :current-length="characterCount"
+    :max-length="showCharacterCount ? maxlength : null"
+  >
+    <template #default="{ id: fieldId, describedBy, invalid }">
     <!-- ── Number variant ───────────────────────────────────────────
          The native <input type="number"> spinner is pinned to the
          inline-end edge by the browser and cannot be repositioned
@@ -57,23 +64,25 @@
           </button>
         </div>
         <input
+          :id="fieldId"
           ref="inputRef"
-          :id="inputId"
           type="number"
           :value="modelValue"
           :placeholder="placeholder"
           :min="min"
           :max="max"
+          :step="step"
           :disabled="disabled"
           :readonly="readonly"
           :required="required"
           :aria-label="ariaLabel || undefined"
-          :aria-describedby="error ? `${inputId}-error` : undefined"
-          @input="$emit('update:modelValue', $event.target.value)"
+          :aria-describedby="describedBy"
+          :aria-invalid="invalid"
+          class="base-input__number-field"
+          @input="updateModelValue($event.target.value)"
           @blur="$emit('blur')"
           @focus="$emit('focus')"
           @keydown.enter="$emit('enter', $event)"
-          class="base-input__number-field"
         />
       </div>
       <button
@@ -82,7 +91,7 @@
         class="base-input__number-clear"
         :disabled="disabled || readonly"
         :aria-label="t('ui.clearField')"
-        @click="$emit('update:modelValue', '')"
+        @click="updateModelValue('')"
       >
         <i class="bi bi-x-lg"></i>
       </button>
@@ -91,8 +100,8 @@
     <!-- ── Text-like variants (text, email, search, password, …) ──── -->
     <div v-else class="base-input__wrapper">
       <input
+        :id="fieldId"
         ref="inputRef"
-        :id="inputId"
         :type="showPassword ? 'text' : type"
         :value="modelValue"
         :placeholder="placeholder"
@@ -101,24 +110,27 @@
         :required="required"
         :min="min"
         :max="max"
+        :step="step"
         :minlength="minlength"
         :maxlength="maxlength"
         :inputmode="inputmode"
+        :list="list || undefined"
         :aria-label="ariaLabel || undefined"
-        :aria-describedby="error ? `${inputId}-error` : undefined"
-        @input="$emit('update:modelValue', $event.target.value)"
+        :aria-describedby="describedBy"
+        :aria-invalid="invalid"
+        class="base-input__field form-control"
+        @input="updateModelValue($event.target.value)"
         @blur="$emit('blur')"
         @focus="$emit('focus')"
         @keydown.enter="$emit('enter', $event)"
-        class="base-input__field form-control"
       />
       <button
         v-if="showClearButton"
         type="button"
         class="base-input__clear"
         :class="{ 'base-input__clear--offset': type === 'password' }"
-        @click="$emit('update:modelValue', '')"
         :aria-label="t('ui.clearField')"
+        @click="updateModelValue('')"
       >
         <i class="bi bi-x-lg"></i>
       </button>
@@ -126,22 +138,20 @@
         v-if="type === 'password'"
         type="button"
         class="base-input__toggle"
-        @click="showPassword = !showPassword"
         :aria-label="showPassword ? t('ui.hidePassword') : t('ui.showPassword')"
+        @click="showPassword = !showPassword"
       >
         <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
       </button>
     </div>
 
-    <div class="base-input__feedback">
-      <span v-if="error" :id="`${inputId}-error`" class="base-input__error">{{ error }}</span>
-      <span v-if="hint && !error" class="base-input__hint">{{ hint }}</span>
-    </div>
-  </div>
+    </template>
+  </BaseField>
 </template>
 
 <script setup>
 import { ref, computed, getCurrentInstance } from 'vue'
+import BaseField from './BaseField.vue'
 
 
 const { t } = useI18n()
@@ -159,10 +169,14 @@ const props = defineProps({
   readonly: { type: Boolean, default: false },
   min: { type: Number, default: undefined },
   max: { type: Number, default: undefined },
+  step: { type: [String, Number], default: undefined },
   minlength: { type: Number, default: undefined },
   maxlength: { type: Number, default: undefined },
   inputmode: { type: String, default: undefined },
+  list: { type: String, default: '' },
   id: { type: String, default: '' },
+  showCount: { type: Boolean, default: false },
+  modelModifiers: { type: Object, default: () => ({}) },
 })
 
 const emit = defineEmits(['update:modelValue', 'blur', 'focus', 'enter'])
@@ -181,6 +195,15 @@ function focus() {
 defineExpose({ focus })
 
 const inputId = computed(() => props.id || `input-${uid}`)
+const showCharacterCount = computed(() => props.showCount && props.maxlength !== undefined)
+const characterCount = computed(() => showCharacterCount.value ? String(props.modelValue ?? '').length : null)
+
+function updateModelValue(value) {
+  let next = value
+  if (props.modelModifiers.trim && typeof next === 'string') next = next.trim()
+  if (props.modelModifiers.number && next !== '') next = Number(next)
+  emit('update:modelValue', next)
+}
 
 const showClearButton = computed(() => {
   const clearableTypes = ['text', 'search', 'number', 'email', 'password']
@@ -232,11 +255,11 @@ function increment() {
   if (props.disabled || props.readonly || isAtMax.value) return
   // String(...) — not the number itself — so the emitted type is
   // identical to the native input path. See the EMIT TYPE note above.
-  emit('update:modelValue', String(numericValue.value + 1))
+  updateModelValue(String(numericValue.value + 1))
 }
 
 function decrement() {
   if (props.disabled || props.readonly || isAtMin.value) return
-  emit('update:modelValue', String(numericValue.value - 1))
+  updateModelValue(String(numericValue.value - 1))
 }
 </script>

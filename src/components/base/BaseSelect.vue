@@ -1,22 +1,29 @@
 <!-- frontend/src/components/base/BaseSelect.vue -->
 <template>
-  <div class="base-select" :class="{ 'base-select--error': error }">
-    <label v-if="label" :for="selectId" class="base-select__label">
-      {{ label }}
-      <span v-if="required" class="base-select__required">*</span>
-    </label>
+  <BaseField
+    :id="selectId"
+    class="base-select"
+    :class="{ 'base-select--error': error }"
+    :label="label"
+    :hint="hint"
+    :error="error"
+    :required="required"
+    :disabled="disabled"
+  >
+    <template #default="{ id: fieldId, describedBy, invalid }">
     <div class="base-select__wrapper">
       
       <select
-        :id="selectId"
+        :id="fieldId"
         :disabled="disabled"
         :required="required"
         :multiple="multiple"
-        :aria-describedby="error ? `${selectId}-error` : undefined"
+        :aria-describedby="describedBy"
+        :aria-invalid="invalid"
+        class="base-select__field"
         @change="handleChange"
         @blur="$emit('blur')"
         @focus="$emit('focus')"
-        class="base-select__field"
       >
         <option v-if="placeholder && !multiple" value="" :selected="!hasSelection">{{ placeholder }}</option>
         <option
@@ -28,13 +35,13 @@
       </select>
       <i v-if="!multiple" class="bi bi-chevron-down base-select__arrow"></i>
     </div>
-    <span v-if="error" :id="`${selectId}-error`" class="base-select__error">{{ error }}</span>
-    <span v-if="hint" class="base-select__hint">{{ hint }}</span>
-  </div>
+    </template>
+  </BaseField>
 </template>
 
 <script setup>
 import { computed, getCurrentInstance } from 'vue'
+import BaseField from './BaseField.vue'
 
 const props = defineProps({
   modelValue: { type: [String, Number, Array], default: '' },

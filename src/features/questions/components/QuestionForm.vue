@@ -9,7 +9,7 @@
 
     <h2>{{ formTitle }}</h2>
 
-    <form @submit.prevent="submitWithGuard" class="question-form__form">
+    <form class="question-form__form" @submit.prevent="submitWithGuard">
       <!--
         Case section (feature: case-based question chains).
 
@@ -25,12 +25,13 @@
           <span v-if="form.case_key" class="question-form__case-badge">{{ form.case_key }}</span>
         </summary>
         <FormGrid>
-          <BaseField :label="t('questions.caseKeyLabel')" :hint="t('questions.caseKeyHint')">
-            <input
+          <div>
+            <BaseInput
               v-model.trim="form.case_key"
-              class="form-control"
+              :label="t('questions.caseKeyLabel')"
+              :hint="t('questions.caseKeyHint')"
               list="case-key-suggestions"
-              maxlength="64"
+              :maxlength="64"
               :placeholder="t('questions.caseKeyPlaceholder')"
             />
             <datalist id="case-key-suggestions">
@@ -38,11 +39,11 @@
                 {{ c.title || c.key }}
               </option>
             </datalist>
-          </BaseField>
+          </div>
         </FormGrid>
         <MarkdownEditor
-          v-model="form.case_stem"
           id="q-case-stem"
+          v-model="form.case_stem"
           :label="t('questions.caseStemLabel')"
           :maxlength="3000"
           :rows="5"
@@ -57,8 +58,8 @@
       </details>
 
       <MarkdownEditor
-        v-model="form.question"
         id="q-question"
+        v-model="form.question"
         :label="t('questions.questionLabel')"
         :maxlength="3000"
         required
@@ -76,14 +77,12 @@
           {{ t('questions.knowledgeObjectHint') }}
         </p>
         <FormGrid>
-          <BaseField :label="t('questions.knowledgeObjectLabel')">
-            <select v-model="form.knowledge_object" class="form-control">
-              <option value="">{{ t('questions.noKnowledgeObject') }}</option>
-              <option v-for="item in knowledgeObjects" :key="item.id" :value="item.id">
-                {{ item.title }}
-              </option>
-            </select>
-          </BaseField>
+          <BaseSelect
+            v-model="form.knowledge_object"
+            :label="t('questions.knowledgeObjectLabel')"
+            :options="knowledgeObjectOptions"
+            :placeholder="t('questions.noKnowledgeObject')"
+          />
           <div class="form-group question-form__knowledge-action">
             <BaseButton
               type="button"
@@ -102,44 +101,35 @@
 
         <div v-if="showKnowledgeCreator" class="question-form__knowledge-creator">
           <FormGrid>
-            <BaseField :label="t('questions.knowledgeObjectTitle')">
-              <input
-                v-model.trim="knowledgeDraft.title"
-                class="form-control"
-                maxlength="200"
-                :placeholder="t('questions.knowledgeObjectTitlePlaceholder')"
-              />
-            </BaseField>
-            <BaseField :label="t('questions.knowledgeObjectObjective')">
-              <textarea
-                v-model.trim="knowledgeDraft.learning_objective"
-                class="form-control"
-                rows="3"
-                maxlength="3000"
-                :placeholder="t('questions.knowledgeObjectObjectivePlaceholder')"
-              ></textarea>
-            </BaseField>
+            <BaseInput
+              v-model.trim="knowledgeDraft.title"
+              :label="t('questions.knowledgeObjectTitle')"
+              :maxlength="200"
+              show-count
+              :placeholder="t('questions.knowledgeObjectTitlePlaceholder')"
+            />
+            <BaseTextarea
+              v-model.trim="knowledgeDraft.learning_objective"
+              :label="t('questions.knowledgeObjectObjective')"
+              :rows="3"
+              :maxlength="3000"
+              :placeholder="t('questions.knowledgeObjectObjectivePlaceholder')"
+            />
           </FormGrid>
-          <BaseField :label="t('questions.knowledgeObjectAnswer')">
-            <textarea
-              v-model.trim="knowledgeDraft.canonical_answer"
-              class="form-control"
-              rows="3"
-              maxlength="3000"
-              :placeholder="t('questions.knowledgeObjectAnswerPlaceholder')"
-            ></textarea>
-          </BaseField>
-          <BaseField
+          <BaseTextarea
+            v-model.trim="knowledgeDraft.canonical_answer"
+            :label="t('questions.knowledgeObjectAnswer')"
+            :rows="3"
+            :maxlength="3000"
+            :placeholder="t('questions.knowledgeObjectAnswerPlaceholder')"
+          />
+          <BaseTextarea
+            v-model="knowledgeDraft.key_facts"
             :label="t('questions.knowledgeObjectFacts')"
             :hint="t('questions.knowledgeObjectFactsHint')"
-          >
-            <textarea
-              v-model="knowledgeDraft.key_facts"
-              class="form-control"
-              rows="3"
-              :placeholder="t('questions.knowledgeObjectFactsPlaceholder')"
-            ></textarea>
-          </BaseField>
+            :rows="3"
+            :placeholder="t('questions.knowledgeObjectFactsPlaceholder')"
+          />
           <BaseButton
             type="button"
             variant="primary"
@@ -175,14 +165,14 @@
         </div>
         <div v-else class="image-preview">
           <img :src="imagePreview" :alt="t('questions.imagePreviewAlt')" />
-          <button
+          <BaseIconButton
             type="button"
             class="image-preview__remove"
+            icon="bi bi-x-lg"
+            variant="danger"
+            :label="t('questions.imageRemove')"
             @click="clearImage"
-            :aria-label="t('questions.imageRemove')"
-          >
-            <i class="bi bi-x-lg"></i>
-          </button>
+          />
           <div class="image-preview__status">
             <i class="bi bi-info-circle"></i>
             {{ imageUploadStatus }}
@@ -205,8 +195,8 @@
       </div>
 
       <MarkdownEditor
-        v-model="form.explanation"
         id="q-explanation"
+        v-model="form.explanation"
         :label="t('questions.explanationLabel')"
         :maxlength="3000"
       />
@@ -217,49 +207,39 @@
           <span>{{ t('questions.provenanceSection') }}</span>
         </summary>
         <FormGrid>
-          <BaseField
-            :label="t('questions.sourceLabel')"
+          <BaseInput
             id="q-source"
+            v-model="form.source"
+            :label="t('questions.sourceLabel')"
             :hint="t('questions.sourcePlaceholder')"
-          >
-            <input id="q-source" v-model="form.source" class="form-control" maxlength="200" />
-          </BaseField>
-          <BaseField
-            :label="t('questions.sourceDocumentLabel')"
+            :maxlength="200"
+            show-count
+          />
+          <BaseInput
             id="q-source-document"
+            v-model="form.source_document"
+            :label="t('questions.sourceDocumentLabel')"
             :hint="t('questions.sourceDocumentHint')"
-          >
-            <input
-              id="q-source-document"
-              v-model="form.source_document"
-              class="form-control"
-              maxlength="500"
-              :placeholder="t('questions.sourceDocumentPlaceholder')"
-            />
-          </BaseField>
-          <BaseField :label="t('questions.sourcePageLabel')" id="q-source-page">
-            <input
-              id="q-source-page"
-              v-model="form.source_page"
-              class="form-control"
-              type="number"
-              min="1"
-              step="1"
-              :placeholder="t('questions.sourcePagePlaceholder')"
-            />
-          </BaseField>
-          <BaseField
-            :label="t('questions.lastRevisedLabel')"
+            :maxlength="500"
+            show-count
+            :placeholder="t('questions.sourceDocumentPlaceholder')"
+          />
+          <BaseInput
+            id="q-source-page"
+            v-model="form.source_page"
+            type="number"
+            :label="t('questions.sourcePageLabel')"
+            :min="1"
+            :step="1"
+            :placeholder="t('questions.sourcePagePlaceholder')"
+          />
+          <BaseInput
             id="q-last-revised"
+            v-model="form.last_revised_at"
+            type="date"
+            :label="t('questions.lastRevisedLabel')"
             :hint="t('questions.lastRevisedHint')"
-          >
-            <input
-              id="q-last-revised"
-              v-model="form.last_revised_at"
-              class="form-control"
-              type="date"
-            />
-          </BaseField>
+          />
         </FormGrid>
       </details>
 
@@ -275,15 +255,14 @@
           {{ t('questions.translationsHint') }}
         </p>
         <div class="question-form__translation-add">
-          <BaseField :label="t('questions.translationLocaleLabel')">
-            <input
-              v-model.trim="translationLocale"
-              class="form-control"
-              maxlength="6"
-              :placeholder="t('questions.translationLocalePlaceholder')"
-              @keyup.enter.prevent="addTranslation"
-            />
-          </BaseField>
+          <BaseInput
+            v-model.trim="translationLocale"
+            :label="t('questions.translationLocaleLabel')"
+            :maxlength="6"
+            show-count
+            :placeholder="t('questions.translationLocalePlaceholder')"
+            @enter="addTranslation"
+          />
           <BaseButton type="button" variant="secondary" @click="addTranslation">
             <i class="bi bi-plus-lg"></i> {{ t('questions.translationAdd') }}
           </BaseButton>
@@ -306,27 +285,24 @@
             </BaseButton>
           </header>
           <MarkdownEditor
-            v-model="translation.question"
             :id="`q-translation-${locale}-question`"
+            v-model="translation.question"
             :label="t('questions.translationQuestionLabel')"
             :maxlength="3000"
           />
           <div class="question-form__translation-choices">
-            <BaseField
+            <BaseInput
               v-for="(_, index) in form.choices"
               :key="`${locale}-${index}`"
+              v-model="translation.choices[index]"
               :label="t('questions.choiceN', { n: index + 1 })"
-            >
-              <input
-                v-model="translation.choices[index]"
-                class="form-control"
-                maxlength="1000"
-              />
-            </BaseField>
+              :maxlength="1000"
+              show-count
+            />
           </div>
           <MarkdownEditor
-            v-model="translation.explanation"
             :id="`q-translation-${locale}-explanation`"
+            v-model="translation.explanation"
             :label="t('questions.translationExplanationLabel')"
             :maxlength="3000"
           />
@@ -367,7 +343,10 @@ import CategorySelect from './CategorySelect.vue'
 import DifficultySelector from './DifficultySelector.vue'
 import TagInput from './TagInput.vue'
 import ChoiceEditor from './ChoiceEditor.vue'
-import BaseField from '@/components/base/BaseField.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import BaseSelect from '@/components/base/BaseSelect.vue'
+import BaseTextarea from '@/components/base/BaseTextarea.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import { useSubmitGuard } from '@/composables/useSubmitGuard'
@@ -455,6 +434,9 @@ const form = reactive({
 
 const selectedKnowledgeObject = computed(() =>
   knowledgeObjects.value.find((item) => Number(item.id) === Number(form.knowledge_object)),
+)
+const knowledgeObjectOptions = computed(() =>
+  knowledgeObjects.value.map(item => ({ value: item.id, label: item.title })),
 )
 
 const translationLocale = ref('')

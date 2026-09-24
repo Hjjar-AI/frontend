@@ -17,6 +17,7 @@
     <i v-else-if="icon" :class="icon" aria-hidden="true"></i>
     <span v-if="!iconOnly && $slots.default" class="base-button__label"><slot /></span>
     <slot v-else-if="iconOnly && !icon" />
+    <slot name="badge" />
   </button>
 </template>
 

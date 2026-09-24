@@ -1,39 +1,30 @@
 <!-- frontend/src/features/questions/components/FilterBar.vue -->
 <template>
-  <div class="filter-bar">
-    <div class="filter-bar__top">
-      <button
-        type="button"
-        class="btn-icon filter-bar__toggle"
-        @click="collapsed = !collapsed"
-        :aria-expanded="!collapsed"
-        :aria-label="collapsed ? t('questions.filterShow') : t('questions.filterHideFull')"
-      >
-        <i :class="collapsed ? 'bi bi-funnel' : 'bi bi-funnel-fill'"></i>
-        <span>{{ collapsed ? t('questions.filterShowShort') : t('questions.filterHide') }}</span>
-        <span v-if="activeFilterCount > 0 && collapsed" class="filter-bar__badge">{{ activeFilterCount }}</span>
-      </button>
-      <BaseButton v-if="activeFilterCount > 0" variant="secondary" size="small" @click="resetFilters">
-        <i class="bi bi-arrow-counterclockwise"></i> {{ t('common.reset') }}
-      </BaseButton>
-    </div>
-
-    <Transition name="filter-collapse">
-      <div v-show="!collapsed" class="filter-bar__row">
-        <div class="filter-bar__field">
-          <BaseInput
-            :model-value="filters.search"
-            @update:model-value="onSearchInput"
-            :placeholder="t('questions.searchPlaceholder')"
-            :aria-label="t('common.search')"
-          />
-        </div>
+  <ListToolbar
+    v-model:collapsed="collapsed"
+    collapsible
+    :active-count="activeFilterCount"
+    :show-label="t('questions.filterShowShort')"
+    :hide-label="t('questions.filterHide')"
+    :reset-label="t('common.reset')"
+    :aria-label="t('questions.filterShow')"
+    @reset="resetFilters"
+  >
+    <template #search>
+      <BaseInput
+        :model-value="filters.search"
+        :placeholder="t('questions.searchPlaceholder')"
+        :aria-label="t('common.search')"
+        @update:model-value="onSearchInput"
+      />
+    </template>
+    <template #filters>
         <div class="filter-bar__field">
           <BaseSelect
             :model-value="filters.category"
-            @update:model-value="(val) => onFilterChange('category', val)"
             :options="categorySelectOptions"
             :placeholder="t('questions.filterAllCategories')"
+            @update:model-value="(val) => onFilterChange('category', val)"
           />
         </div>
         <div class="filter-bar__field">
@@ -45,21 +36,20 @@
         <div class="filter-bar__field filter-bar__field--switch">
           <BaseCheckbox
             :model-value="filters.verified === 'yes'"
-            @update:model-value="(val) => onFilterChange('verified', val ? 'yes' : '')"
             :label="t('questions.filterVerifiedLabel')"
+            @update:model-value="(val) => onFilterChange('verified', val ? 'yes' : '')"
           />
         </div>
         <div class="filter-bar__field">
           <BaseSelect
             :model-value="filters.tag"
-            @update:model-value="(val) => onFilterChange('tag', val)"
             :options="tagSelectOptions"
             :placeholder="t('questions.filterAllTags')"
+            @update:model-value="(val) => onFilterChange('tag', val)"
           />
         </div>
-      </div>
-    </Transition>
-  </div>
+    </template>
+  </ListToolbar>
 </template>
 
 <script setup>
@@ -68,9 +58,9 @@ import { useRecentItems } from '@/composables/useRecentItems'
 import { useDebounceFn } from '@/composables/useDebounceFn'
 import DifficultySelector from './DifficultySelector.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-import BaseButton from '@/components/base/BaseButton.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
+import ListToolbar from '@/components/common/ListToolbar.vue'
 
 const { t } = useI18n()
 

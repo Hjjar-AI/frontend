@@ -3,15 +3,13 @@
   <BaseCard class="chart-card">
     <div class="chart-card__header">
       <h4 class="chart-card__title">{{ title }}</h4>
-      <button
+      <BaseIconButton
         v-if="allowExport"
-        class="btn-icon no-print"
-        :title="t('ui.exportAsPng')"
-        :aria-label="t('ui.exportAsPng')"
+        class="no-print"
+        icon="bi bi-download"
+        :label="t('ui.exportAsPng')"
         @click="exportImage"
-      >
-        <i class="bi bi-download"></i>
-      </button>
+      />
     </div>
     <div class="chart-card__body">
       <canvas ref="chartCanvas" :width="width" :height="height"></canvas>
@@ -27,6 +25,7 @@ import { useNotify } from '@/composables/useNotify'
 import { useChartPalette } from '@/composables/useChartPalette'
 import { getChartPalette } from '@/utils/chartPalette'
 import { downloadUrl } from '@/utils/downloadFile'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 
 const { t } = useI18n()
 

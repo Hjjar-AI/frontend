@@ -1,11 +1,13 @@
 <!-- frontend/src/components/layout/ThemeDropdown.vue -->
 <template>
-  <div class="theme-dropdown" ref="rootRef">
+  <div ref="rootRef" class="theme-dropdown">
     <button
       class="theme-dropdown__toggle"
-      @click.stop="toggle"
       :aria-label="t('theme.label')"
       :title="t('theme.label')"
+      :aria-expanded="isOpen"
+      aria-haspopup="true"
+      @click.stop="toggle"
     >
       <i :class="currentThemeIcon"></i>
       <i
@@ -13,8 +15,7 @@
         :class="{ 'theme-dropdown__arrow--open': isOpen }"
       ></i>
     </button>
-    <Transition name="dropdown">
-      <div v-show="isOpen" class="theme-dropdown__menu menu-surface">
+    <BasePopoverPanel :open="isOpen" panel-class="theme-dropdown__menu">
         <button
           v-for="theme in THEMES"
           :key="theme"
@@ -29,8 +30,7 @@
             class="bi bi-check2 theme-dropdown__item-check"
           ></i>
         </button>
-      </div>
-    </Transition>
+    </BasePopoverPanel>
   </div>
 </template>
 
@@ -38,6 +38,7 @@
 import { computed } from 'vue'
 import { useTheme } from '@/composables/useTheme'
 import { useDropdown } from '@/composables/useDropdown'
+import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
 
 const { t } = useI18n()
 const { currentTheme, applyTheme, THEMES } = useTheme()

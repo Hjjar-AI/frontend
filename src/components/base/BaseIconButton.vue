@@ -9,7 +9,9 @@
     :aria-label="label"
     :title="title || label"
     @click="$emit('click', $event)"
-  />
+  >
+    <template v-if="$slots.badge" #badge><slot name="badge" /></template>
+  </BaseButton>
 </template>
 
 <script setup>

@@ -14,14 +14,14 @@
   dropdown's children.
 -->
 <template>
-  <div class="navbar-dropdown" ref="rootRef">
+  <div ref="rootRef" class="navbar-dropdown">
     <button
       type="button"
       class="nav-link"
       :class="{ 'nav-link--active': isActive }"
-      @click.stop="toggle"
       :aria-expanded="isOpen"
       :aria-haspopup="true"
+      @click.stop="toggle"
     >
       <i :class="icon"></i>
       <span>{{ label }}</span>
@@ -30,20 +30,19 @@
         :class="{ 'navbar-dropdown__arrow--open': isOpen }"
       ></i>
     </button>
-    <Transition name="dropdown">
-      <div
-        v-show="isOpen"
-        class="navbar-dropdown__menu menu-surface"
+    <BasePopoverPanel
+        :open="isOpen"
+        panel-class="navbar-dropdown__menu"
         @click="handleChildClick"
       >
         <slot />
-      </div>
-    </Transition>
+    </BasePopoverPanel>
   </div>
 </template>
 
 <script setup>
 import { useDropdown } from '@/composables/useDropdown'
+import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
 
 defineProps({
   label: { type: String, required: true },

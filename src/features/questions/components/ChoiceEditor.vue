@@ -12,20 +12,19 @@
       <label class="choice-editor__radio">
 
         <BaseRadio
-          :value="index + 1"
           v-model="correctAnswer"
+          :value="index + 1"
           :label="t('questions.selectCorrect')"
         />
       </label>
-      <button
+      <BaseIconButton
         v-if="choices.length > 2"
-        type="button"
-        class="choice-editor__remove"
+        variant="danger"
+        size="small"
+        icon="bi bi-x"
+        :label="t('questions.removeChoice')"
         @click="removeChoice(index)"
-        :aria-label="t('questions.removeChoice')"
-      >
-        <i class="bi bi-x"></i>
-      </button>
+      />
     </div>
     <BaseButton
       v-if="choices.length < maxChoices"
@@ -44,6 +43,7 @@ import { useConfigStore } from '@/stores/configStore'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseRadio from '@/components/base/BaseRadio.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import { FALLBACK_MAX_CHOICES } from '@/utils/constants'
 
 

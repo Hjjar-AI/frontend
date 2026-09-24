@@ -18,26 +18,26 @@
             {{ t('common.back') }}
           </BaseButton>
         </template>
-      <div class="master-exam-drafts-toolbar">
-        <div class="master-exam-drafts-toolbar__search">
+      <ListToolbar :aria-label="t('masterExams.draftsTitle')">
+        <template #search>
           <BaseInput
             :model-value="searchInput"
-            @update:model-value="onSearchInput"
             :placeholder="t('masterExams.draftsSearchPlaceholder')"
+            @update:model-value="onSearchInput"
           />
-        </div>
-        <div class="master-exam-drafts-toolbar__usage">
-          <button :class="{ active: usage === '' }" @click="setUsage('')">
+        </template>
+        <template #filters>
+          <BaseChip interactive :active="usage === ''" @click="setUsage('')">
             {{ t('masterExams.draftsFilterAll') }}
-          </button>
-          <button :class="{ active: usage === 'orphan' }" @click="setUsage('orphan')">
+          </BaseChip>
+          <BaseChip interactive :active="usage === 'orphan'" @click="setUsage('orphan')">
             {{ t('masterExams.draftsFilterOrphan') }}
-          </button>
-          <button :class="{ active: usage === 'attached' }" @click="setUsage('attached')">
+          </BaseChip>
+          <BaseChip interactive :active="usage === 'attached'" @click="setUsage('attached')">
             {{ t('masterExams.draftsFilterAttached') }}
-          </button>
-        </div>
-      </div>
+          </BaseChip>
+        </template>
+      </ListToolbar>
 
       <ErrorBanner
         :error="masterExamStore.draftsError"
@@ -91,9 +91,13 @@
                 <BaseButton variant="secondary" size="small" @click="openEdit(draft)">
                   <i class="bi bi-pencil"></i> {{ t('masterExams.edit') }}
                 </BaseButton>
-                <BaseButton variant="danger" size="small" @click="handleDelete(draft)">
-                  <i class="bi bi-trash"></i>
-                </BaseButton>
+                <BaseIconButton
+                  icon="bi bi-trash"
+                  variant="danger"
+                  size="small"
+                  :label="t('common.delete')"
+                  @click="handleDelete(draft)"
+                />
               </div>
             </div>
           </div>
@@ -129,9 +133,12 @@ import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import ListToolbar from '@/components/common/ListToolbar.vue'
 import DraftQuestionForm from '../components/DraftQuestionForm.vue'
 import { useMasterExamStore } from '@/stores/masterExamStore'
 import { useCategoryStore } from '@/stores/categoryStore'

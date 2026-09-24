@@ -30,24 +30,21 @@
       />
 
       <span class="tag-actions">
-        <button
-          type="button"
-          class="btn-icon btn-icon--compact"
+        <BaseIconButton
+          icon="bi bi-pencil"
+          size="small"
           :title="t('admin.tags.rename')"
-          :aria-label="t('admin.tags.renameAria')"
+          :label="t('admin.tags.renameAria')"
           @click.stop="$emit('rename', node)"
-        >
-          <i class="bi bi-pencil"></i>
-        </button>
-        <button
-          type="button"
-          class="btn-icon btn-icon--compact text-danger"
+        />
+        <BaseIconButton
+          icon="bi bi-trash"
+          variant="danger"
+          size="small"
           :title="t('admin.tags.delete')"
-          :aria-label="t('admin.tags.deleteAria')"
+          :label="t('admin.tags.deleteAria')"
           @click.stop="$emit('delete', node)"
-        >
-          <i class="bi bi-trash"></i>
-        </button>
+        />
       </span>
     </div>
 
@@ -68,6 +65,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 
 const { t } = useI18n()
 

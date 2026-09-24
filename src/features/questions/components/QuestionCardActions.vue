@@ -83,10 +83,9 @@
           @click.stop="toggle"
         />
 
-        <Transition name="dropdown">
-          <div
-            v-show="isOpen"
-            class="question-card-actions__menu menu-surface"
+        <BasePopoverPanel
+            :open="isOpen"
+            panel-class="question-card-actions__menu"
             role="menu"
             @click.stop
           >
@@ -132,8 +131,7 @@
               <i class="bi bi-trash"></i>
               <span>{{ t('common.delete') }}</span>
             </button>
-          </div>
-        </Transition>
+        </BasePopoverPanel>
       </div>
     </div>
   </div>
@@ -146,6 +144,7 @@ import { useQuestionStore } from '@/stores/questionStore'
 import { useDropdown } from '@/composables/useDropdown'
 import { downloadBlob } from '@/utils/downloadFile'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
 
 const { t } = useI18n()
 

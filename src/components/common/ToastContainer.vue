@@ -16,13 +16,13 @@
       >
         <i class="toast__icon" :class="getToastIcon(toast.type)"></i>
         <span class="toast__message">{{ toast.message }}</span>
-        <button
-          class="btn-icon btn-icon--compact toast__close"
+        <BaseIconButton
+          class="toast__close"
+          icon="bi bi-x-lg"
+          size="small"
+          :label="t('a11y.closeNotification')"
           @click="toastStore.removeToast(toast.id)"
-          :aria-label="t('a11y.closeNotification')"
-        >
-          <i class="bi bi-x-lg"></i>
-        </button>
+        />
       </div>
     </TransitionGroup>
   </div>
@@ -30,6 +30,7 @@
 
 <script setup>
 import { useToastStore } from '@/stores/toastStore'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 
 const { t } = useI18n()
 const toastStore = useToastStore()

@@ -1,6 +1,6 @@
 <!-- frontend/src/components/base/BaseDropdown.vue -->
 <template>
-  <div class="base-dropdown" ref="rootRef">
+  <div ref="rootRef" class="base-dropdown">
     <button
       type="button"
       class="base-dropdown__toggle"
@@ -18,8 +18,7 @@
       ></i>
     </button>
 
-    <Transition name="dropdown">
-      <div v-show="isOpen" class="base-dropdown__menu menu-surface" role="listbox">
+    <BasePopoverPanel :open="isOpen" panel-class="base-dropdown__menu" role="listbox">
         <button
           v-for="opt in options"
           :key="String(opt.value)"
@@ -36,14 +35,14 @@
             class="bi bi-check2 base-dropdown__item-check"
           ></i>
         </button>
-      </div>
-    </Transition>
+    </BasePopoverPanel>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { useDropdown } from '@/composables/useDropdown'
+import BasePopoverPanel from './BasePopoverPanel.vue'
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: null },

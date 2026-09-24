@@ -13,7 +13,7 @@
         <span class="bottom-nav__label">{{ t(link.shortLabelKey || link.labelKey) }}</span>
       </router-link>
 
-      <button class="bottom-nav__item" @click="openSheet" :aria-label="t('nav.more')">
+      <button class="bottom-nav__item" :aria-label="t('nav.more')" @click="openSheet">
         <span class="bottom-nav__icon"><i class="bi bi-three-dots"></i></span>
         <span class="bottom-nav__label">{{ t('nav.more') }}</span>
         <span
@@ -24,12 +24,12 @@
     </div>
   </nav>
 
-  <Teleport to="body">
-    <Transition name="sheet">
-      <div v-if="showMore" class="sheet-overlay" @click.self="closeSheet">
-        <div class="sheet">
-          <div class="sheet__handle"></div>
-          <h4 class="sheet__title">{{ t('nav.more') }}</h4>
+  <BaseModal
+    :is-open="showMore"
+    :title="t('nav.more')"
+    size="lg"
+    @update:is-open="showMore = $event"
+  >
           <div class="sheet__grid">
             <router-link
               v-for="link in generalSheetLinks"
@@ -86,14 +86,12 @@
             </div>
           </template>
 
-          <div class="sheet__divider"></div>
-          <button class="sheet__logout" @click="handleLogout">
-            <i class="bi bi-box-arrow-right"></i> {{ t('nav.logout') }}
-          </button>
-        </div>
-      </div>
-    </Transition>
-  </Teleport>
+    <template #footer>
+      <BaseButton variant="danger" icon="bi bi-box-arrow-right" @click="handleLogout">
+        {{ t('nav.logout') }}
+      </BaseButton>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup>
@@ -101,9 +99,10 @@ import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { useMasterExamStore } from '@/stores/masterExamStore'
-import { useFocusReturn } from '@/composables/useFocusReturn'
 import { ADMIN_LINKS } from '@/constants/adminLinks'
 import { navigationLinksFor, isNavigationLinkActive } from '@/constants/navigationLinks'
+import BaseModal from '@/components/base/BaseModal.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -111,7 +110,6 @@ const route = useRoute()
 const authStore = useAuthStore()
 const masterExamStore = useMasterExamStore()
 const showMore = ref(false)
-const { storeFocus, restoreFocus } = useFocusReturn()
 
 const canUseLink = link => !link.capability || authStore.can(link.capability)
 const bottomLinks = computed(() => navigationLinksFor('bottomNav').filter(canUseLink))
@@ -127,13 +125,11 @@ const visibleAdminLinks = computed(() =>
 )
 
 function openSheet() {
-  storeFocus()
   showMore.value = true
 }
 
 function closeSheet() {
   showMore.value = false
-  restoreFocus()
 }
 
 async function handleLogout() {

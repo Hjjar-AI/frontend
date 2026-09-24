@@ -1,18 +1,20 @@
 <!-- frontend/src/components/layout/NotificationBell.vue -->
 <template>
-  <button
+  <BaseIconButton
     class="notification-bell"
-    :aria-label="t('a11y.notifications')"
+    icon="bi bi-bell"
+    :label="t('a11y.notifications')"
     @click="$emit('click')"
-    @keydown.enter="$emit('click')"
-    @keydown.space.prevent="$emit('click')"
   >
-    <i class="bi bi-bell"></i>
-    <span v-if="count > 0" class="notification-bell__badge">{{ count > 9 ? '9+' : count }}</span>
-  </button>
+    <template #badge>
+      <span v-if="count > 0" class="notification-bell__badge">{{ count > 9 ? '9+' : count }}</span>
+    </template>
+  </BaseIconButton>
 </template>
 
 <script setup>
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+
 const { t } = useI18n()
 
 defineProps({

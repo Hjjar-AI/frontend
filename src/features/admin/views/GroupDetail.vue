@@ -31,7 +31,7 @@
           <BaseCheckbox v-model="editForm.is_active" :label="t('admin.groups.editActive')" />
         </FormGrid>
         <div class="form-actions">
-          <BaseButton variant="primary" @click="saveGroup" :loading="groupStore.isLoading">
+          <BaseButton variant="primary" :loading="groupStore.isLoading" @click="saveGroup">
             <i class="bi bi-check-lg"></i> {{ t('admin.groups.editSave') }}
           </BaseButton>
         </div>
@@ -66,14 +66,12 @@
             <span v-if="member.current_streak > 0" class="group-member-row__streak">
               🔥 {{ member.current_streak }}
             </span>
-            <button
-              class="btn-icon text-danger"
+            <BaseIconButton
+              icon="bi bi-x-lg"
+              variant="danger"
+              :label="t('admin.groups.removeMemberAria')"
               @click="removeMember(member)"
-              :aria-label="t('admin.groups.removeMemberAria')"
-              :title="t('admin.groups.removeMemberAria')"
-            >
-              <i class="bi bi-x-lg"></i>
-            </button>
+            />
           </div>
         </div>
         <BaseEmptyState
@@ -147,6 +145,7 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import { useGroupStore } from '@/stores/groupStore'

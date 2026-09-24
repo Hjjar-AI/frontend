@@ -38,25 +38,26 @@ let savedHtmlPaddingRight = null
         @click.self="handleBackdrop"
       >
         <div
+          ref="modalRef"
           class="base-modal"
           :class="[`base-modal--${size}`]"
           :role="role"
           :aria-modal="true"
           :aria-labelledby="titleId"
-          ref="modalRef"
           @keydown="handleKeydown"
         >
           <header class="base-modal__header">
             <h2 :id="titleId" class="base-modal__title">
               <slot name="title">{{ title }}</slot>
             </h2>
-            <button
+            <BaseIconButton
               class="base-modal__close"
+              icon="bi bi-x"
+              variant="ghost"
+              size="small"
+              :label="t('ui.closeDialog')"
               @click="close"
-              :aria-label="t('ui.closeDialog')"
-            >
-              <i class="bi bi-x"></i>
-            </button>
+            />
           </header>
           <div class="base-modal__body">
             <slot />
@@ -73,13 +74,14 @@ let savedHtmlPaddingRight = null
 <script setup>
 import { ref, watch, onUnmounted, nextTick } from 'vue'
 import { useModalStack } from '@/composables/useModalStack'
+import BaseIconButton from './BaseIconButton.vue'
 
 const { t } = useI18n()
 
 const props = defineProps({
   isOpen: { type: Boolean, default: false },
   title: { type: String, default: '' },
-  size: { type: String, default: 'md', validator: (v) => ['sm', 'md', 'lg'].includes(v) },
+  size: { type: String, default: 'md', validator: (v) => ['sm', 'md', 'lg', 'xl'].includes(v) },
   role: { type: String, default: 'dialog' },
   staticBackdrop: { type: Boolean, default: false },
   dismissable: { type: Boolean, default: true },

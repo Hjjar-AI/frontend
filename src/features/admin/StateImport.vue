@@ -18,18 +18,16 @@
 
     <fieldset class="state-import__mode">
       <legend>{{ t('admin.import.stateModeLabel') }}</legend>
-      <label class="state-import__mode-option">
-        <input type="radio" value="merge" v-model="mode" />
+      <BaseRadio v-model="mode" name="state-import-mode" value="merge" class="state-import__mode-option">
         <span>
           <strong>{{ t('admin.import.stateModeMerge') }}</strong>
         </span>
-      </label>
-      <label class="state-import__mode-option">
-        <input type="radio" value="replace" v-model="mode" />
+      </BaseRadio>
+      <BaseRadio v-model="mode" name="state-import-mode" value="replace" class="state-import__mode-option">
         <span>
           <strong>{{ t('admin.import.stateModeReplace') }}</strong>
         </span>
-      </label>
+      </BaseRadio>
       <p v-if="mode === 'replace'" class="state-import__warning">
         <i class="bi bi-exclamation-triangle"></i>
         {{ t('admin.import.stateReplaceWarning') }}
@@ -38,18 +36,15 @@
 
     <fieldset class="state-import__mode">
       <legend>{{ t('admin.import.conflictStrategyLabel') }}</legend>
-      <label class="state-import__mode-option">
-        <input v-model="conflictStrategy" type="radio" value="keep_local" />
+      <BaseRadio v-model="conflictStrategy" name="state-conflict-mode" value="keep_local" class="state-import__mode-option">
         <span><strong>{{ t('admin.import.conflictKeepLocal') }}</strong></span>
-      </label>
-      <label class="state-import__mode-option">
-        <input v-model="conflictStrategy" type="radio" value="use_imported" />
+      </BaseRadio>
+      <BaseRadio v-model="conflictStrategy" name="state-conflict-mode" value="use_imported" class="state-import__mode-option">
         <span><strong>{{ t('admin.import.conflictUseImported') }}</strong></span>
-      </label>
-      <label class="state-import__mode-option">
-        <input v-model="conflictStrategy" type="radio" value="review" />
+      </BaseRadio>
+      <BaseRadio v-model="conflictStrategy" name="state-conflict-mode" value="review" class="state-import__mode-option">
         <span><strong>{{ t('admin.import.conflictReviewManually') }}</strong></span>
-      </label>
+      </BaseRadio>
     </fieldset>
 
     <div class="state-import__actions">
@@ -137,6 +132,7 @@ import { useDialog } from '@/composables/useDialog'
 import { useAdminDatabaseStore } from '@/stores/adminDatabaseStore'
 import { useUserStore } from '@/stores/userStore'
 import DropZone from '@/components/common/DropZone.vue'
+import BaseRadio from '@/components/base/BaseRadio.vue'
 import AuthorMappingModal from './components/AuthorMappingModal.vue'
 import ConflictResolutionModal from './components/ConflictResolutionModal.vue'
 

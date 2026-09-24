@@ -52,7 +52,7 @@
         @retry="() => fetchHistory(currentPage)"
       >
         <template #default="{ items }">
-          <BaseTableShell sticky max-height="70vh" striped>
+          <BaseTableShell mobile-mode="cards" :aria-label="t('history.title')" sticky max-height="70vh" striped>
             <table class="table-shared">
               <thead>
                 <tr>
@@ -68,21 +68,21 @@
               </thead>
               <tbody>
                 <tr v-for="item in items" :key="item.id">
-                  <td v-if="mode === 'all'">
+                  <td v-if="mode === 'all'" :data-label="t('admin.history.colUser')">
                     {{ item.full_name || item.username || t('common.noData') }}
                   </td>
-                  <td>{{ formatDate(item.completed_at) }}</td>
-                  <td>
+                  <td :data-label="t('history.colDate')">{{ formatDate(item.completed_at) }}</td>
+                  <td :data-label="t('history.colType')">
                     <BaseBadge variant="info">{{ modeLabel(item.mode) }}</BaseBadge>
                   </td>
-                  <td>{{ item.tag || '—' }}</td>
-                  <td>{{ item.correct_count }} / {{ item.total_questions }}</td>
-                  <td>
+                  <td :data-label="t('history.colTag')">{{ item.tag || '—' }}</td>
+                  <td :data-label="t('history.colScore')">{{ item.correct_count }} / {{ item.total_questions }}</td>
+                  <td :data-label="t('history.colAccuracy')">
                     <span :class="accuracyClass(item.accuracy)">
                       {{ item.accuracy.toFixed(1) }}%
                     </span>
                   </td>
-                  <td>{{ formatTime(item.time_spent) }}</td>
+                  <td :data-label="t('history.colTime')">{{ formatTime(item.time_spent) }}</td>
                 </tr>
               </tbody>
             </table>

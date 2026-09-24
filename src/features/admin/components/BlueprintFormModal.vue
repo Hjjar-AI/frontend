@@ -29,12 +29,14 @@
           <i class="bi bi-folder2" :style="{ color: cat.color }"></i>
           {{ cat.name }}
         </span>
-        <input
+        <BaseInput
           type="number"
-          min="0"
-          step="0.1"
-          v-model.number="form.weights[cat.id]"
-          class="form-control form-control--compact weight-editor__input"
+          :min="0"
+          :step="0.1"
+          :model-value="form.weights[cat.id]"
+          class="weight-editor__input"
+          :aria-label="`${cat.name} ${t('admin.blueprints.weightLabel')}`"
+          @update:model-value="form.weights[cat.id] = Number($event)"
         />
         <span class="text-muted weight-editor__label">{{ t('admin.blueprints.weightLabel') }}</span>
       </div>

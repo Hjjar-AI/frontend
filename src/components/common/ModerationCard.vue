@@ -14,9 +14,13 @@
       </div>
       <div class="moderation-card__actions">
         <slot name="actions" />
-        <button v-if="showSelect" class="btn-icon" :class="{ 'btn-icon--active': selected }" @click="$emit('toggle-select')">
-          <i :class="selected ? 'bi bi-check-square' : 'bi bi-square'"></i>
-        </button>
+        <BaseIconButton
+          v-if="showSelect"
+          :class="{ 'base-button--active': selected }"
+          :icon="selected ? 'bi bi-check-square' : 'bi bi-square'"
+          :label="selected ? t('ui.deselectItem') : t('ui.selectItem')"
+          @click="$emit('toggle-select')"
+        />
       </div>
     </div>
     <div class="moderation-card__meta">
@@ -30,6 +34,9 @@
 
 <script setup>
 import BaseCard from '@/components/base/BaseCard.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+
+const { t } = useI18n()
 
 defineProps({
   icon: { type: String, default: '' },

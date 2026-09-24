@@ -20,12 +20,12 @@
   `canViewAll` check inside the view.
 -->
 <template>
-  <div class="navbar__user" ref="rootRef">
+  <div ref="rootRef" class="navbar__user">
     <button
       class="navbar__user-btn"
-      @click.stop="toggle"
       :aria-expanded="isOpen"
       :aria-label="t('nav.userMenu')"
+      @click.stop="toggle"
     >
       <span class="navbar__avatar">{{ avatarInitial }}</span>
       <i
@@ -34,10 +34,9 @@
       ></i>
     </button>
 
-    <Transition name="dropdown">
-      <div
-        v-show="isOpen"
-        class="navbar__user-menu menu-surface"
+    <BasePopoverPanel
+        :open="isOpen"
+        panel-class="navbar__user-menu"
         @click="handleChildClick"
       >
         <div class="navbar__user-info">
@@ -84,8 +83,7 @@
         <button class="nav-link nav-link--danger" @click="handleLogout">
           <i class="bi bi-box-arrow-right"></i> {{ t('nav.logout') }}
         </button>
-      </div>
-    </Transition>
+    </BasePopoverPanel>
   </div>
 </template>
 
@@ -95,6 +93,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { useDropdown } from '@/composables/useDropdown'
 import { roleLabelFor } from '@/utils/roleDisplay'
+import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
 
 const { t } = useI18n()
 const router = useRouter()

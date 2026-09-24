@@ -1,8 +1,12 @@
 <!-- frontend/src/features/questions/components/TagInput.vue -->
 <template>
-  <div class="form-group tag-input">
-    <label for="q-tags">{{ t('questions.tagsLabel') }}</label>
-
+  <BaseField
+    id="q-tags"
+    class="tag-input"
+    :label="t('questions.tagsLabel')"
+    :current-length="tagChars"
+    :max-length="200"
+  >
     <div v-if="recentTags.length" class="tag-input__recent">
       <span class="tag-input__recent-label">{{ t('questions.recentLabel') }}</span>
       <span v-for="tag in recentTags" :key="tag" class="chip" @click="appendTag(tag)">{{
@@ -41,8 +45,7 @@
         </div>
       </Transition>
     </div>
-    <small class="text-muted">{{ tagChars }}/200</small>
-  </div>
+  </BaseField>
 </template>
 
 <script setup>
@@ -50,6 +53,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRecentItems } from '@/composables/useRecentItems'
 import { useDebounceFn } from '@/composables/useDebounceFn'
 import { useTagStore } from '@/stores/tagStore'
+import BaseField from '@/components/base/BaseField.vue'
 
 const { t } = useI18n()
 

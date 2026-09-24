@@ -73,7 +73,7 @@
           empty-icon="bi-people"
         >
           <template #default="{ items }">
-            <BaseTableShell sticky max-height="600px" striped>
+            <BaseTableShell mobile-mode="columns" :aria-label="t('masterExams.resultsParticipants')" sticky max-height="600px" striped>
               <table class="table-shared master-exam-results__table">
                 <thead>
                   <tr>
@@ -81,8 +81,8 @@
                     <th>{{ t('masterExams.resultsColScore') }}</th>
                     <th>{{ t('masterExams.resultsColAccuracy') }}</th>
                     <th>{{ t('masterExams.resultsColWeighted') }}</th>
-                    <th>{{ t('masterExams.resultsColStarted') }}</th>
-                    <th>{{ t('masterExams.resultsColFinished') }}</th>
+                    <th data-priority="medium">{{ t('masterExams.resultsColStarted') }}</th>
+                    <th data-priority="low">{{ t('masterExams.resultsColFinished') }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -105,8 +105,8 @@
                     <td class="numeric">
                       {{ row.is_complete ? `${row.weighted_score}%` : '—' }}
                     </td>
-                    <td>{{ formatDateTime(row.started_at) }}</td>
-                    <td>{{ row.finished_at ? formatDateTime(row.finished_at) : '—' }}</td>
+                    <td data-priority="medium">{{ formatDateTime(row.started_at) }}</td>
+                    <td data-priority="low">{{ row.finished_at ? formatDateTime(row.finished_at) : '—' }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -118,16 +118,16 @@
       <!-- Per-question table -->
       <BaseCard v-if="results && results.per_question && results.per_question.length">
         <CardHeader :title="t('masterExams.resultsDistribution')" icon="bi bi-list-ol" />
-        <BaseTableShell sticky max-height="600px" striped>
+        <BaseTableShell mobile-mode="columns" :aria-label="t('masterExams.resultsDistribution')" sticky max-height="600px" striped>
           <table class="table-shared master-exam-results__table">
             <thead>
               <tr>
                 <th>#</th>
                 <th>{{ t('masterExams.resultsColQuestion') }}</th>
-                <th>{{ t('masterExams.resultsColAnswered') }}</th>
-                <th>{{ t('masterExams.resultsColCorrect') }}</th>
+                <th data-priority="medium">{{ t('masterExams.resultsColAnswered') }}</th>
+                <th data-priority="medium">{{ t('masterExams.resultsColCorrect') }}</th>
                 <th>{{ t('masterExams.resultsColPercent') }}</th>
-                <th>{{ t('masterExams.resultsDistribution') }}</th>
+                <th data-priority="low">{{ t('masterExams.resultsDistribution') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -136,10 +136,10 @@
                 <td class="master-exam-results__question-text">
                   {{ row.question_text }}
                 </td>
-                <td class="numeric">{{ row.answered_count }}</td>
-                <td class="numeric">{{ row.correct_count }}</td>
+                <td class="numeric" data-priority="medium">{{ row.answered_count }}</td>
+                <td class="numeric" data-priority="medium">{{ row.correct_count }}</td>
                 <td class="numeric">{{ row.correct_rate }}%</td>
-                <td>
+                <td data-priority="low">
                   <div class="master-exam-distribution">
                     <div
                       v-for="segment in distributionSegments(row)"

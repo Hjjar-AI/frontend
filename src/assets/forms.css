@@ -47,6 +47,24 @@
   margin-top: var(--space-lg);
 }
 
+/* Shared field composition: every text input, select, and textarea uses
+   this label/control/feedback rhythm. */
+.base-field { display: flex; flex-direction: column; gap: var(--space-xs); width: 100%; min-width: 0; }
+.base-field__label-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); }
+.base-field__label { color: var(--color-text-secondary); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); }
+.base-field__required { color: var(--color-danger); margin-inline-start: var(--space-2xs); }
+.base-field__optional { color: var(--color-text-muted); font-size: var(--font-size-xs); font-weight: var(--font-weight-normal); margin-inline-start: var(--space-xs); }
+.base-field__control { min-width: 0; }
+.base-field__feedback { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-sm); min-height: 1.25rem; font-size: var(--font-size-xs); }
+.base-field__hint { color: var(--color-text-muted); }
+.base-field__error { color: var(--color-danger); }
+.base-field__count { margin-inline-start: auto; color: var(--color-text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.base-field__count--limit { color: var(--color-danger); }
+.base-field--disabled { opacity: var(--opacity-disabled); }
+.base-field--error :where(.form-control, .base-select__field) { border-color: var(--color-danger); }
+.base-field--error :where(.form-control, .base-select__field):focus { box-shadow: 0 0 0 var(--focus-ring-width) color-mix(in srgb, var(--color-danger) 20%, transparent); }
+.base-textarea__field { resize: vertical; min-block-size: calc(var(--control-height) * 2); line-height: var(--line-height-body); }
+
 @media (max-width: 640px) {
   .form-actions > .base-button { flex: 1 1 10rem; }
 }

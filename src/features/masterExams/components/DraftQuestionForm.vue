@@ -1,16 +1,12 @@
 <template>
   <form class="master-exam-draft-form" @submit.prevent="$emit('submit')">
-    <BaseField v-slot="{ id }" :label="t('masterExams.questionTextLabel')">
-      <textarea
-        :id="id"
-        v-model="form.question"
-        class="form-control"
-        rows="3"
-        maxlength="3000"
-        dir="auto"
-        required
-      ></textarea>
-    </BaseField>
+    <BaseTextarea
+      v-model="form.question"
+      :label="t('masterExams.questionTextLabel')"
+      :rows="3"
+      :maxlength="3000"
+      required
+    />
 
     <div class="form-group">
       <label>{{ t('masterExams.choicesLabel') }}</label>
@@ -22,31 +18,26 @@
         <span class="master-exam-question-row__index draft-choice-index">
           {{ index + 1 }}
         </span>
-        <input
+        <BaseInput
           v-model="form.choices[index]"
-          class="form-control"
-          maxlength="300"
-          dir="auto"
+          :maxlength="300"
+          show-count
           :placeholder="t('masterExams.choiceN', { n: index + 1 })"
         />
-        <button
-          type="button"
-          class="btn-icon text-danger"
+        <BaseIconButton
+          variant="danger"
+          size="small"
+          icon="bi bi-x"
           :disabled="form.choices.length <= 2"
-          :aria-label="t('masterExams.removeChoiceAria')"
+          :label="t('masterExams.removeChoiceAria')"
           @click="removeChoice(index)"
-        >
-          <i class="bi bi-x"></i>
-        </button>
-        <label class="d-flex align-center gap-1 draft-correct-label">
-          <input
-            v-model.number="form.correct_answer"
-            type="radio"
-            :name="correctAnswerName"
-            :value="index + 1"
-          />
-          {{ t('masterExams.correctLabel') }}
-        </label>
+        />
+        <BaseRadio
+          v-model="form.correct_answer"
+          :name="correctAnswerName"
+          :value="index + 1"
+          :label="t('masterExams.correctLabel')"
+        />
       </div>
       <BaseButton
         v-if="form.choices.length < maxChoices"
@@ -60,58 +51,50 @@
     </div>
 
     <FormGrid>
-      <BaseField v-slot="{ id }" :label="t('questions.explanationLabel')">
-        <textarea
-          :id="id"
-          v-model="form.explanation"
-          class="form-control"
-          rows="2"
-          dir="auto"
-        ></textarea>
-      </BaseField>
-      <BaseField v-slot="{ id }" :label="t('questions.sourceLabel')">
-        <input :id="id" v-model="form.source" class="form-control" maxlength="200" />
-      </BaseField>
+      <BaseTextarea
+        v-model="form.explanation"
+        :label="t('questions.explanationLabel')"
+        :rows="2"
+        :maxlength="3000"
+      />
+      <BaseInput
+        v-model="form.source"
+        :label="t('questions.sourceLabel')"
+        :maxlength="200"
+        show-count
+      />
     </FormGrid>
 
     <FormGrid>
-      <BaseField v-slot="{ id }" :label="t('questions.difficultyLabel')">
-        <select :id="id" v-model="form.difficulty" class="form-control">
-          <option v-for="option in DIFFICULTY_OPTIONS" :key="option.value" :value="option.value">
-            {{ t(option.labelKey) }}
-          </option>
-        </select>
-      </BaseField>
-      <BaseField v-slot="{ id }" :label="t('questions.categoryLabel')">
-        <select :id="id" v-model="form.category" class="form-control">
-          <option :value="null">{{ t('questions.noCategory') }}</option>
-          <option v-for="category in categories" :key="category.id" :value="category.id">
-            {{ category.name }}
-          </option>
-        </select>
-      </BaseField>
+      <BaseSelect
+        v-model="form.difficulty"
+        :label="t('questions.difficultyLabel')"
+        :options="difficultyOptions"
+      />
+      <BaseSelect
+        v-model="form.category"
+        :label="t('questions.categoryLabel')"
+        :options="categoryOptions"
+        :placeholder="t('questions.noCategory')"
+      />
     </FormGrid>
 
-    <BaseField
-      v-slot="{ id, describedBy }"
-      :label="t('questions.caseKeyLabel')"
-      :hint="t('questions.caseKeyHint')"
-    >
-      <input
-        :id="id"
-        v-model.trim="form.case_key"
-        :aria-describedby="describedBy"
-        class="form-control"
+    <div>
+      <BaseInput
+        :model-value="form.case_key"
+        :label="t('questions.caseKeyLabel')"
+        :hint="t('questions.caseKeyHint')"
         :list="caseListId"
-        maxlength="64"
+        :maxlength="64"
         :placeholder="t('questions.caseKeyPlaceholder')"
+        @update:model-value="form.case_key = $event.trim()"
       />
       <datalist :id="caseListId">
         <option v-for="item in cases" :key="item.key" :value="item.key">
           {{ item.title || item.key }}
         </option>
       </datalist>
-    </BaseField>
+    </div>
 
     <div class="form-actions">
       <BaseButton type="button" variant="secondary" @click="$emit('cancel')">
@@ -126,7 +109,11 @@
 
 <script setup>
 import BaseButton from '@/components/base/BaseButton.vue'
-import BaseField from '@/components/base/BaseField.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import BaseRadio from '@/components/base/BaseRadio.vue'
+import BaseSelect from '@/components/base/BaseSelect.vue'
+import BaseTextarea from '@/components/base/BaseTextarea.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import { DIFFICULTY_OPTIONS, FALLBACK_MAX_CHOICES } from '@/utils/constants'
 
@@ -146,7 +133,7 @@ const form = defineModel({
   }),
 })
 
-defineProps({
+const props = defineProps({
   categories: { type: Array, default: () => [] },
   cases: { type: Array, default: () => [] },
   loading: { type: Boolean, default: false },
@@ -155,6 +142,15 @@ defineProps({
   correctAnswerName: { type: String, default: 'draft-correct-answer' },
   maxChoices: { type: Number, default: FALLBACK_MAX_CHOICES },
 })
+
+const difficultyOptions = computed(() => DIFFICULTY_OPTIONS.map(option => ({
+  value: option.value,
+  label: t(option.labelKey),
+})))
+const categoryOptions = computed(() => props.categories.map(category => ({
+  value: category.id,
+  label: category.name,
+})))
 
 defineEmits(['submit', 'cancel'])
 

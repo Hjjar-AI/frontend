@@ -4,6 +4,63 @@
 .page--wide { max-width: var(--content-wide); margin-inline: auto; }
 .page--form { max-width: var(--content-form); margin-inline: auto; }
 
+/* Shared composition primitives. Set --layout-gap at the call site when a
+   one-off density is needed instead of rebuilding flex spacing per feature. */
+.ui-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-gap, var(--space-md));
+}
+.ui-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--layout-gap, var(--space-sm));
+}
+.ui-cluster {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--layout-gap, var(--space-sm));
+}
+.ui-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min, 14rem), 1fr));
+  gap: var(--layout-gap, var(--space-md));
+}
+.ui-stack--xs, .ui-inline--xs, .ui-cluster--xs, .ui-grid--xs { --layout-gap: var(--space-xs); }
+.ui-stack--lg, .ui-inline--lg, .ui-cluster--lg, .ui-grid--lg { --layout-gap: var(--space-lg); }
+
+.list-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-block-end: var(--space-md);
+  padding: var(--space-md);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-alt);
+  box-shadow: var(--shadow-sm);
+}
+.list-toolbar__header:empty { display: none; }
+.list-toolbar__summary { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.list-toolbar__actions { margin-inline-start: auto; }
+.list-toolbar__count {
+  min-width: 1.2rem;
+  padding-inline: var(--space-2xs);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+}
+.list-toolbar__controls { align-items: stretch; }
+.list-toolbar__search { flex: 1 1 16rem; min-width: min(100%, 13rem); }
+.list-toolbar__filters { flex: 3 1 28rem; align-items: stretch; }
+.list-toolbar__filters > * { flex: 1 1 9rem; min-width: 8rem; }
+.list-toolbar__filters > .base-chip { flex: 0 0 auto; min-width: 0; }
+.list-toolbar__chips { padding-block-start: var(--space-xs); border-top: var(--border-width) solid var(--color-border); }
+
 .page-shell {
   width: 100%;
   margin-inline: auto;
@@ -95,4 +152,12 @@
     width: 100%;
     margin-inline-start: 0;
   }
+  .list-toolbar { padding: var(--space-sm); }
+  .list-toolbar__header > .base-button:first-child { flex: 1; }
+  .list-toolbar__actions { margin-inline-start: 0; }
+  .list-toolbar__controls,
+  .list-toolbar__filters { align-items: stretch; }
+  .list-toolbar__search,
+  .list-toolbar__filters,
+  .list-toolbar__filters > * { flex-basis: 100%; width: 100%; }
 }

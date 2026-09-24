@@ -108,47 +108,33 @@
                 </div>
               </div>
               <div class="user-card__actions">
-                <button
-                  class="btn-icon icon-button"
+                <BaseIconButton
+                  icon="bi bi-pencil"
+                  :label="t('common.edit')"
                   @click="userFormModalRef?.open(user)"
-                  :title="t('common.edit')"
-                  :aria-label="t('common.edit')"
-                >
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button
+                />
+                <BaseIconButton
                   v-if="authStore.can('admin.permissions')"
-                  class="btn-icon icon-button"
+                  icon="bi bi-shield-check"
+                  :label="t('admin.users.permissionsButton')"
                   @click="router.push({ path: '/admin/permissions', query: { user: user.id } })"
-                  :title="t('admin.users.permissionsButton')"
-                  :aria-label="t('admin.users.permissionsButton')"
-                >
-                  <i class="bi bi-shield-check"></i>
-                </button>
-                <button
-                  class="btn-icon icon-button"
+                />
+                <BaseIconButton
+                  icon="bi bi-key"
+                  :label="t('admin.users.resetTitle')"
                   @click="openResetPassword(user)"
-                  :title="t('admin.users.resetTitle')"
-                  :aria-label="t('admin.users.resetTitle')"
-                >
-                  <i class="bi bi-key"></i>
-                </button>
-                <button
-                  class="btn-icon icon-button"
+                />
+                <BaseIconButton
+                  :icon="user.is_active ? 'bi bi-toggle-off' : 'bi bi-toggle-on'"
+                  :label="user.is_active ? t('admin.users.bulkDeactivate') : t('admin.users.bulkActivate')"
                   @click="confirmToggle(user)"
-                  :title="user.is_active ? t('admin.users.bulkDeactivate') : t('admin.users.bulkActivate')"
-                  :aria-label="user.is_active ? t('admin.users.bulkDeactivate') : t('admin.users.bulkActivate')"
-                >
-                  <i :class="user.is_active ? 'bi bi-toggle-off' : 'bi bi-toggle-on'"></i>
-                </button>
-                <button
-                  class="btn-icon text-danger icon-button"
+                />
+                <BaseIconButton
+                  icon="bi bi-trash"
+                  variant="danger"
+                  :label="t('common.delete')"
                   @click="confirmDelete(user)"
-                  :title="t('common.delete')"
-                  :aria-label="t('common.delete')"
-                >
-                  <i class="bi bi-trash"></i>
-                </button>
+                />
               </div>
             </BaseCard>
           </div>
@@ -224,6 +210,7 @@ import BaseInput from '@/components/base/BaseInput.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import BulkActions from '@/components/common/BulkActions.vue'
 import UserFormModal from '../components/UserFormModal.vue'

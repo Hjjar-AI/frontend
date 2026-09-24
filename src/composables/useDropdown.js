@@ -91,15 +91,44 @@ export function useDropdown(options = {}) {
   function handleKeydown(event) {
     if (event.key === 'Escape' && isOpen.value) {
       close()
+      return
+    }
+
+    if (!isOpen.value || !['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
+      return
+    }
+
+    const panel = rootRef.value?.querySelector('.menu-surface')
+    if (!panel) return
+    const items = Array.from(panel.querySelectorAll(
+      'button:not(:disabled), a[href], [role="option"]:not([aria-disabled="true"]), [tabindex]:not([tabindex="-1"])'
+    )).filter(item => item.offsetParent !== null)
+    if (items.length === 0) return
+
+    event.preventDefault()
+    const current = items.indexOf(document.activeElement)
+    let next = 0
+    if (event.key === 'End') next = items.length - 1
+    else if (event.key === 'ArrowUp') next = current <= 0 ? items.length - 1 : current - 1
+    else if (event.key === 'ArrowDown') next = current >= items.length - 1 ? 0 : current + 1
+    items[next].focus()
+  }
+
+  function handleFocusIn(event) {
+    if (isOpen.value && rootRef.value && !rootRef.value.contains(event.target)) {
+      openDropdownId.value = null
+      if (onClose) onClose()
     }
   }
 
   onMounted(() => {
     document.addEventListener('keydown', handleKeydown)
+    document.addEventListener('focusin', handleFocusIn)
   })
 
   onBeforeUnmount(() => {
     document.removeEventListener('keydown', handleKeydown)
+    document.removeEventListener('focusin', handleFocusIn)
     // Release the shared slot if this component owned it. Without
     // this, unmounting an open dropdown would leave `openDropdownId`
     // pointing at a dead instance and block every other dropdown

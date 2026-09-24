@@ -64,16 +64,12 @@
           alongside the control. Both are optional but here every
           field has a hint or a label, so both are used.
         -->
-        <BaseField v-slot="{ id, describedBy }" :label="t('masterExams.instructions')">
-          <textarea
-            :id="id"
-            :aria-describedby="describedBy"
-            v-model="form.instructions"
-            class="form-control"
-            rows="3"
-            :disabled="isFrozen"
-          ></textarea>
-        </BaseField>
+        <BaseTextarea
+          v-model="form.instructions"
+          :label="t('masterExams.instructions')"
+          :rows="3"
+          :disabled="isFrozen"
+        />
       </BaseCard>
 
       <BaseCard>
@@ -82,24 +78,18 @@
           {{ t('masterExams.sectionSchedule') }}
         </h3>
         <FormGrid>
-          <BaseField v-slot="{ id }" :label="t('masterExams.opensAt')">
-            <input
-              :id="id"
-              type="datetime-local"
-              v-model="form.opens_at_local"
-              class="form-control"
-              :disabled="isFrozen"
-            />
-          </BaseField>
-          <BaseField v-slot="{ id }" :label="t('masterExams.closesAt')">
-            <input
-              :id="id"
-              type="datetime-local"
-              v-model="form.closes_at_local"
-              class="form-control"
-              :disabled="isFrozen"
-            />
-          </BaseField>
+          <BaseInput
+            v-model="form.opens_at_local"
+            type="datetime-local"
+            :label="t('masterExams.opensAt')"
+            :disabled="isFrozen"
+          />
+          <BaseInput
+            v-model="form.closes_at_local"
+            type="datetime-local"
+            :label="t('masterExams.closesAt')"
+            :disabled="isFrozen"
+          />
           <BaseInput
             v-model.number="form.duration_minutes"
             type="number"
@@ -128,45 +118,27 @@
             :disabled="isFrozen"
           />
         </FormGrid>
-        <BaseField v-slot="{ id }" :label="t('masterExams.audienceGroups')">
-          <select
-            :id="id"
-            v-model="form.audience_group_ids"
-            class="form-control"
-            multiple
-            :disabled="isFrozen"
-          >
-            <option v-for="g in availableGroups" :key="g.id" :value="g.id">
-              {{ g.name }} ({{ g.member_count }})
-            </option>
-          </select>
-        </BaseField>
-        <BaseField v-slot="{ id }" :label="t('masterExams.audienceUsers')">
-          <select
-            :id="id"
-            v-model="form.audience_user_ids"
-            class="form-control"
-            multiple
-            :disabled="isFrozen"
-          >
-            <option v-for="u in availableUsers" :key="u.id" :value="u.id">
-              {{ u.full_name || u.username }}
-            </option>
-          </select>
-        </BaseField>
-        <BaseField v-slot="{ id }" :label="t('masterExams.coAttendings')">
-          <select
-            :id="id"
-            v-model="form.co_attending_ids"
-            class="form-control"
-            multiple
-            :disabled="isFrozen"
-          >
-            <option v-for="u in availableAttendings" :key="u.id" :value="u.id">
-              {{ u.full_name || u.username }}
-            </option>
-          </select>
-        </BaseField>
+        <BaseSelect
+          v-model="form.audience_group_ids"
+          :label="t('masterExams.audienceGroups')"
+          :options="audienceGroupOptions"
+          multiple
+          :disabled="isFrozen"
+        />
+        <BaseSelect
+          v-model="form.audience_user_ids"
+          :label="t('masterExams.audienceUsers')"
+          :options="audienceUserOptions"
+          multiple
+          :disabled="isFrozen"
+        />
+        <BaseSelect
+          v-model="form.co_attending_ids"
+          :label="t('masterExams.coAttendings')"
+          :options="attendingOptions"
+          multiple
+          :disabled="isFrozen"
+        />
       </BaseCard>
 
       <BaseCard>
@@ -229,16 +201,16 @@
               <button
                 type="button"
                 :disabled="idx === 0 || isFrozen"
-                @click="moveUp(idx)"
                 :aria-label="t('masterExams.moveUpAria')"
+                @click="moveUp(idx)"
               >
                 <i class="bi bi-chevron-up"></i>
               </button>
               <button
                 type="button"
                 :disabled="idx === form.question_ids.length - 1 || isFrozen"
-                @click="moveDown(idx)"
                 :aria-label="t('masterExams.moveDownAria')"
+                @click="moveDown(idx)"
               >
                 <i class="bi bi-chevron-down"></i>
               </button>
@@ -247,16 +219,16 @@
               <button
                 type="button"
                 :disabled="idx === 0 || isFrozen"
-                @click="moveTop(idx)"
                 :aria-label="t('masterExams.moveTopAria')"
+                @click="moveTop(idx)"
               >
                 <i class="bi bi-chevron-double-up"></i>
               </button>
               <button
                 type="button"
                 :disabled="idx === form.question_ids.length - 1 || isFrozen"
-                @click="moveBottom(idx)"
                 :aria-label="t('masterExams.moveBottomAria')"
+                @click="moveBottom(idx)"
               >
                 <i class="bi bi-chevron-double-down"></i>
               </button>
@@ -290,8 +262,8 @@
                 type="button"
                 class="danger"
                 :disabled="isFrozen"
-                @click="removeQuestion(idx)"
                 :aria-label="t('masterExams.removeQuestionAria')"
+                @click="removeQuestion(idx)"
               >
                 <i class="bi bi-x-lg"></i>
               </button>
@@ -322,13 +294,11 @@
           <div class="master-exam-draft-form__header">
             <i class="bi bi-pencil-square"></i>
             <h4>{{ t('masterExams.draftNew') }}</h4>
-            <button
-              class="btn-icon"
+            <BaseIconButton
+              icon="bi bi-x-lg"
+              :label="t('masterExams.closeDraftFormAria')"
               @click="draftFormOpen = false"
-              :aria-label="t('masterExams.closeDraftFormAria')"
-            >
-              <i class="bi bi-x-lg"></i>
-            </button>
+            />
           </div>
           <DraftQuestionForm
             v-model="draftForm"
@@ -354,9 +324,9 @@
           <div class="master-exam-picker__filters">
             <BaseInput
               :model-value="pickerSearch"
-              @update:model-value="onPickerSearch"
               :placeholder="t('masterExams.pickerSearch')"
               class="master-exam-picker__search"
+              @update:model-value="onPickerSearch"
             />
             <BaseButton variant="secondary" size="small" @click="loadPicker">
               <i class="bi bi-arrow-repeat"></i> {{ t('common.refresh') }}
@@ -438,9 +408,11 @@ import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
+import BaseTextarea from '@/components/base/BaseTextarea.vue'
+import BaseSelect from '@/components/base/BaseSelect.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-import BaseField from '@/components/base/BaseField.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
@@ -484,4 +456,17 @@ const {
   addDraft,
   save,
 } = useMasterExamEditor(t)
+
+const audienceGroupOptions = computed(() => availableGroups.value.map(group => ({
+  value: group.id,
+  label: `${group.name} (${group.member_count})`,
+})))
+const audienceUserOptions = computed(() => availableUsers.value.map(user => ({
+  value: user.id,
+  label: user.full_name || user.username,
+})))
+const attendingOptions = computed(() => availableAttendings.value.map(user => ({
+  value: user.id,
+  label: user.full_name || user.username,
+})))
 </script>
