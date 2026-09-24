@@ -7,7 +7,7 @@
         <p v-if="tag" class="text-muted"><i class="bi bi-tag"></i> {{ t('tests.resultsTagLabel') }}: <span class="test-tag">{{ tag }}</span></p>
         <AlertBox v-if="showWarning" variant="warning" :message="warningMessage" />
         <div class="test-results__score">
-          <span class="score-number" :class="scoreClass">{{ formatNumber(correctCount) }}/{{ formatNumber(answeredCount) }}</span>
+          <span class="score-number" :class="scoreClass">{{ formatNumber(correctCount) }}/{{ formatNumber(totalQuestions) }}</span>
           <span class="score-percent" :class="scoreClass">{{ formatNumber(animatedAccuracy, 1) }}%</span>
         </div>
         <ProgressBar :progress="animatedAccuracy" :label="t('tests.resultsAccuracy')" />

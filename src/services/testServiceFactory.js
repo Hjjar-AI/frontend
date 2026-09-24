@@ -32,7 +32,9 @@ export function createTestService(mode) {
       const payload = { session_id: sessionId, answer, action }
       if (targetIndex !== null) payload.target_index = targetIndex
       if (answer !== null && answer !== undefined) {
-        payload.confidence = confidence === null || confidence === undefined ? 3 : confidence
+        if (confidence !== null && confidence !== undefined) {
+          payload.confidence = confidence
+        }
         if (errorReason) payload.error_reason = errorReason
       }
       if (preAnswer !== null && preAnswer !== undefined) payload.pre_answer = preAnswer

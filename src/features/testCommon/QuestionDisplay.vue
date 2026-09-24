@@ -74,7 +74,7 @@
               v-model="selectedAnswer"
               type="radio"
               :value="idx + 1"
-              :disabled="disabled"
+              :disabled="disabled || showReflectionPrompt || lockAnswerChoices"
               @change="onUserSelect(idx + 1)"
             />
             <span class="question-card__choice-text" dir="auto">
@@ -111,36 +111,31 @@
         </span>
       </div>
 
-      <div v-if="showReflectionPrompt && !pickedReason" class="reflection-prompt">
+      <div v-if="showReflectionPrompt" class="reflection-prompt">
         <div class="reflection-prompt__header">
           <i class="bi bi-question-circle"></i>
           <strong>{{ t('tests.reflectionTitle') }}</strong>
           <span class="reflection-prompt__hint">{{ t('tests.reflectionHint') }}</span>
         </div>
         <div class="reflection-prompt__buttons">
-          <button type="button" class="reflection-prompt__btn" @click="pickReason('unknown')">
+          <button type="button" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('unknown')">
             <i class="bi bi-x-octagon"></i>
             {{ t('tests.reflectionUnknown') }}
           </button>
-          <button type="button" class="reflection-prompt__btn" @click="pickReason('misread')">
+          <button type="button" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('misread')">
             <i class="bi bi-eye-slash"></i>
             {{ t('tests.reflectionMisread') }}
           </button>
-          <button type="button" class="reflection-prompt__btn" @click="pickReason('confused')">
+          <button type="button" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('confused')">
             <i class="bi bi-signpost-split"></i>
             {{ t('tests.reflectionConfused') }}
           </button>
-          <button type="button" class="reflection-prompt__btn" @click="pickReason('guessed')">
+          <button type="button" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('guessed')">
             <i class="bi bi-dice-5"></i>
             {{ t('tests.reflectionGuessed') }}
           </button>
         </div>
       </div>
-      <div v-else-if="pickedReason" class="reflection-prompt reflection-prompt--done">
-        <i class="bi bi-check-circle-fill"></i>
-        <span>{{ t('tests.reflectionThanks') }}</span>
-      </div>
-
       <slot name="feedback"></slot>
     </BaseCard>
   </div>
@@ -159,13 +154,14 @@ const { t, locale } = useI18n()
 const props = defineProps({
   question: { type: Object, required: true },
   initialAnswer: { type: Number, default: null },
-  initialConfidence: { type: [Number, Boolean], default: 3 },
+  initialConfidence: { type: [Number, Boolean], default: null },
   answerBeforeOptions: { type: Boolean, default: false },
   initialPreAnswer: { type: String, default: '' },
   choicesRevealed: { type: Boolean, default: true },
   showVerification: { type: Boolean, default: true },
   showConfidenceHint: { type: Boolean, default: true },
   showReflectionPrompt: { type: Boolean, default: false },
+  lockAnswerChoices: { type: Boolean, default: false },
   // When true, the answer radios and the confidence checkbox are
   // disabled. The master-exam runner binds this to the store's
   // in-flight answer flag so a second click cannot land while the
@@ -178,9 +174,8 @@ const props = defineProps({
 const emit = defineEmits(['answer', 'confidence', 'reflection', 'reveal'])
 
 const selectedAnswer = ref(props.initialAnswer)
-const confidenceScore = ref(normalizeConfidenceScore(props.initialConfidence))
+const confidenceScore = ref(normalizeConfidenceScore(props.initialConfidence, null))
 const preAnswer = ref(props.initialPreAnswer || '')
-const pickedReason = ref(null)
 const displayQuestion = computed(() => localizedQuestion(props.question, locale.value))
 const confidenceOptions = [
   { value: 1, icon: 'bi bi-dice-5', labelKey: 'tests.confidenceGuessing' },
@@ -192,9 +187,8 @@ watch(
   () => props.question?.id,
   () => {
     selectedAnswer.value = props.initialAnswer
-    confidenceScore.value = normalizeConfidenceScore(props.initialConfidence)
+    confidenceScore.value = normalizeConfidenceScore(props.initialConfidence, null)
     preAnswer.value = props.initialPreAnswer || ''
-    pickedReason.value = null
   },
 )
 
@@ -202,14 +196,13 @@ watch(
   () => props.initialAnswer,
   (val) => {
     selectedAnswer.value = val
-    pickedReason.value = null
   },
 )
 
 watch(
   () => props.initialConfidence,
   (val) => {
-    confidenceScore.value = normalizeConfidenceScore(val)
+    confidenceScore.value = normalizeConfidenceScore(val, null)
   },
 )
 
@@ -234,7 +227,6 @@ function revealChoices() {
 }
 
 function pickReason(reason) {
-  pickedReason.value = reason
   emit('reflection', reason)
 }
 </script>

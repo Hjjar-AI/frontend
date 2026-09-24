@@ -3,7 +3,7 @@
     <button
       type="button"
       class="question-nav-dots__control"
-      :disabled="current === 0"
+      :disabled="disabled || current === 0"
       :aria-label="t('questions.navDotPrevAria')"
       @click="emit('go', current - 1)"
     >
@@ -20,6 +20,7 @@
         'question-nav-dots__item--answered': hasAnswer(index),
       }"
       :aria-current="index === current ? 'step' : undefined"
+      :disabled="disabled"
       :aria-label="
         t('questions.navDotAriaLabel', {
           index: index + 1,
@@ -34,7 +35,7 @@
     <button
       type="button"
       class="question-nav-dots__control"
-      :disabled="current === total - 1"
+      :disabled="disabled || current === total - 1"
       :aria-label="t('questions.navDotNextAria')"
       @click="emit('go', current + 1)"
     >
@@ -58,6 +59,7 @@ const props = defineProps({
   current: { type: Number, required: true },
   hasAnswer: { type: Function, required: true },
   maxVisibleDots: { type: Number, default: 9 },
+  disabled: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['go'])

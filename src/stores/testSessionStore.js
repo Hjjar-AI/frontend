@@ -218,7 +218,8 @@ export const useTestSessionStore = defineStore('testSession', {
           this.currentIndex = 0
           this.answers = {}
           this.confidence = {}
-          this.startedAt = new Date()
+          const parsedStart = res.started_at ? new Date(res.started_at) : new Date()
+          this.startedAt = isNaN(parsedStart.getTime()) ? new Date() : parsedStart
           this.accumulatedTime = 0
           this.isActive = true
           this.results = null
@@ -228,7 +229,7 @@ export const useTestSessionStore = defineStore('testSession', {
           //   • config.disable_timer → force stopwatch (elapsed only).
           //   • res.duration_minutes  → countdown (backend supplied).
           //   • otherwise             → elapsed only.
-          if (config.disable_timer) {
+          if (config.disable_timer && mode !== 'exam') {
             this.durationMinutes = null
           } else if (res.duration_minutes) {
             this.durationMinutes = Number(res.duration_minutes)
@@ -307,9 +308,11 @@ export const useTestSessionStore = defineStore('testSession', {
         )
         if (answer !== undefined && answer !== null) {
           this.answers[requestIndex] = answer
-          this.confidence = {
-            ...this.confidence,
-            [requestIndex]: normalizeConfidenceScore(confidence),
+          if (confidence !== null && confidence !== undefined) {
+            this.confidence = {
+              ...this.confidence,
+              [requestIndex]: normalizeConfidenceScore(confidence),
+            }
           }
         }
         if (action === 'next') {
@@ -473,7 +476,9 @@ export const useTestSessionStore = defineStore('testSession', {
         const idx = Number(idxStr)
         if (raw && typeof raw === 'object' && raw.answer !== null && raw.answer !== undefined) {
           unpackedAnswers[idx] = raw.answer
-          unpackedConfidence[idx] = normalizeConfidenceScore(raw.confidence)
+          if (raw.confidence_provided !== false) {
+            unpackedConfidence[idx] = normalizeConfidenceScore(raw.confidence)
+          }
         } else if (raw !== null && typeof raw !== 'object') {
           unpackedAnswers[idx] = raw
           unpackedConfidence[idx] = 3

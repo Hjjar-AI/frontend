@@ -13,6 +13,7 @@
         v-if="isPauseSupported && store.isActive"
         type="button"
         class="btn-icon pause-btn"
+        :disabled="navigationDisabled"
         @click="pauseSession"
         :aria-label="t('tests.pauseAria')"
         :title="t('tests.pause')"
@@ -29,11 +30,12 @@
       <QuestionDisplay
         :question="displayQuestion"
         :initial-answer="selectedAnswer"
-        :initial-confidence="confidenceForCurrent"
+        :initial-confidence="confidence"
         :answer-before-options="mode === 'recall'"
         :initial-pre-answer="preAnswer"
         :choices-revealed="choicesRevealed"
-        :disabled="submitting"
+        :lock-answer-choices="(mode === 'study' || mode === 'recall') && store.hasAnswer(store.currentIndex)"
+        :disabled="answerControlsBusy"
         :show-reflection-prompt="showReflectionPrompt"
         @answer="handleAnswer"
         @confidence="handleConfidence"
@@ -50,6 +52,7 @@
         :current="store.currentIndex"
         :total="store.totalQuestions"
         :loading="submitting"
+        :disabled="navigationDisabled"
         @previous="goPrevious"
         @next="goNext"
         @finish="finish"
@@ -59,11 +62,19 @@
         :total="store.totalQuestions"
         :current="store.currentIndex"
         :has-answer="store.hasAnswer"
+        :disabled="navigationDisabled"
         @go="goTo"
       />
 
       <ShortcutHint />
     </template>
+
+    <div v-else-if="questionLoadFailed" class="test-question__loading">
+      <p>{{ t('notifications.questionLoadFailed') }}</p>
+      <button type="button" class="btn btn-primary" @click="retryLoadQuestion">
+        {{ t('common.retry') }}
+      </button>
+    </div>
 
     <div v-else class="test-question__loading">
       <BaseSkeleton height="400px" />
@@ -98,16 +109,20 @@ const {
   store,
   question,
   selectedAnswer,
+  confidence,
   startTime,
   swipeContainer,
   showReflectionPrompt,
+  questionLoadFailed,
   submitting,
+  navigationDisabled,
+  answerControlsBusy,
   examTotalSeconds,
   isCritical,
-  confidenceForCurrent,
   preAnswer,
   choicesRevealed,
   onTimerTick,
+  retryLoadQuestion,
   handleAnswer,
   handleConfidence,
   handleReveal,
