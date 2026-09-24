@@ -1,7 +1,7 @@
 .badge {
   --badge-accent: var(--color-text-muted);
   --badge-foreground: var(--color-text-secondary);
-  padding: 0.2rem 0.6rem; border-radius: var(--radius-pill);
+  padding: 0.15rem 0.5rem; border-radius: var(--radius-pill);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: 1.25;
@@ -17,10 +17,10 @@
 .badge-info { --badge-accent: var(--color-info); --badge-foreground: var(--color-info-soft-text); }
 .badge-warning { --badge-accent: var(--color-warning); --badge-foreground: var(--color-warning-soft-text); }
 .badge-secondary { --badge-accent: var(--color-text-muted); --badge-foreground: var(--color-text-secondary); }
-.badge--small { padding: 0.1rem 0.4rem; font-size: var(--font-size-xs); }
+.badge--small { padding: 0.08rem 0.35rem; font-size: var(--font-size-xs); }
 
 .status-badge {
-  display: inline-flex; align-items: center; gap: var(--space-xs); padding: 0.15em 0.7em; border-radius: var(--radius-pill);
+  display: inline-flex; align-items: center; gap: var(--space-2xs); padding: 0.12em 0.55em; border-radius: var(--radius-pill);
   font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); white-space: nowrap; border: var(--border-width) solid transparent;
 }
 .status-badge.badge-success { background: var(--color-success); color: var(--color-on-success); border-color: var(--color-success-dark); }
@@ -65,6 +65,39 @@
   line-height: 1;
 }
 .chip__remove:hover { background: color-mix(in srgb, var(--color-danger) 12%, transparent); color: var(--color-danger); }
+
+.base-chip {
+  --chip-accent: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-height: 1.75rem;
+  padding: 0.2rem 0.55rem;
+  border: var(--border-width) solid color-mix(in srgb, var(--chip-accent) 24%, var(--color-border));
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--chip-accent) 6%, var(--color-bg-card));
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.base-chip--compact { min-height: 1.5rem; padding: 0.12rem 0.45rem; }
+.base-chip--primary { --chip-accent: var(--color-primary); }
+.base-chip--info { --chip-accent: var(--color-info); }
+.base-chip--success { --chip-accent: var(--color-success); }
+.base-chip--warning { --chip-accent: var(--color-warning); }
+.base-chip--danger { --chip-accent: var(--color-danger); }
+.base-chip--interactive { cursor: pointer; }
+.base-chip--interactive:hover:not(:disabled),
+.base-chip--active {
+  border-color: var(--chip-accent);
+  background: var(--chip-accent);
+  color: var(--color-on-primary);
+}
+.base-chip:disabled { opacity: var(--opacity-disabled); cursor: not-allowed; }
+.base-chip__remove { display: grid; place-items: center; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
 
 .icon-hero { width: 64px; height: 64px; border-radius: var(--radius-circle); display: grid; place-items: center; font-size: var(--icon-xl); background: color-mix(in srgb, currentColor 12%, transparent); color: var(--color-primary); }
 .icon-hero--lg { width: 96px; height: 96px; font-size: var(--icon-2xl); }

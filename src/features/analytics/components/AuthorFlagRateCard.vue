@@ -14,8 +14,8 @@
       {{ t('analytics.authorFlagRateEmpty') }}
     </div>
 
-    <div v-else class="report-table-wrap">
-      <table class="report-table">
+    <BaseTableShell v-else density="compact" striped>
+      <table class="table-shared report-table">
         <thead>
           <tr>
             <th>{{ t('analytics.authorFlagRateAuthor') }}</th>
@@ -37,12 +37,13 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </BaseTableShell>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import BaseTableShell from '@/components/common/BaseTableShell.vue'
 
 const { t } = useI18n()
 

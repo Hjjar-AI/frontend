@@ -2,36 +2,48 @@
 <template>
   <button
     :type="type"
-    :class="['base-button', `base-button--${variant}`, `base-button--${size}`, { 'base-button--loading': loading }]"
+    :class="[
+      'base-button',
+      `base-button--${variant}`,
+      `base-button--${normalizedSize}`,
+      { 'base-button--loading': loading, 'base-button--icon-only': iconOnly },
+    ]"
     :disabled="disabled || loading"
     :aria-disabled="disabled || loading"
+    :aria-busy="loading || undefined"
     @click="handleClick"
   >
     <i v-if="loading" class="bi bi-arrow-repeat spin-icon"></i>
-    <slot />
+    <i v-else-if="icon" :class="icon" aria-hidden="true"></i>
+    <span v-if="!iconOnly && $slots.default" class="base-button__label"><slot /></span>
+    <slot v-else-if="iconOnly && !icon" />
   </button>
 </template>
 
 <script setup>
-import { onBeforeUnmount } from 'vue'
+import { computed, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   variant: {
     type: String,
     default: 'primary',
-    validator: (v) => ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'outline'].includes(v)
+    validator: (v) => ['primary', 'secondary', 'ghost', 'success', 'danger', 'warning', 'info', 'outline'].includes(v)
   },
   size: {
     type: String,
     default: 'medium',
-    validator: (v) => ['small', 'medium', 'large'].includes(v)
+    validator: (v) => ['sm', 'small', 'medium', 'large'].includes(v)
   },
+  icon: { type: String, default: '' },
+  iconOnly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   type: { type: String, default: 'button' },
 })
 
 const emit = defineEmits(['click'])
+
+const normalizedSize = computed(() => props.size === 'sm' ? 'small' : props.size)
 
 const rippleTimers = new Set()
 

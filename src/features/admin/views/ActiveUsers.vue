@@ -16,9 +16,7 @@
           <BaseBadge variant="secondary">{{ lastUpdateBadgeText }}</BaseBadge>
         </template>
         <template #actions>
-          <BaseButton variant="secondary" size="small" @click="refresh" :loading="isRefreshing">
-            <i v-if="isRefreshing" class="bi bi-arrow-repeat spin-icon"></i>
-            <i v-else class="bi bi-arrow-repeat"></i>
+          <BaseButton variant="ghost" size="small" icon="bi bi-arrow-repeat" @click="refresh" :loading="isRefreshing">
             {{ t('admin.activeUsers.refresh') }}
           </BaseButton>
         </template>

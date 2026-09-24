@@ -66,7 +66,7 @@
         </BaseButton>
         <BaseButton
           v-if="exam.can_edit_now && (exam.question_count || 0) > 0"
-          variant="info"
+          variant="secondary"
           size="small"
           @click="emitAction('preview')"
         >
@@ -82,7 +82,7 @@
         </BaseButton>
         <BaseButton
           v-if="exam.status !== 'draft' && exam.status !== 'cancelled'"
-          variant="info"
+          variant="secondary"
           size="small"
           @click="emitAction('view-results')"
         >
@@ -106,7 +106,7 @@
 
         <BaseButton
           v-else-if="hasInProgress"
-          variant="warning"
+          variant="primary"
           size="small"
           @click="emitAction('resume')"
         >
@@ -115,7 +115,7 @@
 
         <BaseButton
           v-else-if="canMakeup"
-          variant="warning"
+          variant="primary"
           size="small"
           @click="emitAction('start-makeup')"
         >

@@ -1,49 +1,40 @@
 <!-- frontend/src/components/base/BaseListContainer.vue -->
 <template>
   <div class="base-list-container" :aria-busy="loading ? 'true' : 'false'">
-    <div v-if="loading">
-      <BaseSkeleton :count="skeletonCount" :height="skeletonHeight" stacked />
-    </div>
-
-    <BaseErrorState
-      v-else-if="error && items.length === 0"
-      :message="error"
-      retry
+    <AsyncContent
+      :loading="loading"
+      :error="items.length === 0 ? error : ''"
+      :empty="items.length === 0"
+      :empty-title="emptyTitle"
+      :empty-message="emptyMessage"
+      :empty-icon="emptyIcon"
+      :skeleton-count="skeletonCount"
+      :skeleton-height="skeletonHeight"
       @retry="$emit('retry')"
-    />
-
-    <BaseEmptyState
-      v-else-if="items.length === 0"
-      :title="emptyTitle"
-      :message="emptyMessage"
-      :icon="emptyIcon"
     >
-      <template #actions v-if="$slots.emptyActions">
+      <template v-if="$slots.emptyActions" #emptyActions>
         <slot name="emptyActions" />
       </template>
-    </BaseEmptyState>
-
-    <div v-else class="base-list-container__content">
-      <div v-if="error" class="base-list-container__inline-error" role="alert">
-        <i class="bi bi-exclamation-triangle"></i>
-        <span>{{ error }}</span>
-        <button
-          class="btn-icon btn-icon--compact"
-          @click="$emit('retry')"
-          :aria-label="t('common.retry')"
-        >
-          <i class="bi bi-arrow-repeat"></i>
-        </button>
+      <div class="base-list-container__content">
+        <div v-if="error" class="base-list-container__inline-error" role="alert">
+          <i class="bi bi-exclamation-triangle"></i>
+          <span>{{ error }}</span>
+          <BaseIconButton
+            icon="bi bi-arrow-repeat"
+            size="small"
+            :label="t('common.retry')"
+            @click="$emit('retry')"
+          />
+        </div>
+        <slot :items="items" />
       </div>
-      <slot :items="items" />
-    </div>
+    </AsyncContent>
   </div>
 </template>
 
 <script setup>
-import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
-import BaseErrorState from '@/components/base/BaseErrorState.vue'
-import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
+import AsyncContent from '@/components/common/AsyncContent.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 
 const { t } = useI18n()
 

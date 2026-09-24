@@ -43,7 +43,7 @@ icon="bi-flag-fill"
 @toggle-select="toggleSelection(flag.id)"
 >
 <template #actions>
-<BaseButton variant="success" size="small" @click="resolve(flag.id)"><i class="bi bi-check-circle"></i> {{ t('admin.flags.resolve') }}</BaseButton>
+<BaseButton variant="secondary" size="small" @click="resolve(flag.id)"><i class="bi bi-check-circle"></i> {{ t('admin.flags.resolve') }}</BaseButton>
 </template>
 <template #meta>
 <span><i class="bi bi-pencil"></i> {{ t('admin.flags.author', { name: flag.question_author || t('questions.unknownAuthor') }) }}</span>

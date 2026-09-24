@@ -43,73 +43,45 @@
   <div class="question-card__actions no-print">
     <!-- ── Primary actions ──────────────────────────────────────── -->
     <div class="question-card__actions-group">
-      <button
+      <BaseIconButton
         v-if="showSelect"
-        type="button"
-        class="btn-icon"
-        :class="{ 'btn-icon--active': selected }"
+        :class="{ 'base-button--active': selected }"
+        :icon="selected ? 'bi bi-check-square' : 'bi bi-square'"
+        :label="selected ? t('ui.deselectItem') : t('ui.selectItem')"
         @click="$emit('toggle-select')"
-        :aria-label="selected ? t('ui.deselectItem') : t('ui.selectItem')"
-        :title="selected ? t('ui.deselectItem') : t('ui.selectItem')"
-      >
-        <i :class="selected ? 'bi bi-check-square' : 'bi bi-square'"></i>
-      </button>
+      />
 
-      <button
-        type="button"
-        class="btn-icon"
+      <BaseIconButton
+        :icon="bookmarkIcon"
+        :label="bookmarked ? t('questions.unbookmark') : t('questions.bookmark')"
         @click="onBookmark"
-        :aria-label="bookmarked ? t('questions.unbookmark') : t('questions.bookmark')"
-        :title="bookmarked ? t('questions.unbookmark') : t('questions.bookmark')"
-      >
-        <i
-          :class="[
-            bookmarked ? 'bi bi-bookmark-heart-fill' : 'bi bi-bookmark-heart',
-            { 'question-card-actions__bookmark--animated': bookmarkAnim },
-          ]"
-        ></i>
-      </button>
+      />
 
-      <button
-        type="button"
-        class="btn-icon"
+      <BaseIconButton
+        icon="bi bi-pencil"
+        :label="t('common.edit')"
         @click="$emit('edit')"
-        :aria-label="t('common.edit')"
-        :title="t('common.edit')"
-      >
-        <i class="bi bi-pencil"></i>
-      </button>
+      />
 
-      <button
+      <BaseIconButton
         v-if="authStore.can('questions.verify')"
-        type="button"
-        class="btn-icon"
-        :disabled="verifying"
+        icon="bi bi-patch-check"
+        :label="t('questions.verify')"
+        :loading="verifying"
         @click="$emit('verify')"
-        :aria-label="t('questions.verify')"
-        :title="t('questions.verify')"
-      >
-        <i
-          class="bi bi-patch-check"
-          :class="{ 'spin-icon': verifying }"
-        ></i>
-      </button>
+      />
     </div>
 
     <!-- ── Overflow menu ────────────────────────────────────────── -->
     <div class="question-card__actions-group question-card__actions-group--end">
-      <div class="question-card-actions__menu-wrap" ref="rootRef">
-        <button
-          type="button"
-          class="btn-icon"
+      <div ref="rootRef" class="question-card-actions__menu-wrap">
+        <BaseIconButton
+          icon="bi bi-three-dots"
+          :label="t('ui.moreActions')"
           :aria-expanded="isOpen"
           aria-haspopup="menu"
-          :aria-label="t('ui.moreActions')"
-          :title="t('ui.moreActions')"
           @click.stop="toggle"
-        >
-          <i class="bi bi-three-dots"></i>
-        </button>
+        />
 
         <Transition name="dropdown">
           <div
@@ -173,6 +145,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useQuestionStore } from '@/stores/questionStore'
 import { useDropdown } from '@/composables/useDropdown'
 import { downloadBlob } from '@/utils/downloadFile'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 
 const { t } = useI18n()
 
@@ -218,6 +191,11 @@ const verifying = computed(() => questionStore.isVerifying(props.question.id))
 const { isOpen, rootRef, close, toggle } = useDropdown()
 
 const bookmarkAnim = ref(false)
+const bookmarkedIcon = computed(() => props.bookmarked ? 'bi bi-bookmark-heart-fill' : 'bi bi-bookmark-heart')
+const bookmarkIcon = computed(() => [
+  bookmarkedIcon.value,
+  bookmarkAnim.value ? 'question-card-actions__bookmark--animated' : '',
+].filter(Boolean).join(' '))
 
 function onBookmark() {
   bookmarkAnim.value = true

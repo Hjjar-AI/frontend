@@ -167,6 +167,7 @@
     "pageOf": "Page {page} of {pages}",
 
     "rating": "Rating:",
+    "advancedInfo": "Rating and question details",
     "ratingSuccess": "Rating saved",
     "ratingFailed": "Rating failed, please try again",
     "ratingAvg": "{avg} ({count})",

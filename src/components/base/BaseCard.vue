@@ -4,7 +4,7 @@
     class="base-card"
     :class="[
       `base-card--${variant}`,
-      { 'base-card--hover': hover }
+      { 'base-card--hover': hover, 'base-card--custom-accent': accentColor }
     ]"
     :style="accentColor ? { borderInlineStartColor: accentColor } : null"
   >

@@ -22,37 +22,17 @@
           icon="bi bi-collection"
           :is-active="isContentActive"
         >
-          <router-link to="/questions" class="nav-link">
-            <i class="bi bi-question-circle"></i> {{ t('nav.questions') }}
-          </router-link>
           <router-link
-            v-if="authStore.can('questions.create')"
-            to="/questions/add"
+            v-for="link in contentLinks"
+            :key="link.id"
+            :to="link.to"
             class="nav-link"
           >
-            <i class="bi bi-plus-circle"></i> {{ t('nav.addQuestion') }}
-          </router-link>
-          <router-link to="/questions/review" class="nav-link">
-            <i class="bi bi-check2-all"></i> {{ t('nav.review') }}
-          </router-link>
-          <router-link to="/questions/mistakes" class="nav-link">
-            <i class="bi bi-journal-x"></i> {{ t('nav.mistakes') }}
+            <i :class="link.icon"></i> {{ t(link.labelKey) }}
             <span
-              v-if="wrongAnswerStore.summary && wrongAnswerStore.summary.wrong_open > 0"
+              v-if="navBadge(link.id)"
               class="badge badge-danger badge--small navbar__badge"
-            >{{ wrongAnswerStore.summary.wrong_open }}</span>
-          </router-link>
-          <router-link to="/questions/fragile" class="nav-link">
-            <i class="bi bi-shield-slash"></i> {{ t('nav.fragile') }}
-          </router-link>
-          <router-link to="/categories" class="nav-link">
-            <i class="bi bi-folder2"></i> {{ t('nav.categories') }}
-          </router-link>
-          <router-link to="/bookmarks" class="nav-link">
-            <i class="bi bi-bookmark-heart"></i> {{ t('nav.bookmarks') }}
-          </router-link>
-          <router-link to="/knowledge-map" class="nav-link">
-            <i class="bi bi-map"></i> {{ t('nav.knowledgeMap') }}
+            >{{ navBadge(link.id) }}</span>
           </router-link>
         </NavbarDropdown>
 
@@ -61,37 +41,23 @@
           icon="bi bi-pencil-square"
           :is-active="isTestsActive"
         >
-          <router-link to="/study" class="nav-link">
-            <i class="bi bi-journal-check"></i> {{ t('nav.studyMode') }}
-          </router-link>
-          <router-link to="/master-exams" class="nav-link">
-            <i class="bi bi-mortarboard"></i> {{ t('nav.masterExams') }}
+          <router-link v-for="link in testLinks" :key="link.id" :to="link.to" class="nav-link">
+            <i :class="link.icon"></i> {{ t(link.labelKey) }}
             <span
-              v-if="masterExamStore.needsAckCount > 0"
+              v-if="navBadge(link.id)"
               class="badge badge-danger badge--small navbar__badge"
-            >{{ masterExamStore.needsAckCount }}</span>
+            >{{ navBadge(link.id) }}</span>
           </router-link>
         </NavbarDropdown>
 
-        <router-link to="/manual" class="nav-link" active-class="nav-link--active">
-          <i class="bi bi-book"></i> {{ t('nav.manual') }}
-        </router-link>
-
-        <!--
-          Analytics is a top-level nav destination, not an admin-only
-          entry. The page has a member-facing section (category
-          mastery, streak history) that every authenticated user can
-          read; the admin-only accordion reports on the same page
-          remain hidden by the in-view `canViewAll` check.
-
-          This link is rendered for every authenticated user. The
-          matching `/analytics` entry in `ADMIN_LINKS` (see
-          constants/adminLinks.js) has been removed so admins do not
-          see the same destination twice — once here and once in the
-          admin dropdown.
-        -->
-        <router-link to="/analytics" class="nav-link" active-class="nav-link--active">
-          <i class="bi bi-graph-up"></i> {{ t('nav.analytics') }}
+        <router-link
+          v-for="link in topLinks"
+          :key="link.id"
+          :to="link.to"
+          class="nav-link"
+          active-class="nav-link--active"
+        >
+          <i :class="link.icon"></i> {{ t(link.labelKey) }}
         </router-link>
 
         <template v-if="canSeeAdminMenu">
@@ -160,6 +126,7 @@ import LanguageSwitcher from '@/components/layout/LanguageSwitcher.vue'
 import NavbarDropdown from './NavbarDropdown.vue'
 import NavbarUserMenu from './NavbarUserMenu.vue'
 import { ADMIN_LINKS, ADMIN_BADGE_CAPABILITIES } from '@/constants/adminLinks'
+import { navigationLinksFor, isNavigationLinkActive } from '@/constants/navigationLinks'
 
 const { t } = useI18n()
 
@@ -170,6 +137,11 @@ const flagStore = useFlagStore()
 const groupStore = useGroupStore()
 const wrongAnswerStore = useWrongAnswerStore()
 const masterExamStore = useMasterExamStore()
+
+const canUseLink = link => !link.capability || authStore.can(link.capability)
+const contentLinks = computed(() => navigationLinksFor('desktop', 'content').filter(canUseLink))
+const testLinks = computed(() => navigationLinksFor('desktop', 'tests').filter(canUseLink))
+const topLinks = computed(() => navigationLinksFor('desktop', 'top').filter(canUseLink))
 
 const menuOpen = ref(false)
 const pendingFlagCount = computed(() => flagStore.pendingCount)
@@ -185,11 +157,11 @@ const longestStreak = computed(() => groupStore.longestStreak)
 const isAdminActive = computed(() => route.path.startsWith('/admin'))
 
 const isTestsActive = computed(() =>
-  ['/exam', '/study', '/recall', '/master-exams'].some(p => route.path.startsWith(p))
+  testLinks.value.some(link => isNavigationLinkActive(link, route.path))
 )
 
 const isContentActive = computed(() =>
-  ['/questions', '/categories', '/bookmarks', '/knowledge-map'].some(p => route.path.startsWith(p))
+  contentLinks.value.some(link => isNavigationLinkActive(link, route.path))
 )
 
 const visibleAdminLinks = computed(() =>
@@ -201,6 +173,12 @@ const canSeeAdminMenu = computed(() => visibleAdminLinks.value.length > 0)
 const showAdminBadge = computed(() =>
   authStore.canAny(...ADMIN_BADGE_CAPABILITIES)
 )
+
+function navBadge(id) {
+  if (id === 'mistakes') return wrongAnswerStore.summary?.wrong_open || 0
+  if (id === 'master-exams') return masterExamStore.needsAckCount || 0
+  return 0
+}
 
 watch(() => route.fullPath, () => {
   menuOpen.value = false

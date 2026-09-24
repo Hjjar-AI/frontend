@@ -7,7 +7,7 @@
       page-class="bookmarks-page"
     >
       <template #actions>
-        <BaseButton variant="success" size="small" @click="startFromBookmarks">
+        <BaseButton variant="primary" size="small" @click="startFromBookmarks">
           <i class="bi bi-book-half"></i> {{ t('questions.startFromBookmarks') }}
         </BaseButton>
       </template>

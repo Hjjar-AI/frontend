@@ -79,7 +79,7 @@
           <i class="card-title__icon bi bi-diagram-3"></i>
           {{ t('admin.verification.breakdownTitle') }}
         </h4>
-        <div class="category-breakdown">
+        <BaseTableShell density="compact" striped>
           <table class="table-shared">
             <thead>
               <tr>
@@ -104,7 +104,7 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </BaseTableShell>
       </BaseCard>
 
       <ChartCard
@@ -139,6 +139,7 @@ import ExportButtons from '@/components/common/ExportButtons.vue'
 import ChartCard from '@/components/charts/ChartCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
+import BaseTableShell from '@/components/common/BaseTableShell.vue'
 import { useAdminVerificationStatsStore } from '@/stores/adminVerificationStatsStore'
 import { useAdminDatabaseStore } from '@/stores/adminDatabaseStore'
 import { useAutoRefresh } from '@/composables/useAutoRefresh'

@@ -32,46 +32,40 @@
           </BaseButton>
         </template>
         <template #default="{ items }">
-          <div class="blueprint-list">
-            <div
+          <div class="entity-list">
+            <EntityRow
               v-for="group in items"
               :key="group.id"
-              class="blueprint-row"
-              :class="{ 'blueprint-row--inactive': !group.is_active }"
+              :title="group.name"
+              :description="group.description || ''"
+              :inactive="!group.is_active"
             >
-              <div class="blueprint-row__body">
-                <h4 class="blueprint-row__name">{{ group.name }}</h4>
-                <p v-if="group.description" class="blueprint-row__description">
-                  {{ group.description }}
-                </p>
-                <div class="blueprint-row__weights">
-                  <span class="blueprint-row__weight-chip">
-                    <i class="bi bi-people"></i>
+              <template #metadata>
+                  <BaseChip icon="bi bi-people">
                     <strong>{{ group.member_count }}</strong> {{ t('admin.groups.membersLabel') }}
-                  </span>
-                  <span v-if="!group.is_active" class="blueprint-row__weight-chip">
-                    <i class="bi bi-eye-slash"></i>
+                  </BaseChip>
+                  <BaseChip v-if="!group.is_active" icon="bi bi-eye-slash">
                     {{ t('admin.groups.inactive') }}
-                  </span>
-                </div>
-              </div>
-              <div class="blueprint-row__actions">
+                  </BaseChip>
+              </template>
+              <template #actions>
                 <BaseButton
-                  variant="primary"
+                  variant="secondary"
                   size="small"
+                  icon="bi bi-pencil"
                   @click="router.push(`/admin/groups/${group.id}`)"
                 >
-                  <i class="bi bi-pencil"></i> {{ t('admin.groups.manage') }}
+                  {{ t('admin.groups.manage') }}
                 </BaseButton>
-                <BaseButton
+                <BaseIconButton
                   variant="danger"
                   size="small"
+                  icon="bi bi-trash"
+                  :label="t('common.delete')"
                   @click="confirmDelete(group)"
-                >
-                  <i class="bi bi-trash"></i>
-                </BaseButton>
-              </div>
-            </div>
+                />
+              </template>
+            </EntityRow>
           </div>
         </template>
       </BaseListContainer>
@@ -88,6 +82,9 @@ import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
+import EntityRow from '@/components/common/EntityRow.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import GroupFormModal from '../components/GroupFormModal.vue'
 import { useGroupStore } from '@/stores/groupStore'

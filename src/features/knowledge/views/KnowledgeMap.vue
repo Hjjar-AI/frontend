@@ -6,14 +6,13 @@
       :subtitle="t('knowledge.description')"
       page-class="knowledge-map-page"
     >
-
-      <ErrorBanner :error="error" @dismiss="error = null" />
-
-      <div v-if="loading" class="knowledge-map-page__loading">
-        <BaseSkeleton height="240px" />
-      </div>
-
-      <template v-else-if="payload">
+      <AsyncContent
+        :loading="loading"
+        :error="error || ''"
+        skeleton-height="240px"
+        @retry="load"
+      >
+      <template v-if="payload">
         <div class="knowledge-summary">
           <BaseCard v-for="stat in summaryStats" :key="stat.key" class="knowledge-summary__card">
             <i :class="stat.icon"></i>
@@ -23,16 +22,16 @@
         </div>
 
         <div class="knowledge-map-page__filters">
-          <button
+          <BaseChip
             v-for="option in statusOptions"
             :key="option.value"
-            type="button"
-            class="knowledge-filter"
-            :class="{ 'knowledge-filter--active': activeStatus === option.value }"
+            interactive
+            :active="activeStatus === option.value"
+            variant="primary"
             @click="activeStatus = option.value"
           >
             {{ t(option.labelKey) }}
-          </button>
+          </BaseChip>
         </div>
 
         <BaseEmptyState
@@ -47,7 +46,7 @@
           :key="group.name"
           class="knowledge-group"
         >
-          <h2 class="knowledge-group__title">{{ group.name }}</h2>
+          <SectionHeader :title="group.name" compact />
           <div class="knowledge-grid">
             <BaseCard
               v-for="item in group.items"
@@ -60,9 +59,9 @@
                   <h3>{{ item.title }}</h3>
                   <p>{{ item.learning_objective }}</p>
                 </div>
-                <span class="knowledge-status" :class="`knowledge-status--${item.status}`">
+                <BaseBadge :variant="statusVariant(item.status)">
                   {{ t(`knowledge.status.${item.status}`) }}
-                </span>
+                </BaseBadge>
               </div>
 
               <div class="knowledge-meter" :aria-label="t('knowledge.mastery')">
@@ -90,7 +89,7 @@
 
               <BaseButton
                 v-if="item.question_ids.length"
-                variant="secondary"
+                variant="ghost"
                 size="sm"
                 :loading="startingId === item.id"
                 @click="reviewObject(item)"
@@ -101,6 +100,7 @@
           </div>
         </section>
       </template>
+      </AsyncContent>
     </PageShell>
   </Layout>
 </template>
@@ -112,9 +112,11 @@ import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import AsyncContent from '@/components/common/AsyncContent.vue'
+import SectionHeader from '@/components/common/SectionHeader.vue'
 import { knowledgeService } from '@/services/knowledgeService'
 import { useTestSessionStore } from '@/stores/testSessionStore'
 import '@/assets/knowledge-map.css'
@@ -170,6 +172,15 @@ function confidenceLabel(value) {
   return t('tests.confidenceGuessing')
 }
 
+function statusVariant(status) {
+  return {
+    mastered: 'success',
+    developing: 'info',
+    needs_work: 'warning',
+    unstarted: 'secondary',
+  }[status] || 'secondary'
+}
+
 async function reviewObject(item) {
   startingId.value = item.id
   try {
@@ -185,7 +196,9 @@ async function reviewObject(item) {
   }
 }
 
-onMounted(async () => {
+async function load() {
+  loading.value = true
+  error.value = null
   try {
     payload.value = await knowledgeService.map()
   } catch (exc) {
@@ -193,5 +206,7 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
+
+onMounted(load)
 </script>

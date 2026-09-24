@@ -141,3 +141,24 @@
   margin: var(--space-2xs) 0;
 }
 .question-card-actions__bookmark--animated { animation: heartbeat 0.4s ease; }
+.question-card__advanced {
+  margin-top: var(--space-md);
+  border-top: var(--border-width) solid var(--color-border);
+}
+.question-card__advanced-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-block: var(--space-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  list-style: none;
+}
+.question-card__advanced-summary::-webkit-details-marker { display: none; }
+.question-card__advanced-summary:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+.question-card__advanced-chevron { transition: transform var(--motion-fast); }
+.question-card__advanced[open] .question-card__advanced-chevron { transform: rotate(180deg); }
+.question-card__advanced-content { display: grid; gap: var(--space-sm); padding-bottom: var(--space-sm); }

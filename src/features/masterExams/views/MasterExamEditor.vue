@@ -310,7 +310,7 @@
             <i class="bi bi-plus-circle"></i> {{ t('masterExams.addFromBank') }}
           </BaseButton>
           <BaseButton
-            variant="warning"
+            variant="secondary"
             :disabled="isFrozen"
             @click="draftFormOpen = !draftFormOpen"
           >

@@ -20,7 +20,7 @@ defineProps({
   icon: { type: String, default: '' },
   level: {
     type: Number,
-    default: 2,
+    default: 1,
     validator: (value) => value >= 1 && value <= 6,
   },
 })

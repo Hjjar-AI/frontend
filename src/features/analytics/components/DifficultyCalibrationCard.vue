@@ -54,8 +54,8 @@
         </div>
       </div>
 
-      <div class="report-table-wrap difficulty-calibration__table">
-        <table class="report-table">
+      <BaseTableShell class="difficulty-calibration__table" density="compact" striped>
+        <table class="table-shared report-table">
           <thead>
             <tr>
               <th>{{ t('difficulty.label') }}</th>
@@ -79,13 +79,14 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </BaseTableShell>
     </template>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import BaseTableShell from '@/components/common/BaseTableShell.vue'
 import {
   difficultyLabelFor,
   difficultyColorFor,

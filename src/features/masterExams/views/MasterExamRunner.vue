@@ -228,7 +228,7 @@
           {{ t('tests.next') }}
           <DirectionalIcon ltr="bi bi-chevron-right" rtl="bi bi-chevron-left" />
         </BaseButton>
-        <BaseButton v-else variant="success" @click="attemptFinish">
+        <BaseButton v-else variant="primary" @click="attemptFinish">
           <i class="bi bi-check-lg"></i> {{ t('masterExams.runnerFinish') }}
         </BaseButton>
       </div>

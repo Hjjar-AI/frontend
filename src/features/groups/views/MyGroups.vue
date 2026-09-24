@@ -6,20 +6,15 @@
         <template #badges>
           <BaseBadge variant="info">{{ t('groups.badge', { count: groupStore.myGroupCount }) }}</BaseBadge>
         </template>
-      <ErrorBanner
-        :error="groupStore.error"
-        :retry="groupStore.error ? true : false"
-        @dismiss="groupStore.error = null"
+      <AsyncContent
+        :loading="groupStore.isLoading && groupStore.myGroups.length === 0"
+        :error="groupStore.error || ''"
+        :empty="!groupStore.isLoading && groupStore.myGroups.length === 0"
+        :empty-title="t('groups.empty')"
+        :empty-message="t('groups.emptyDesc')"
+        empty-icon="bi-people"
         @retry="loadGroups"
-      />
-
-      <div v-if="!groupStore.isLoading && groupStore.myGroups.length === 0" class="notebook-empty">
-        <i class="bi bi-people"></i>
-        <h4>{{ t('groups.empty') }}</h4>
-        <p>{{ t('groups.emptyDesc') }}</p>
-      </div>
-
-      <template v-else>
+      >
         <div class="groups-grid">
           <div
             v-for="group in groupStore.myGroups"
@@ -46,18 +41,19 @@
           v-if="selectedGroupId"
           class="groups-page__leaderboard-card"
         >
-          <div class="d-flex justify-between align-center flex-wrap gap-2 mb-2">
-            <h3 class="groups-page__leaderboard-title">
-              <i class="bi bi-trophy"></i>
-              {{ t('groups.leaderboardLast', { name: selectedGroupName, days: currentDays }) }}
-            </h3>
-            <BaseSelect
-              :model-value="currentDays"
-              @update:model-value="changeDays"
-              :options="dayOptions"
-              class="groups-page__leaderboard-period"
-            />
-          </div>
+          <CardHeader
+            :title="t('groups.leaderboardLast', { name: selectedGroupName, days: currentDays })"
+            icon="bi bi-trophy"
+          >
+            <template #actions>
+              <BaseSelect
+                :model-value="currentDays"
+                @update:model-value="changeDays"
+                :options="dayOptions"
+                class="groups-page__leaderboard-period"
+              />
+            </template>
+          </CardHeader>
 
           <div class="group-visibility-row">
             <BaseCheckbox
@@ -78,8 +74,8 @@
             empty-icon="bi-bar-chart"
           >
             <template #default="{ items }">
-              <div class="leaderboard-wrap">
-                <table class="leaderboard">
+              <BaseTableShell density="compact" striped>
+                <table class="table-shared leaderboard">
                   <thead>
                     <tr>
                       <th class="leaderboard__rank">{{ t('groups.colRank') }}</th>
@@ -122,11 +118,11 @@
                     </tr>
                   </tbody>
                 </table>
-              </div>
+              </BaseTableShell>
             </template>
           </BaseListContainer>
         </BaseCard>
-      </template>
+      </AsyncContent>
     </PageShell>
   </Layout>
 </template>
@@ -140,7 +136,9 @@ import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import AsyncContent from '@/components/common/AsyncContent.vue'
+import CardHeader from '@/components/common/CardHeader.vue'
+import BaseTableShell from '@/components/common/BaseTableShell.vue'
 import { useGroupStore } from '@/stores/groupStore'
 import { useAuthStore } from '@/stores/authStore'
 

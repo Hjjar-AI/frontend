@@ -12,25 +12,22 @@
             {{ t('common.back') }}
           </BaseButton>
         </template>
-      <ErrorBanner :error="error" @dismiss="error = null" />
-
-      <BaseCard
-        v-if="loading"
-        class="d-flex align-center justify-center master-exam-my-result__loading"
+      <AsyncContent
+        :loading="loading"
+        :error="error || ''"
+        :empty="!attempt || !attempt.is_complete"
+        :empty-title="t('masterExams.myResultEmpty')"
+        :empty-message="t('masterExams.myResultEmptyDesc')"
+        empty-icon="bi-trophy"
+        skeleton-height="60px"
+        @retry="load"
       >
-        <BaseSkeleton :count="3" height="60px" stacked />
-      </BaseCard>
-
-      <template v-else-if="attempt && attempt.is_complete">
         <ResultStatGrid :items="statItems" />
 
         <BaseCard>
-          <h3 class="master-exam-editor__section-title">
-            <i class="bi bi-info-circle"></i>
-            {{ t('masterExams.resultsParticipants') }}
-          </h3>
-          <div class="master-exam-results__table--scrollable">
-            <table class="master-exam-results__table">
+          <CardHeader :title="t('masterExams.resultsParticipants')" icon="bi bi-info-circle" />
+          <BaseTableShell density="compact">
+            <table class="table-shared master-exam-results__table">
               <thead>
                 <tr>
                   <th>{{ t('masterExams.resultsColStarted') }}</th>
@@ -44,7 +41,7 @@
                 </tr>
               </tbody>
             </table>
-          </div>
+          </BaseTableShell>
           <div
             v-if="attempt.is_makeup || attempt.forced_finish"
             class="master-exam-my-result__flags"
@@ -57,14 +54,7 @@
             }}</span>
           </div>
         </BaseCard>
-      </template>
-
-      <BaseEmptyState
-        v-else
-        :title="t('masterExams.myResultEmpty')"
-        :message="t('masterExams.myResultEmptyDesc')"
-        icon="bi-trophy"
-      />
+      </AsyncContent>
     </PageShell>
   </Layout>
 </template>
@@ -77,9 +67,9 @@ import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
-import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import AsyncContent from '@/components/common/AsyncContent.vue'
+import CardHeader from '@/components/common/CardHeader.vue'
+import BaseTableShell from '@/components/common/BaseTableShell.vue'
 import ResultStatGrid from '../components/ResultStatGrid.vue'
 import { useMasterExamStore } from '@/stores/masterExamStore'
 import { formatDateTime } from '@/utils/formatters'

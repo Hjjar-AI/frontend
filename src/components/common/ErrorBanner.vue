@@ -4,16 +4,15 @@
     <div v-if="error" class="error-banner" role="alert">
       <span class="error-banner__text">{{ error }}</span>
       <div class="error-banner__actions">
-        <BaseButton v-if="retry" variant="danger" size="small" @click="$emit('retry')">
+        <BaseButton v-if="retry" variant="ghost" size="small" @click="$emit('retry')">
           <i class="bi bi-arrow-repeat"></i> {{ t('common.retry') }}
         </BaseButton>
-        <button
-          class="btn-icon btn-icon--compact"
+        <BaseIconButton
+          icon="bi bi-x"
+          size="small"
+          :label="t('ui.dismiss')"
           @click="$emit('dismiss')"
-          :aria-label="t('ui.dismiss')"
-        >
-          <i class="bi bi-x"></i>
-        </button>
+        />
       </div>
     </div>
   </Transition>
@@ -21,6 +20,7 @@
 
 <script setup>
 import { onMounted, onBeforeUnmount, watch } from 'vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 
 const { t } = useI18n()
 

@@ -14,13 +14,13 @@
         </template>
         <template #actions>
           <div class="master-exam-results__header-actions">
-            <BaseButton variant="secondary" size="small" @click="load">
+            <BaseButton variant="ghost" size="small" @click="load">
               <i class="bi bi-arrow-repeat"></i> {{ t('masterExams.resultsRefresh') }}
             </BaseButton>
-            <BaseButton variant="info" size="small" @click="downloadSummaryCsv">
+            <BaseButton variant="ghost" size="small" @click="downloadSummaryCsv">
               <i class="bi bi-filetype-csv"></i> {{ t('masterExams.resultsSummaryCsv') }}
             </BaseButton>
-            <BaseButton variant="info" size="small" @click="downloadMatrixCsv">
+            <BaseButton variant="ghost" size="small" @click="downloadMatrixCsv">
               <i class="bi bi-filetype-csv"></i> {{ t('masterExams.resultsMatrixCsv') }}
             </BaseButton>
             <BaseButton
@@ -44,10 +44,10 @@
 
       <!-- Flags raised during exam -->
       <BaseCard v-if="results && results.flags && results.flags.length">
-        <h3 class="master-exam-editor__section-title">
-          <i class="bi bi-flag-fill master-exam-results__flag-icon"></i>
-          {{ t('masterExams.resultsFlagTitle', { count: results.flags.length }) }}
-        </h3>
+        <CardHeader
+          :title="t('masterExams.resultsFlagTitle', { count: results.flags.length })"
+          icon="bi bi-flag-fill"
+        />
         <div class="master-exam-flags-list">
           <div v-for="flag in results.flags" :key="flag.flag_id" class="master-exam-flag-item">
             <i class="bi bi-flag-fill"></i>
@@ -64,10 +64,7 @@
 
       <!-- Per-user table -->
       <BaseCard>
-        <h3 class="master-exam-editor__section-title">
-          <i class="bi bi-people-fill"></i>
-          {{ t('masterExams.resultsParticipants') }}
-        </h3>
+        <CardHeader :title="t('masterExams.resultsParticipants')" icon="bi bi-people-fill" />
         <BaseListContainer
           :loading="masterExamStore.isLoading"
           :items="results?.per_user || []"
@@ -76,8 +73,8 @@
           empty-icon="bi-people"
         >
           <template #default="{ items }">
-            <div class="master-exam-results__table--scrollable">
-              <table class="master-exam-results__table">
+            <BaseTableShell sticky max-height="600px" striped>
+              <table class="table-shared master-exam-results__table">
                 <thead>
                   <tr>
                     <th>{{ t('masterExams.resultsColName') }}</th>
@@ -113,19 +110,16 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </BaseTableShell>
           </template>
         </BaseListContainer>
       </BaseCard>
 
       <!-- Per-question table -->
       <BaseCard v-if="results && results.per_question && results.per_question.length">
-        <h3 class="master-exam-editor__section-title">
-          <i class="bi bi-list-ol"></i>
-          {{ t('masterExams.resultsDistribution') }}
-        </h3>
-        <div class="master-exam-results__table--scrollable">
-          <table class="master-exam-results__table">
+        <CardHeader :title="t('masterExams.resultsDistribution')" icon="bi bi-list-ol" />
+        <BaseTableShell sticky max-height="600px" striped>
+          <table class="table-shared master-exam-results__table">
             <thead>
               <tr>
                 <th>#</th>
@@ -162,7 +156,7 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </BaseTableShell>
       </BaseCard>
     </PageShell>
   </Layout>
@@ -178,6 +172,8 @@ import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import CardHeader from '@/components/common/CardHeader.vue'
+import BaseTableShell from '@/components/common/BaseTableShell.vue'
 import ResultStatGrid from '../components/ResultStatGrid.vue'
 import { useMasterExamStore } from '@/stores/masterExamStore'
 import { useAuthStore } from '@/stores/authStore'

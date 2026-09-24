@@ -8,9 +8,9 @@
     >
 
       <div class="dashboard__welcome" :class="{ 'dashboard__welcome--animated': bannerAnimated }">
-        <h1>
+        <h2>
           <i class="bi bi-hand-wave"></i> {{ t('dashboard.welcome', { name: authStore.fullName }) }}
-        </h1>
+        </h2>
         <p class="text-muted">{{ t('dashboard.overview') }}</p>
         <div
           v-if="daysSinceLastLogin !== null && daysSinceLastLogin > 0"
@@ -58,10 +58,7 @@
         v-if="masterExamStore.needsAckItems.length > 0"
         class="dashboard__master-exams"
       >
-        <h3 class="dashboard__master-exams-title">
-          <i class="bi bi-mortarboard"></i>
-          {{ t('dashboard.masterExamNeedsAck') }}
-        </h3>
+        <SectionHeader :title="t('dashboard.masterExamNeedsAck')" icon="bi bi-mortarboard" compact />
         <div class="master-exams-grid">
           <MasterExamCard
             v-for="exam in masterExamStore.needsAckItems"
@@ -216,10 +213,10 @@
         <BaseButton variant="secondary" @click="router.push('/questions')">
           <i class="bi bi-list"></i> {{ t('nav.questions') }}
         </BaseButton>
-        <BaseButton variant="warning" @click="router.push('/questions/review')">
+        <BaseButton variant="secondary" @click="router.push('/questions/review')">
           <i class="bi bi-check2-all"></i> {{ t('nav.review') }} ({{ unverifiedCount }})
         </BaseButton>
-        <BaseButton v-if="weakCategories.length > 0" variant="info" @click="startWeakAreasDrill">
+        <BaseButton v-if="weakCategories.length > 0" variant="secondary" @click="startWeakAreasDrill">
           <i class="bi bi-graph-down"></i> {{ t('dashboard.weakCategoriesDrill') }}
         </BaseButton>
         <BaseButton variant="secondary" @click="router.push('/bookmarks')">
@@ -228,7 +225,7 @@
       </div>
 
       <div v-if="questionStore.items.length" class="dashboard__recent">
-        <h3><i class="bi bi-clock-history"></i> {{ t('dashboard.recentQuestions') }}</h3>
+        <SectionHeader :title="t('dashboard.recentQuestions')" icon="bi bi-clock-history" compact />
         <BaseListContainer
           :loading="questionStore.isLoading"
           :error="questionStore.error"
@@ -272,6 +269,7 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import SectionHeader from '@/components/common/SectionHeader.vue'
 import { useDashboardController } from '../composables/useDashboardController'
 
 const {

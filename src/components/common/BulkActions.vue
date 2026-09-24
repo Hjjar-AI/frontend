@@ -7,7 +7,7 @@
     </span>
     <div class="bulk-actions__buttons">
       <BaseButton
-        variant="success"
+        variant="secondary"
         size="small"
         @click="$emit('verify')"
         :aria-label="resolvedVerifyLabel"
@@ -15,7 +15,7 @@
         <i class="bi bi-patch-check"></i> {{ resolvedVerifyLabel }}
       </BaseButton>
       <BaseButton
-        variant="warning"
+        variant="secondary"
         size="small"
         @click="$emit('unverify')"
         :aria-label="resolvedUnverifyLabel"

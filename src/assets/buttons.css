@@ -24,6 +24,9 @@
 .base-button--primary:hover:not(:disabled) { background: var(--color-primary-dark); }
 .base-button--secondary { background: var(--color-bg-card); color: var(--color-text-primary); border: var(--border-width) solid var(--color-border); }
 .base-button--secondary:hover:not(:disabled) { background: var(--color-bg-alt); }
+.base-button--ghost { background: transparent; color: var(--color-text-secondary); }
+.base-button--ghost:hover:not(:disabled) { background: var(--color-bg-alt); color: var(--color-text-primary); }
+.base-button--ghost.base-button--active { background: color-mix(in srgb, var(--color-primary) 12%, transparent); color: var(--color-primary); }
 .base-button--success { background: var(--color-success); color: var(--color-on-success); }
 .base-button--success:hover:not(:disabled) { background: var(--color-success-dark); }
 .base-button--danger { background: var(--color-danger); color: var(--color-on-danger); }
@@ -36,6 +39,18 @@
 .base-button--outline:hover:not(:disabled) { background: var(--color-bg-alt); }
 .base-button:disabled { opacity: var(--opacity-disabled); cursor: not-allowed; box-shadow: none; transform: none; }
 .base-button--loading { pointer-events: none; min-width: var(--control-height); }
+.base-button--icon-only {
+  inline-size: var(--control-height);
+  min-inline-size: var(--control-height);
+  padding-inline: 0;
+  border-radius: var(--radius-circle);
+}
+.base-button--small.base-button--icon-only {
+  inline-size: var(--control-height-compact);
+  min-inline-size: var(--control-height-compact);
+  padding-inline: 0;
+}
+.base-button__label { display: inline-flex; align-items: center; gap: var(--space-xs); }
 
 /* Spinner (used by buttons) */
 .spinner { display: inline-block; width: 1em; height: 1em; border: var(--border-width-strong) solid currentColor; border-inline-end-color: transparent; border-radius: var(--radius-circle); animation: spin 0.6s linear infinite; }

@@ -167,6 +167,7 @@
     "pageOf": "الصفحة {page} من {pages}",
 
     "rating": "تقييم:",
+    "advancedInfo": "التقييم وتفاصيل السؤال",
     "ratingSuccess": "تم التقييم",
     "ratingFailed": "فشل التقييم، حاول مرة أخرى",
     "ratingAvg": "{avg} ({count})",

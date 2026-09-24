@@ -32,38 +32,41 @@
           </BaseButton>
         </template>
         <template #default="{ items }">
-          <div class="blueprint-list">
-            <div
+          <div class="entity-list">
+            <EntityRow
               v-for="bp in items"
               :key="bp.id"
-              class="blueprint-row"
-              :class="{ 'blueprint-row--inactive': !bp.is_active }"
+              :title="bp.name"
+              :description="bp.description || ''"
+              :inactive="!bp.is_active"
             >
-              <div class="blueprint-row__body">
-                <h4 class="blueprint-row__name">{{ bp.name }}</h4>
-                <p v-if="bp.description" class="blueprint-row__description">{{ bp.description }}</p>
-                <div class="blueprint-row__weights">
-                  <span
+              <template #metadata>
+                  <BaseChip
                     v-for="(weight, cid) in bp.weights"
                     :key="cid"
-                    class="blueprint-row__weight-chip"
                   >
                     {{ categoryName(cid) }} <strong>{{ weight }}</strong>
-                  </span>
-                  <span v-if="!Object.keys(bp.weights).length" class="blueprint-row__weight-chip">
-                    <i class="bi bi-shuffle"></i> {{ t('admin.blueprints.randomDistribution') }}
-                  </span>
-                </div>
-              </div>
-              <div class="blueprint-row__actions">
-                <BaseButton variant="primary" size="small" @click="formModalRef?.open(bp)">
-                  <i class="bi bi-pencil"></i> {{ t('admin.blueprints.edit') }}
+                  </BaseChip>
+                  <BaseChip
+                    v-if="!Object.keys(bp.weights).length"
+                    icon="bi bi-shuffle"
+                  >
+                    {{ t('admin.blueprints.randomDistribution') }}
+                  </BaseChip>
+              </template>
+              <template #actions>
+                <BaseButton variant="secondary" size="small" icon="bi bi-pencil" @click="formModalRef?.open(bp)">
+                  {{ t('admin.blueprints.edit') }}
                 </BaseButton>
-                <BaseButton variant="danger" size="small" @click="confirmDelete(bp)">
-                  <i class="bi bi-trash"></i>
-                </BaseButton>
-              </div>
-            </div>
+                <BaseIconButton
+                  variant="danger"
+                  size="small"
+                  icon="bi bi-trash"
+                  :label="t('common.delete')"
+                  @click="confirmDelete(bp)"
+                />
+              </template>
+            </EntityRow>
           </div>
         </template>
       </BaseListContainer>
@@ -81,6 +84,9 @@ import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
+import EntityRow from '@/components/common/EntityRow.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import BlueprintFormModal from '../components/BlueprintFormModal.vue'
 import { useBlueprintStore } from '@/stores/blueprintStore'

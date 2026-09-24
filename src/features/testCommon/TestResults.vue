@@ -87,7 +87,7 @@
           <BaseButton variant="secondary" @click="$emit('home')">
             <i class="bi bi-house"></i> {{ t('tests.home') }}
           </BaseButton>
-          <BaseButton v-if="showShare" variant="info" @click="shareResults">
+          <BaseButton v-if="showShare" variant="secondary" @click="shareResults">
             <i class="bi bi-share"></i> {{ t('tests.share') }}
           </BaseButton>
         </div>

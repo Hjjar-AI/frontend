@@ -19,8 +19,8 @@ role="button"
 </div>
 </div>
 <div v-if="isAdmin" class="category-card__actions">
-<button class="btn-icon" @click="$emit('edit')" :aria-label="t('categories.editButtonAria')" :title="t('categories.editButtonAria')"><i class="bi bi-pencil"></i></button>
-<button class="btn-icon text-danger" @click="$emit('delete')" :aria-label="t('categories.deleteButtonAria')" :title="t('categories.deleteButtonAria')"><i class="bi bi-trash"></i></button>
+<BaseIconButton icon="bi bi-pencil" :label="t('categories.editButtonAria')" @click="$emit('edit')" />
+<BaseIconButton variant="danger" icon="bi bi-trash" :label="t('categories.deleteButtonAria')" @click="$emit('delete')" />
 </div>
 </div>
 </BaseCard>
@@ -29,6 +29,7 @@ role="button"
 <script setup>
 import { formatDate } from '@/utils/formatters'
 import BaseCard from '@/components/base/BaseCard.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 
 
 const { t } = useI18n()

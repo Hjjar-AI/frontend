@@ -52,7 +52,7 @@
         @retry="() => fetchHistory(currentPage)"
       >
         <template #default="{ items }">
-          <div class="history-table-wrap">
+          <BaseTableShell sticky max-height="70vh" striped>
             <table class="table-shared">
               <thead>
                 <tr>
@@ -86,7 +86,7 @@
                 </tr>
               </tbody>
             </table>
-          </div>
+          </BaseTableShell>
         </template>
       </BaseListContainer>
 
@@ -109,6 +109,7 @@ import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import Pagination from '@/components/base/BasePagination.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
+import BaseTableShell from '@/components/common/BaseTableShell.vue'
 import { useTestHistoryStore } from '@/stores/testHistoryStore'
 import { useAuthStore } from '@/stores/authStore'
 import { formatDate } from '@/utils/formatters'

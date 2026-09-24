@@ -38,7 +38,7 @@
               <i class="bi bi-play-circle"></i> {{ drillButtonLabel }}
             </BaseButton>
             <BaseButton
-              variant="secondary"
+              variant="ghost"
               size="small"
               @click="() => fetchPage(currentPage)"
             >
@@ -135,7 +135,7 @@
         class="review-queue__bulk"
       >
         <BaseButton
-          variant="success"
+          variant="primary"
           size="small"
           :disabled="selectedIds.length === 0"
           @click="handleBulkVerify('verify')"

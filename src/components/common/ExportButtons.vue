@@ -7,8 +7,8 @@
       :variant="fmt.variant"
       :loading="exportingFormat === fmt.value"
       :disabled="exportingFormat !== null && exportingFormat !== fmt.value"
-      @click="exportFile(fmt.value)"
       :aria-label="t('ui.exportAs', { format: fmt.label })"
+      @click="exportFile(fmt.value)"
     >
       <i :class="fmt.icon"></i> {{ fmt.label }}
     </BaseButton>
@@ -48,10 +48,10 @@ const { notify } = useNotify()
 const exportingFormat = ref(null)
 
 const formats = [
-  { value: 'excel', label: 'Excel', icon: 'bi-file-earmark-excel', variant: 'success' },
-  { value: 'csv', label: 'CSV', icon: 'bi-file-earmark-text', variant: 'primary' },
-  { value: 'json', label: 'JSON', icon: 'bi-file-earmark-code', variant: 'info' },
-  { value: 'pdf', label: 'PDF', icon: 'bi-file-earmark-pdf', variant: 'danger' },
+  { value: 'excel', label: 'Excel', icon: 'bi-file-earmark-excel', variant: 'secondary' },
+  { value: 'csv', label: 'CSV', icon: 'bi-file-earmark-text', variant: 'secondary' },
+  { value: 'json', label: 'JSON', icon: 'bi-file-earmark-code', variant: 'secondary' },
+  { value: 'pdf', label: 'PDF', icon: 'bi-file-earmark-pdf', variant: 'secondary' },
 ]
 
 

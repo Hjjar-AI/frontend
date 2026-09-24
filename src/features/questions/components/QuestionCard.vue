@@ -108,82 +108,90 @@
       </Transition>
     </div>
 
-    <div class="question-card__rating">
-      <span class="rating-label"><i class="bi bi-star"></i> {{ t('questions.rating') }}</span>
-      <button
-        v-for="star in 5"
-        :key="star"
-        class="star-btn"
-        :class="{ active: star <= (userRating || 0) }"
-        :disabled="ratingLoading"
-        :aria-label="t('questions.ratingAria', { star })"
-        @click="rate(star)"
-      >
-        <i :class="star <= (userRating || 0) ? 'bi bi-star-fill' : 'bi bi-star'"></i>
-      </button>
-      <span v-if="avgRating > 0" class="rating-avg">
-        {{ avgRating.toFixed(1) }} ({{ ratingCount }})
-      </span>
-    </div>
+    <details class="question-card__advanced">
+      <summary class="question-card__advanced-summary">
+        <span><i class="bi bi-sliders"></i> {{ t('questions.advancedInfo') }}</span>
+        <i class="bi bi-chevron-down question-card__advanced-chevron" aria-hidden="true"></i>
+      </summary>
+      <div class="question-card__advanced-content">
+        <div class="question-card__rating">
+          <span class="rating-label"><i class="bi bi-star"></i> {{ t('questions.rating') }}</span>
+          <button
+            v-for="star in 5"
+            :key="star"
+            class="star-btn"
+            :class="{ active: star <= (userRating || 0) }"
+            :disabled="ratingLoading"
+            :aria-label="t('questions.ratingAria', { star })"
+            @click="rate(star)"
+          >
+            <i :class="star <= (userRating || 0) ? 'bi bi-star-fill' : 'bi bi-star'"></i>
+          </button>
+          <span v-if="avgRating > 0" class="rating-avg">
+            {{ avgRating.toFixed(1) }} ({{ ratingCount }})
+          </span>
+        </div>
 
-    <div
-      v-if="question.source || question.source_document || question.source_page"
-      class="question-card__source"
-    >
-      <strong><i class="bi bi-book"></i> {{ t('questions.sourceLabel') }}:</strong>
-      <span v-if="question.source">{{ question.source }}</span>
-      <span v-if="question.source_document">
-        · {{ t('questions.sourceDocumentLabel') }}: {{ question.source_document }}
-      </span>
-      <span v-if="question.source_page">
-        · {{ t('questions.sourcePageLabel') }}: {{ question.source_page }}
-      </span>
-    </div>
-
-    <div class="question-card__meta">
-      <span class="question-card__author">
-        <i class="bi bi-person"></i>
-        {{ question.authored_by_username || t('questions.unknownAuthor') }}
-        <BaseBadge
-          v-if="question.authored_by_rank"
-          :variant="authorRankVariant"
-          :title="t('profile.rankLabel')"
-          class="author-rank-badge"
+        <div
+          v-if="question.source || question.source_document || question.source_page"
+          class="question-card__source"
         >
-          <i :class="authorRankIcon"></i>
-          {{ authorRankLabel }}
-        </BaseBadge>
-      </span>
-      <span
-        v-if="ownershipDiffers"
-        class="question-card__owner"
-        :title="t('questions.ownedByTooltip')"
-      >
-        <i class="bi bi-shield-check"></i>
-        {{ t('questions.ownedBy', { username: question.owned_by_username }) }}
-      </span>
-      <span><i class="bi bi-calendar"></i> {{ formatDate(question.created_at) }}</span>
-      <span v-if="question.updated_at">
-        <i class="bi bi-clock-history"></i>
-        {{ t('questions.lastUpdated', { date: formatDate(question.updated_at) }) }}
-      </span>
-      <span v-if="question.last_revised_at">
-        <i class="bi bi-calendar-check"></i>
-        {{ t('questions.lastRevised', { date: formatDate(question.last_revised_at) }) }}
-      </span>
-      <span>
-        <i class="bi bi-eye"></i>
-        {{ t('questions.timesAnswered', { count: question.times_answered || 0 }) }}
-      </span>
-      <span>
-        <i class="bi bi-check2"></i>
-        {{ t('questions.timesCorrect', { count: question.times_correct || 0 }) }}
-      </span>
-      <span v-if="question.tags && question.tags.length" class="tags">
-        <i class="bi bi-tags"></i>
-        <span v-for="tag in question.tags" :key="tag" class="chip">{{ tag }}</span>
-      </span>
-    </div>
+          <strong><i class="bi bi-book"></i> {{ t('questions.sourceLabel') }}:</strong>
+          <span v-if="question.source">{{ question.source }}</span>
+          <span v-if="question.source_document">
+            · {{ t('questions.sourceDocumentLabel') }}: {{ question.source_document }}
+          </span>
+          <span v-if="question.source_page">
+            · {{ t('questions.sourcePageLabel') }}: {{ question.source_page }}
+          </span>
+        </div>
+
+        <div class="question-card__meta">
+          <span class="question-card__author">
+            <i class="bi bi-person"></i>
+            {{ question.authored_by_username || t('questions.unknownAuthor') }}
+            <BaseBadge
+              v-if="question.authored_by_rank"
+              :variant="authorRankVariant"
+              :title="t('profile.rankLabel')"
+              class="author-rank-badge"
+            >
+              <i :class="authorRankIcon"></i>
+              {{ authorRankLabel }}
+            </BaseBadge>
+          </span>
+          <span
+            v-if="ownershipDiffers"
+            class="question-card__owner"
+            :title="t('questions.ownedByTooltip')"
+          >
+            <i class="bi bi-shield-check"></i>
+            {{ t('questions.ownedBy', { username: question.owned_by_username }) }}
+          </span>
+          <span><i class="bi bi-calendar"></i> {{ formatDate(question.created_at) }}</span>
+          <span v-if="question.updated_at">
+            <i class="bi bi-clock-history"></i>
+            {{ t('questions.lastUpdated', { date: formatDate(question.updated_at) }) }}
+          </span>
+          <span v-if="question.last_revised_at">
+            <i class="bi bi-calendar-check"></i>
+            {{ t('questions.lastRevised', { date: formatDate(question.last_revised_at) }) }}
+          </span>
+          <span>
+            <i class="bi bi-eye"></i>
+            {{ t('questions.timesAnswered', { count: question.times_answered || 0 }) }}
+          </span>
+          <span>
+            <i class="bi bi-check2"></i>
+            {{ t('questions.timesCorrect', { count: question.times_correct || 0 }) }}
+          </span>
+          <span v-if="question.tags && question.tags.length" class="tags">
+            <i class="bi bi-tags"></i>
+            <BaseChip v-for="tag in question.tags" :key="tag">{{ tag }}</BaseChip>
+          </span>
+        </div>
+      </div>
+    </details>
   </BaseCard>
 </template>
 
@@ -194,6 +202,7 @@ import { useNotify } from '@/composables/useNotify'
 import { useDebounceFn } from '@/composables/useDebounceFn'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
 import BaseMarkdown from '@/components/markdown/BaseMarkdown.vue'
 import DifficultyBadge from '@/components/base/DifficultyBadge.vue'
 import QuestionCardActions from './QuestionCardActions.vue'

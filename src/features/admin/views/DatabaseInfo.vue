@@ -12,42 +12,44 @@
           <h4 class="card-title">
             <i class="card-title__icon bi bi-info-circle"></i> {{ t('admin.database.infoTitle') }}
           </h4>
-          <table class="table-shared">
-            <tbody>
-              <tr>
-                <th>{{ t('admin.database.type') }}</th>
-                <td>{{ dbInfo.database_type || 'SQLite' }}</td>
-              </tr>
-              <tr>
-                <th>{{ t('admin.database.fileSize') }}</th>
-                <td>{{ dbInfo.file_size || '0 KB' }}</td>
-              </tr>
-              <tr>
-                <th>{{ t('admin.database.lastModified') }}</th>
-                <td>{{ dbInfo.file_modified || 'N/A' }}</td>
-              </tr>
-              <tr>
-                <th>{{ t('admin.database.totalQuestions') }}</th>
-                <td>{{ dbInfo.total_questions || 0 }}</td>
-              </tr>
-              <tr>
-                <th>{{ t('admin.database.verifiedQuestions') }}</th>
-                <td>{{ dbInfo.verified_count || 0 }}</td>
-              </tr>
-              <tr>
-                <th>{{ t('admin.database.totalUsers') }}</th>
-                <td>{{ dbInfo.total_users || 0 }}</td>
-              </tr>
-              <tr>
-                <th>{{ t('admin.database.totalCategories') }}</th>
-                <td>{{ dbInfo.total_categories || 0 }}</td>
-              </tr>
-              <tr>
-                <th>{{ t('admin.database.totalSessions') }}</th>
-                <td>{{ dbInfo.total_sessions || 0 }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <BaseTableShell density="compact">
+            <table class="table-shared">
+              <tbody>
+                <tr>
+                  <th>{{ t('admin.database.type') }}</th>
+                  <td>{{ dbInfo.database_type || 'SQLite' }}</td>
+                </tr>
+                <tr>
+                  <th>{{ t('admin.database.fileSize') }}</th>
+                  <td>{{ dbInfo.file_size || '0 KB' }}</td>
+                </tr>
+                <tr>
+                  <th>{{ t('admin.database.lastModified') }}</th>
+                  <td>{{ dbInfo.file_modified || 'N/A' }}</td>
+                </tr>
+                <tr>
+                  <th>{{ t('admin.database.totalQuestions') }}</th>
+                  <td>{{ dbInfo.total_questions || 0 }}</td>
+                </tr>
+                <tr>
+                  <th>{{ t('admin.database.verifiedQuestions') }}</th>
+                  <td>{{ dbInfo.verified_count || 0 }}</td>
+                </tr>
+                <tr>
+                  <th>{{ t('admin.database.totalUsers') }}</th>
+                  <td>{{ dbInfo.total_users || 0 }}</td>
+                </tr>
+                <tr>
+                  <th>{{ t('admin.database.totalCategories') }}</th>
+                  <td>{{ dbInfo.total_categories || 0 }}</td>
+                </tr>
+                <tr>
+                  <th>{{ t('admin.database.totalSessions') }}</th>
+                  <td>{{ dbInfo.total_sessions || 0 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </BaseTableShell>
         </BaseCard>
         <div>
           <BaseCard>
@@ -70,7 +72,7 @@
               {{ t('admin.database.exportStateDesc') }}
             </p>
             <div class="export-buttons">
-              <BaseButton variant="primary" @click="exportState(true, 'xlsx')">
+              <BaseButton variant="secondary" @click="exportState(true, 'xlsx')">
                 <i class="bi bi-file-earmark-spreadsheet"></i>
                 {{ t('admin.database.exportStateExcel') }}
               </BaseButton>
@@ -137,7 +139,7 @@
                 <span>{{ backup.name }}</span>
                 <span>{{ backup.size }}</span>
                 <span>{{ formatDateTime(backup.modified) }}</span>
-                <BaseButton variant="warning" size="small" @click="openRestoreModal(backup.name)">
+                <BaseButton variant="danger" size="small" @click="openRestoreModal(backup.name)">
                   <i class="bi bi-arrow-counterclockwise"></i>
                   {{ t('admin.database.restoreButton') }}
                 </BaseButton>
@@ -162,7 +164,7 @@
                 <i class="bi bi-search"></i> {{ t('admin.database.qualityScan') }}
               </BaseButton>
               <BaseButton
-                variant="warning"
+                variant="secondary"
                 :disabled="!qualityReport?.summary?.questions_with_issues"
                 :loading="qualityFlagging"
                 @click="flagQualityIssues"
@@ -271,7 +273,7 @@
             t('common.cancel')
           }}</BaseButton>
           <BaseButton
-            variant="warning"
+            variant="danger"
             :disabled="!restorePassword"
             :loading="adminDatabaseStore.isLoading"
             @click="submitRestore"
@@ -288,6 +290,7 @@
 import { ref, computed, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
+import BaseTableShell from '@/components/common/BaseTableShell.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import ExportButtons from '@/components/common/ExportButtons.vue'
 import ExportFilters from '../components/ExportFilters.vue'
