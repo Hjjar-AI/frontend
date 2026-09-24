@@ -12,7 +12,7 @@
             <i class="bi bi-plus-circle"></i> {{ t('admin.groups.addButton') }}
           </BaseButton>
         </template>
-      <ErrorBanner
+      <FeedbackRegion
         :error="groupStore.error"
         :retry="groupStore.error ? true : false"
         @dismiss="groupStore.error = null"
@@ -85,7 +85,7 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import BaseChip from '@/components/base/BaseChip.vue'
 import EntityRow from '@/components/common/EntityRow.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import GroupFormModal from '../components/GroupFormModal.vue'
 import { useGroupStore } from '@/stores/groupStore'
 import { useDialog } from '@/composables/useDialog'

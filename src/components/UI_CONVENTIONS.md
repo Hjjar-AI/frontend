@@ -8,6 +8,7 @@ These contracts keep feature screens visually and behaviorally consistent.
 - Use `SectionHeader` (`h2`) for page sections and `CardHeader` (`h3`) inside cards.
 - Put page commands in the `PageShell` `actions` slot. Use one primary action per page or section.
 - Use primary for the main commit/create action, secondary or ghost for navigation, refresh, and export, and danger only for destructive commands.
+- Feature, navigation, toolbar, and editor actions use `BaseButton`/`BaseIconButton`; native buttons are reserved for shared primitive internals. Use `raw-content` only when an established compound control needs to preserve its internal layout.
 
 ## Feedback and async states
 
@@ -30,6 +31,7 @@ These contracts keep feature screens visually and behaviorally consistent.
 - Keep filter and pagination state in the route query so detail navigation and browser Back restore the list.
 - Repeated title/description/status/action records use `EntityRow`; repeated icon/label/value facts use `MetadataList`.
 - Passive state/count values use `BaseBadge`; interactive and removable values use `BaseChip`.
+- Data tables live in `BaseTableShell`. Choose `scroll`, `columns`, or `cards` deliberately and supply `data-label` values for card-mode cells.
 
 ## Responsive and international content
 

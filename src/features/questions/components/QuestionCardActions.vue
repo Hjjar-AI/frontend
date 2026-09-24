@@ -89,48 +89,56 @@
             role="menu"
             @click.stop
           >
-            <button
+            <BaseButton
               v-if="authStore.can('questions.duplicate')"
-              type="button"
+              variant="ghost"
+              size="small"
+              raw-content
               class="question-card-actions__item"
               role="menuitem"
               @click="run('duplicate')"
             >
               <i class="bi bi-files"></i>
               <span>{{ t('questions.duplicate') }}</span>
-            </button>
+            </BaseButton>
 
-            <button
-              type="button"
+            <BaseButton
+              variant="ghost"
+              size="small"
+              raw-content
               class="question-card-actions__item"
               role="menuitem"
               @click="run('export')"
             >
               <i class="bi bi-download"></i>
               <span>{{ t('questions.exportSingle') }}</span>
-            </button>
+            </BaseButton>
 
-            <button
-              type="button"
+            <BaseButton
+              variant="ghost"
+              size="small"
+              raw-content
               class="question-card-actions__item"
               role="menuitem"
               @click="run('flag')"
             >
               <i class="bi bi-flag"></i>
               <span>{{ t('questions.flag') }}</span>
-            </button>
+            </BaseButton>
 
             <div class="question-card-actions__divider" role="separator"></div>
 
-            <button
-              type="button"
+            <BaseButton
+              variant="ghost"
+              size="small"
+              raw-content
               class="question-card-actions__item question-card-actions__item--danger"
               role="menuitem"
               @click="run('delete')"
             >
               <i class="bi bi-trash"></i>
               <span>{{ t('common.delete') }}</span>
-            </button>
+            </BaseButton>
         </BasePopoverPanel>
       </div>
     </div>
@@ -144,6 +152,7 @@ import { useQuestionStore } from '@/stores/questionStore'
 import { useDropdown } from '@/composables/useDropdown'
 import { downloadBlob } from '@/utils/downloadFile'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
 
 const { t } = useI18n()

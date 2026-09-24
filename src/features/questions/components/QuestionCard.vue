@@ -89,8 +89,10 @@
     </div>
 
     <div v-if="displayQuestion.explanation" class="question-card__explanation">
-      <button
-        type="button"
+      <BaseButton
+        variant="ghost"
+        size="small"
+        raw-content
         class="explanation-toggle"
         :aria-expanded="explanationExpanded"
         @click="explanationExpanded = !explanationExpanded"
@@ -100,7 +102,7 @@
           <i :class="explanationExpanded ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></i>
           {{ explanationExpanded ? t('questions.explainHide') : t('questions.explainShow') }}
         </span>
-      </button>
+      </BaseButton>
       <Transition name="explanation">
         <p v-if="explanationExpanded" dir="auto" class="explanation-text">
           {{ displayQuestion.explanation }}
@@ -116,17 +118,18 @@
       <div class="question-card__advanced-content">
         <div class="question-card__rating">
           <span class="rating-label"><i class="bi bi-star"></i> {{ t('questions.rating') }}</span>
-          <button
+          <BaseIconButton
             v-for="star in 5"
             :key="star"
+            variant="ghost"
+            size="small"
             class="star-btn"
+            :icon="star <= (userRating || 0) ? 'bi bi-star-fill' : 'bi bi-star'"
+            :label="t('questions.ratingAria', { star })"
             :class="{ active: star <= (userRating || 0) }"
             :disabled="ratingLoading"
-            :aria-label="t('questions.ratingAria', { star })"
             @click="rate(star)"
-          >
-            <i :class="star <= (userRating || 0) ? 'bi bi-star-fill' : 'bi bi-star'"></i>
-          </button>
+          />
           <span v-if="avgRating > 0" class="rating-avg">
             {{ avgRating.toFixed(1) }} ({{ ratingCount }})
           </span>
@@ -203,6 +206,8 @@ import { useDebounceFn } from '@/composables/useDebounceFn'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseChip from '@/components/base/BaseChip.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import BaseMarkdown from '@/components/markdown/BaseMarkdown.vue'
 import DifficultyBadge from '@/components/base/DifficultyBadge.vue'
 import QuestionCardActions from './QuestionCardActions.vue'

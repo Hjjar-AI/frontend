@@ -20,7 +20,7 @@
         <summary class="question-form__case-summary">
           <i class="bi bi-journal-medical"></i>
           <span>{{ t('questions.caseSection') }}</span>
-          <span v-if="form.case_key" class="question-form__case-badge">{{ form.case_key }}</span>
+          <BaseBadge v-if="form.case_key" variant="info" small class="question-form__case-badge">{{ form.case_key }}</BaseBadge>
         </summary>
         <FormGrid>
           <div>
@@ -67,9 +67,9 @@
         <summary class="question-form__case-summary">
           <i class="bi bi-bullseye"></i>
           <span>{{ t('questions.knowledgeObjectSection') }}</span>
-          <span v-if="selectedKnowledgeObject" class="question-form__case-badge">
+          <BaseBadge v-if="selectedKnowledgeObject" variant="info" small class="question-form__case-badge">
             {{ selectedKnowledgeObject.title }}
-          </span>
+          </BaseBadge>
         </summary>
         <p class="text-muted question-form__case-hint">
           {{ t('questions.knowledgeObjectHint') }}
@@ -171,10 +171,10 @@
             :label="t('questions.imageRemove')"
             @click="clearImage"
           />
-          <div class="image-preview__status">
+          <BaseBadge variant="info" class="image-preview__status">
             <i class="bi bi-info-circle"></i>
             {{ imageUploadStatus }}
-          </div>
+          </BaseBadge>
         </div>
       </div>
 
@@ -245,9 +245,9 @@
         <summary class="question-form__case-summary">
           <i class="bi bi-translate"></i>
           <span>{{ t('questions.translationsSection') }}</span>
-          <span v-if="translationCount" class="question-form__case-badge">
+          <BaseBadge v-if="translationCount" variant="info" small class="question-form__case-badge">
             {{ translationCount }}
-          </span>
+          </BaseBadge>
         </summary>
         <p class="text-muted question-form__case-hint">
           {{ t('questions.translationsHint') }}
@@ -346,6 +346,7 @@ import BaseInput from '@/components/base/BaseInput.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import BaseTextarea from '@/components/base/BaseTextarea.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import { useSubmitGuard } from '@/composables/useSubmitGuard'
 import { useUnsavedChanges } from '@/composables/useUnsavedChanges'

@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <BaseTableShell class="difficulty-calibration__table" density="compact" striped>
+      <BaseTableShell class="difficulty-calibration__table" density="compact" striped mobile-mode="cards">
         <table class="table-shared report-table">
           <thead>
             <tr>
@@ -72,10 +72,10 @@
           </thead>
           <tbody>
             <tr v-for="row in rows" :key="row.difficulty">
-              <td>{{ difficultyLabel(row.difficulty) }}</td>
-              <td class="numeric">{{ row.question_count }}</td>
-              <td class="numeric">{{ row.total_answered }}</td>
-              <td class="numeric">{{ row.observed_accuracy.toFixed(1) }}%</td>
+              <td :data-label="t('difficulty.label')">{{ difficultyLabel(row.difficulty) }}</td>
+              <td class="numeric" :data-label="t('analytics.difficultyCalibrationQuestions')">{{ row.question_count }}</td>
+              <td class="numeric" :data-label="t('analytics.difficultyCalibrationAnswered')">{{ row.total_answered }}</td>
+              <td class="numeric" :data-label="t('analytics.difficultyCalibrationObserved')">{{ row.observed_accuracy.toFixed(1) }}%</td>
             </tr>
           </tbody>
         </table>

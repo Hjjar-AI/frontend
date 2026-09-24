@@ -138,4 +138,7 @@
 
 @media (max-width: 480px) {
   .table-shell--mobile-columns [data-priority="medium"] { display: none; }
+  .table-shell--mobile-cards tbody td {
+    grid-template-columns: minmax(6rem, 0.85fr) minmax(0, 1.15fr);
+  }
 }

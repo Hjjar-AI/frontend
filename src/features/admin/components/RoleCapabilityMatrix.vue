@@ -25,14 +25,16 @@
       The parent's ErrorBanner covers catalog-fetch failures; this
       banner covers role-save failures. The two are independent.
     -->
-    <ErrorBanner :error="error" :retry="Boolean(error)" @dismiss="error = ''" />
+    <FeedbackRegion scope="section" :error="error" :retry="Boolean(error)" @dismiss="error = ''" />
 
     <!-- ── Role picker ──────────────────────────────────────────── -->
     <div class="role-picker">
-      <button
+      <BaseChip
         v-for="role in editableRoles"
         :key="role"
-        type="button"
+        interactive
+        variant="primary"
+        :active="activeRole === role"
         class="role-chip"
         :class="{ 'role-chip--active': activeRole === role }"
         @click="activeRole = role"
@@ -42,10 +44,12 @@
         <span class="role-chip__count">
           {{ (draftRoleCaps[role] || []).length }}
         </span>
-      </button>
+      </BaseChip>
 
-      <button
-        type="button"
+      <BaseChip
+        interactive
+        variant="primary"
+        :active="activeRole === 'admin'"
         class="role-chip role-chip--readonly"
         :class="{ 'role-chip--active': activeRole === 'admin' }"
         @click="activeRole = 'admin'"
@@ -53,7 +57,7 @@
         <i class="bi bi-shield-lock-fill"></i>
         {{ roleLabel('admin') }}
         <span class="role-chip__count">{{ capabilityCatalog.length }}</span>
-      </button>
+      </BaseChip>
     </div>
 
     <!-- ── Current-role header ──────────────────────────────────── -->
@@ -133,7 +137,8 @@ import { ref, computed } from 'vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import { usePermissionStore } from '@/stores/permissionStore'
 import { useNotify } from '@/composables/useNotify'
 import { ROLES } from '@/utils/constants'

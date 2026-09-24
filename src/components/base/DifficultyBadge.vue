@@ -1,13 +1,14 @@
 <!-- frontend/src/components/base/DifficultyBadge.vue -->
 <template>
-  <span class="difficulty-badge" :class="`difficulty-badge--${difficulty}`">
+  <BaseBadge :variant="variant" status class="difficulty-badge" :class="`difficulty-badge--${difficulty}`">
     <span class="difficulty-badge__dot"></span>
     {{ label }}
-  </span>
+  </BaseBadge>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import BaseBadge from './BaseBadge.vue'
 
 import { DIFFICULTY_LABEL_KEYS } from '@/utils/constants'
 
@@ -24,4 +25,10 @@ const label = computed(() => {
   // backend-added value still renders something instead of blank.
   return key ? t(key) : props.difficulty
 })
+
+const variant = computed(() => ({
+  easy: 'success',
+  medium: 'warning',
+  hard: 'danger',
+})[props.difficulty] || 'secondary')
 </script>

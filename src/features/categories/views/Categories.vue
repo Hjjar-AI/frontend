@@ -15,7 +15,7 @@
             <i class="bi bi-plus-circle"></i> {{ t('categories.addButton') }}
           </BaseButton>
         </template>
-      <ErrorBanner
+      <FeedbackRegion
         :error="categoryStore.error"
         :retry="categoryStore.error ? true : false"
         @dismiss="categoryStore.error = null"
@@ -61,7 +61,7 @@ import PageShell from '@/components/common/PageShell.vue'
 import CategoryCard from '../components/CategoryCard.vue'
 import CategoryForm from '../components/CategoryForm.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useAuthStore } from '@/stores/authStore'

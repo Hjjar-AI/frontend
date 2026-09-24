@@ -19,10 +19,12 @@
         <BaseInput v-model="form.description" :label="t('categories.descriptionLabel')" />
         <BaseField :label="t('categories.colorLabel')" id="cat-color">
           <div class="category-form__presets">
-            <button
+            <BaseButton
               v-for="c in colorPresets"
               :key="c"
-              type="button"
+              variant="ghost"
+              size="small"
+              icon-only
               class="category-form__preset"
               :style="{ background: c }"
               @click="form.color = c"
@@ -30,7 +32,7 @@
               :aria-label="t('categories.colorPresetAria', { color: c })"
             >
               <span v-if="form.color === c" class="category-form__preset-check"><i class="bi bi-check-lg"></i></span>
-            </button>
+            </BaseButton>
             <input
               type="color"
               v-model="form.color"

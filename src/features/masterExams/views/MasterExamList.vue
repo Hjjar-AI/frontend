@@ -24,7 +24,7 @@
             </BaseButton>
           </div>
         </template>
-      <ErrorBanner
+      <FeedbackRegion
         :error="masterExamStore.error"
         :retry="masterExamStore.error ? true : false"
         @dismiss="masterExamStore.error = null"
@@ -67,14 +67,14 @@
 
 <script setup>
 import '@/assets/master.css'
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import TabStrip from '@/components/common/TabStrip.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import MasterExamCard from '../components/MasterExamCard.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useMasterExamStore } from '@/stores/masterExamStore'
@@ -83,13 +83,25 @@ import { useDialog } from '@/composables/useDialog'
 
 const { t } = useI18n()
 
+const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const masterExamStore = useMasterExamStore()
 const attemptStore = useMasterExamAttemptStore()
 const { confirm } = useDialog()
 
-const activeTab = ref('active')
+const validTabs = new Set(['active', 'upcoming', 'mine', 'all'])
+const initialTab = String(route.query.tab || 'active')
+const activeTab = ref(validTabs.has(initialTab) ? initialTab : 'active')
+
+watch(activeTab, (tab) => {
+  router.replace({ query: { ...route.query, tab: tab === 'active' ? undefined : tab } })
+})
+
+watch(() => route.query.tab, (tab) => {
+  const next = String(tab || 'active')
+  activeTab.value = validTabs.has(next) ? next : 'active'
+})
 
 const tabs = computed(() => [
   {

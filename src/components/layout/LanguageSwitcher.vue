@@ -1,7 +1,10 @@
 <!-- frontend/src/components/layout/LanguageSwitcher.vue -->
 <template>
   <div ref="rootRef" class="language-dropdown">
-    <button
+    <BaseButton
+      variant="ghost"
+      size="small"
+      raw-content
       class="language-dropdown__toggle"
       :aria-label="t('language.switch')"
       :title="t('language.switch')"
@@ -15,13 +18,15 @@
         class="bi bi-chevron-down language-dropdown__arrow"
         :class="{ 'language-dropdown__arrow--open': isOpen }"
       ></i>
-    </button>
+    </BaseButton>
 
     <BasePopoverPanel :open="isOpen" panel-class="language-dropdown__menu">
-        <button
+        <BaseButton
           v-for="locale in SUPPORTED_LOCALES"
           :key="locale"
-          type="button"
+          variant="ghost"
+          size="small"
+          raw-content
           class="language-dropdown__item"
           :class="{ 'language-dropdown__item--active': locale === currentLocale }"
           @click="select(locale)"
@@ -34,7 +39,7 @@
             v-if="locale === currentLocale"
             class="bi bi-check2 language-dropdown__check"
           ></i>
-        </button>
+        </BaseButton>
     </BasePopoverPanel>
   </div>
 </template>
@@ -46,6 +51,7 @@ import { LOCALE_META, SUPPORTED_LOCALES } from '@/i18n/helpers/direction'
 import { useNotify } from '@/composables/useNotify'
 import { useDropdown } from '@/composables/useDropdown'
 import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 const { t, locale } = useI18n()
 const { notify } = useNotify()

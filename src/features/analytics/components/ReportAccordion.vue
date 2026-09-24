@@ -27,8 +27,9 @@
 -->
 <template>
   <BaseCard class="report-accordion">
-    <button
-      type="button"
+    <BaseButton
+      variant="ghost"
+      raw-content
       class="report-accordion__toggle"
       :aria-expanded="expanded"
       :aria-controls="bodyId"
@@ -44,18 +45,20 @@
         ></i>
       </span>
       <span v-if="summary" class="report-accordion__summary">{{ summary }}</span>
-    </button>
+    </BaseButton>
 
     <div v-show="expanded" :id="bodyId" class="report-accordion__body">
       <p v-if="description" class="report-accordion__desc">{{ description }}</p>
 
-      <div v-if="loading" class="report-accordion__skeleton">
-        <BaseSkeleton :count="3" height="48px" stacked />
-      </div>
-
-      <ErrorBanner v-else-if="error" :error="error" retry @retry="$emit('retry')" />
-
-      <slot v-else />
+      <AsyncContent
+        :loading="loading"
+        :error="error"
+        :skeleton-count="3"
+        skeleton-height="48px"
+        @retry="$emit('retry')"
+      >
+        <slot />
+      </AsyncContent>
     </div>
   </BaseCard>
 </template>
@@ -63,8 +66,8 @@
 <script setup>
 import { useId } from 'vue'
 import BaseCard from '@/components/base/BaseCard.vue'
-import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import AsyncContent from '@/components/common/AsyncContent.vue'
 
 const props = defineProps({
   title: { type: String, required: true },

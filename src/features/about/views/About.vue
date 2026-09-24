@@ -93,9 +93,9 @@
         </h2>
         <p class="section-text">{{ t('about.ai.intro') }}</p>
         <div class="ai-chips">
-          <span class="chip chip--primary" v-for="ai in aiTools" :key="ai">
+          <BaseBadge variant="info" v-for="ai in aiTools" :key="ai">
             <i class="bi bi-cpu"></i> {{ ai }}
-          </span>
+          </BaseBadge>
         </div>
       </BaseCard>
 

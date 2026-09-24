@@ -106,8 +106,8 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
@@ -122,12 +122,15 @@ import { useTestSessionStore } from '@/stores/testSessionStore'
 import '@/assets/knowledge-map.css'
 
 const { t } = useI18n()
+const route = useRoute()
 const router = useRouter()
 const sessionStore = useTestSessionStore()
 const payload = ref(null)
 const loading = ref(true)
 const error = ref(null)
-const activeStatus = ref('all')
+const validStatuses = new Set(['all', 'mastered', 'developing', 'needs_work', 'unstarted'])
+const initialStatus = String(route.query.status || 'all')
+const activeStatus = ref(validStatuses.has(initialStatus) ? initialStatus : 'all')
 const startingId = ref(null)
 
 const statusOptions = [
@@ -137,6 +140,15 @@ const statusOptions = [
   { value: 'needs_work', labelKey: 'knowledge.status.needs_work' },
   { value: 'unstarted', labelKey: 'knowledge.status.unstarted' },
 ]
+
+watch(activeStatus, (status) => {
+  router.replace({ query: { ...route.query, status: status === 'all' ? undefined : status } })
+})
+
+watch(() => route.query.status, (status) => {
+  const next = String(status || 'all')
+  activeStatus.value = validStatuses.has(next) ? next : 'all'
+})
 
 const summaryStats = computed(() => {
   const summary = payload.value?.summary || {}

@@ -8,7 +8,7 @@
       :aria-expanded="isOpen"
       @click.stop="toggle"
     >
-      <template #badge><span class="shortcut-hint__badge">⌨</span></template>
+      <template #badge><BaseBadge variant="info" small class="shortcut-hint__badge">⌨</BaseBadge></template>
     </BaseIconButton>
     <BasePopoverPanel :open="isOpen" panel-class="shortcut-hint__panel" transition="hint">
         <div class="shortcut-hint__item">
@@ -36,6 +36,7 @@ import { FALLBACK_MAX_CHOICES } from '@/utils/constants'
 import { useDropdown } from '@/composables/useDropdown'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 
 
 const { t } = useI18n()

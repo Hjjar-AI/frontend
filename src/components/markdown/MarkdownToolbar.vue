@@ -1,18 +1,20 @@
 <!-- frontend/src/components/markdown/MarkdownToolbar.vue -->
 <template>
   <div class="markdown-toolbar">
-    <button
+    <BaseButton
       v-for="btn in buttons"
       :key="btn.action"
-      type="button"
       class="btn-icon"
+      variant="ghost"
+      size="small"
+      icon-only
+      :icon="btn.icon || ''"
       :title="btn.title"
       :aria-label="btn.title"
       @click="$emit('insert', btn.action)"
     >
-      <i v-if="btn.icon" :class="btn.icon"></i>
-      <span v-else>{{ btn.label }}</span>
-    </button>
+      <span v-if="!btn.icon">{{ btn.label }}</span>
+    </BaseButton>
     <router-link
       to="/manual#markdown"
       class="markdown-toolbar__help"
@@ -26,6 +28,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 
 const { t } = useI18n()

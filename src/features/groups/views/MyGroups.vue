@@ -74,7 +74,7 @@
             empty-icon="bi-bar-chart"
           >
             <template #default="{ items }">
-              <BaseTableShell density="compact" striped>
+              <BaseTableShell density="compact" striped mobile-mode="cards">
                 <table class="table-shared leaderboard">
                   <thead>
                     <tr>
@@ -91,13 +91,13 @@
                       :key="row.user_id"
                       :class="{ 'leaderboard__self': row.user_id === currentUserId }"
                     >
-                      <td class="leaderboard__rank" :class="rankClass(row.rank)">
+                      <td class="leaderboard__rank" :class="rankClass(row.rank)" :data-label="t('groups.colRank')">
                         <span v-if="row.rank === 1">🥇</span>
                         <span v-else-if="row.rank === 2">🥈</span>
                         <span v-else-if="row.rank === 3">🥉</span>
                         <span v-else>{{ row.rank }}</span>
                       </td>
-                      <td class="leaderboard__name">
+                      <td class="leaderboard__name" :data-label="t('groups.colName')">
                         {{ row.full_name }}
 
                         <span
@@ -105,11 +105,11 @@
                           class="leaderboard__self-marker"
                         >({{ t('groups.self') }})</span>
                       </td>
-                      <td>{{ row.questions_answered }}</td>
-                      <td class="leaderboard__accuracy" :class="accuracyClass(row.accuracy)">
+                      <td :data-label="t('groups.colQuestions')">{{ row.questions_answered }}</td>
+                      <td class="leaderboard__accuracy" :class="accuracyClass(row.accuracy)" :data-label="t('groups.colAccuracy')">
                         {{ row.accuracy }}%
                       </td>
-                      <td>
+                      <td :data-label="t('groups.colStreak')">
                         <span v-if="row.current_streak > 0" class="leaderboard__streak">
                           🔥 {{ row.current_streak }}
                         </span>
@@ -128,7 +128,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
@@ -146,9 +147,13 @@ const { t } = useI18n()
 
 const groupStore = useGroupStore()
 const authStore = useAuthStore()
+const route = useRoute()
+const router = useRouter()
 
-const selectedGroupId = ref(null)
-const currentDays = ref(7)
+const selectedGroupId = ref(Number(route.query.group) || null)
+const allowedDays = new Set([7, 30, 90])
+const routeDays = Number(route.query.days)
+const currentDays = ref(allowedDays.has(routeDays) ? routeDays : 7)
 
 const dayOptions = computed(() => [
   { value: 7,  label: t('groups.days7') },
@@ -189,22 +194,47 @@ function accuracyClass(acc) {
 
 async function loadGroups() {
   await groupStore.fetchMyGroups()
-  if (!selectedGroupId.value && groupStore.myGroups.length > 0) {
-    selectGroup(groupStore.myGroups[0].id)
-  }
+  const requestedExists = groupStore.myGroups.some(group => group.id === selectedGroupId.value)
+  const nextId = requestedExists ? selectedGroupId.value : groupStore.myGroups[0]?.id
+  if (nextId) await selectGroup(nextId)
 }
 
 async function selectGroup(groupId) {
   selectedGroupId.value = groupId
+  syncQuery()
   await groupStore.fetchLeaderboard(groupId, currentDays.value)
 }
 
 async function changeDays(days) {
-  currentDays.value = days
+  currentDays.value = Number(days)
+  syncQuery()
   if (selectedGroupId.value) {
     await groupStore.fetchLeaderboard(selectedGroupId.value, days)
   }
 }
+
+function syncQuery() {
+  router.replace({
+    query: {
+      ...route.query,
+      group: selectedGroupId.value ? String(selectedGroupId.value) : undefined,
+      days: currentDays.value === 7 ? undefined : String(currentDays.value),
+    },
+  })
+}
+
+watch(
+  () => [route.query.group, route.query.days],
+  async ([group, days]) => {
+    const nextGroup = Number(group) || null
+    const parsedDays = Number(days || 7)
+    const nextDays = allowedDays.has(parsedDays) ? parsedDays : 7
+    if (nextGroup === selectedGroupId.value && nextDays === currentDays.value) return
+    selectedGroupId.value = nextGroup
+    currentDays.value = nextDays
+    if (nextGroup) await groupStore.fetchLeaderboard(nextGroup, nextDays)
+  },
+)
 
 async function toggleVisibility(visible) {
   if (!selectedGroupId.value) return

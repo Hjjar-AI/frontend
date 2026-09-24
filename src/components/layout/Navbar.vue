@@ -7,14 +7,13 @@
         <span class="navbar__brand-text">{{ t('app.name') }}</span>
       </router-link>
 
-      <button
+      <BaseIconButton
         class="navbar__toggle"
+        :icon="menuOpen ? 'bi bi-x-lg' : 'bi bi-list'"
+        :label="menuOpen ? t('nav.closeMenu') : t('nav.openMenu')"
         @click="menuOpen = !menuOpen"
-        :aria-label="menuOpen ? t('nav.closeMenu') : t('nav.openMenu')"
         :aria-expanded="menuOpen"
-      >
-        <i :class="menuOpen ? 'bi bi-x-lg' : 'bi bi-list'"></i>
-      </button>
+      />
 
       <div class="navbar__links" :class="{ 'navbar__links--open': menuOpen }">
         <NavbarDropdown
@@ -29,10 +28,12 @@
             class="nav-link"
           >
             <i :class="link.icon"></i> {{ t(link.labelKey) }}
-            <span
+            <BaseBadge
               v-if="navBadge(link.id)"
-              class="badge badge-danger badge--small navbar__badge"
-            >{{ navBadge(link.id) }}</span>
+              variant="danger"
+              small
+              class="navbar__badge"
+            >{{ navBadge(link.id) }}</BaseBadge>
           </router-link>
         </NavbarDropdown>
 
@@ -43,10 +44,12 @@
         >
           <router-link v-for="link in testLinks" :key="link.id" :to="link.to" class="nav-link">
             <i :class="link.icon"></i> {{ t(link.labelKey) }}
-            <span
+            <BaseBadge
               v-if="navBadge(link.id)"
-              class="badge badge-danger badge--small navbar__badge"
-            >{{ navBadge(link.id) }}</span>
+              variant="danger"
+              small
+              class="navbar__badge"
+            >{{ navBadge(link.id) }}</BaseBadge>
           </router-link>
         </NavbarDropdown>
 
@@ -80,22 +83,25 @@
       </div>
 
       <div class="navbar__actions">
-        <span
+        <BaseBadge
           v-if="showAdminBadge"
+          variant="warning"
+          small
           class="navbar__admin-badge"
           :title="t('a11y.adminMode')"
         >
           <i class="bi bi-shield-lock"></i>
-        </span>
+        </BaseBadge>
 
-        <span
+        <BaseBadge
           v-if="streak > 0"
+          variant="warning"
           class="streak-chip streak-chip--compact"
           :title="t('a11y.streakTooltip', { current: streak, longest: longestStreak })"
         >
           <span class="streak-chip__emoji">🔥</span>
           <span class="streak-chip__count">{{ streak }}</span>
-        </span>
+        </BaseBadge>
 
         <NotificationBell
           v-if="authStore.can('admin.flags')"
@@ -121,6 +127,8 @@ import { useGroupStore } from '@/stores/groupStore'
 import { useWrongAnswerStore } from '@/stores/wrongAnswerStore'
 import { useMasterExamStore } from '@/stores/masterExamStore'
 import NotificationBell from '@/components/layout/NotificationBell.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 import ThemeDropdown from '@/components/layout/ThemeDropdown.vue'
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher.vue'
 import NavbarDropdown from './NavbarDropdown.vue'

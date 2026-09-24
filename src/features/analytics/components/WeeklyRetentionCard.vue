@@ -14,7 +14,7 @@
       {{ t('analytics.weeklyRetentionEmpty') }}
     </div>
 
-    <BaseTableShell v-else density="compact" striped>
+    <BaseTableShell v-else density="compact" striped mobile-mode="cards">
       <table class="table-shared report-table">
         <thead>
           <tr>
@@ -27,14 +27,14 @@
         </thead>
         <tbody>
           <tr v-for="row in rows" :key="row.week_start">
-            <td>{{ row.week_start }}</td>
-            <td class="numeric">{{ row.active_prior_week }}</td>
-            <td class="numeric">{{ row.active_this_week }}</td>
-            <td class="numeric">{{ row.retained }}</td>
-            <td class="numeric">
-              <span :class="retentionChipClass(row.retention_rate)">
+            <td :data-label="t('analytics.weeklyRetentionWeek')">{{ row.week_start }}</td>
+            <td class="numeric" :data-label="t('analytics.weeklyRetentionPriorActive')">{{ row.active_prior_week }}</td>
+            <td class="numeric" :data-label="t('analytics.weeklyRetentionThisActive')">{{ row.active_this_week }}</td>
+            <td class="numeric" :data-label="t('analytics.weeklyRetentionRetained')">{{ row.retained }}</td>
+            <td class="numeric" :data-label="t('analytics.weeklyRetentionRate')">
+              <BaseBadge :variant="retentionVariant(row.retention_rate)">
                 {{ row.retention_rate.toFixed(1) }}%
-              </span>
+              </BaseBadge>
             </td>
           </tr>
         </tbody>
@@ -46,6 +46,7 @@
 <script setup>
 import { computed } from 'vue'
 import BaseTableShell from '@/components/common/BaseTableShell.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 
 const { t } = useI18n()
 
@@ -55,12 +56,12 @@ const props = defineProps({
 
 const rows = computed(() => props.data?.rows || [])
 
-function retentionChipClass(rate) {
+function retentionVariant(rate) {
   // Retention thresholds are intentionally different from the
   // accuracy thresholds above: a "great" retention for a study app
   // is around 60% week-over-week; anything over 30% is healthy.
-  if (rate >= 60) return 'accuracy-chip accuracy-chip--great'
-  if (rate >= 30) return 'accuracy-chip accuracy-chip--ok'
-  return 'accuracy-chip accuracy-chip--low'
+  if (rate >= 60) return 'success'
+  if (rate >= 30) return 'warning'
+  return 'danger'
 }
 </script>

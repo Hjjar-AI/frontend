@@ -26,7 +26,7 @@
 
         <BaseCard>
           <CardHeader :title="t('masterExams.resultsParticipants')" icon="bi bi-info-circle" />
-          <BaseTableShell density="compact">
+          <BaseTableShell density="compact" mobile-mode="cards">
             <table class="table-shared master-exam-results__table">
               <thead>
                 <tr>
@@ -36,8 +36,8 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{ attempt.started_at ? formatDateTime(attempt.started_at) : '—' }}</td>
-                  <td>{{ attempt.finished_at ? formatDateTime(attempt.finished_at) : '—' }}</td>
+                  <td :data-label="t('masterExams.resultsColStarted')">{{ attempt.started_at ? formatDateTime(attempt.started_at) : '—' }}</td>
+                  <td :data-label="t('masterExams.resultsColFinished')">{{ attempt.finished_at ? formatDateTime(attempt.finished_at) : '—' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -46,12 +46,12 @@
             v-if="attempt.is_makeup || attempt.forced_finish"
             class="master-exam-my-result__flags"
           >
-            <span v-if="attempt.is_makeup" class="master-exam-results__makeup-flag">{{
+            <BaseBadge v-if="attempt.is_makeup" variant="info" class="master-exam-results__makeup-flag">{{
               t('masterExams.resultsMakeupFlag')
-            }}</span>
-            <span v-if="attempt.forced_finish" class="master-exam-results__forced-flag">{{
+            }}</BaseBadge>
+            <BaseBadge v-if="attempt.forced_finish" variant="warning" class="master-exam-results__forced-flag">{{
               t('masterExams.resultsForcedFlag')
-            }}</span>
+            }}</BaseBadge>
           </div>
         </BaseCard>
       </AsyncContent>
@@ -67,6 +67,7 @@ import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 import AsyncContent from '@/components/common/AsyncContent.vue'
 import CardHeader from '@/components/common/CardHeader.vue'
 import BaseTableShell from '@/components/common/BaseTableShell.vue'

@@ -6,7 +6,7 @@
   gap: var(--space-lg);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .analytics-grid { grid-template-columns: 1fr; }
 }
 
@@ -334,31 +334,6 @@
   font-size: var(--icon-lg);
   color: var(--color-text-muted);
   margin-bottom: var(--space-xs);
-}
-
-/* ── Accuracy chip (color coding reused across several reports) ─ */
-.accuracy-chip {
-  display: inline-block;
-  padding: 1px var(--space-xs);
-  border-radius: var(--radius-pill);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  font-variant-numeric: tabular-nums;
-}
-
-.accuracy-chip--great {
-  background: color-mix(in srgb, var(--color-success) 15%, transparent);
-  color: var(--color-success-dark);
-}
-
-.accuracy-chip--ok {
-  background: color-mix(in srgb, var(--color-warning) 15%, transparent);
-  color: var(--color-warning-dark);
-}
-
-.accuracy-chip--low {
-  background: color-mix(in srgb, var(--color-danger) 15%, transparent);
-  color: var(--color-danger-dark);
 }
 
 .difficulty-calibration__table { margin-top: var(--space-md); }

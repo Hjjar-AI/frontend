@@ -26,8 +26,8 @@
         </div>
       </div>
 
-      <ErrorBanner :error="questionStore.error" @dismiss="questionStore.error = null" />
-      <ErrorBanner :error="bookmarkStore.error" @dismiss="bookmarkStore.error = null" />
+      <FeedbackRegion :error="questionStore.error" @dismiss="questionStore.error = null" />
+      <FeedbackRegion :error="bookmarkStore.error" @dismiss="bookmarkStore.error = null" />
 
       <!-- Unified Study Now queue -->
       <BaseCard class="dashboard__study-now">
@@ -268,7 +268,7 @@ import StatTile from '@/components/base/StatTile.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import SectionHeader from '@/components/common/SectionHeader.vue'
 import { useDashboardController } from '../composables/useDashboardController'
 

@@ -7,13 +7,14 @@
     @click="$emit('click')"
   >
     <template #badge>
-      <span v-if="count > 0" class="notification-bell__badge">{{ count > 9 ? '9+' : count }}</span>
+      <BaseBadge v-if="count > 0" variant="danger" small class="notification-bell__badge">{{ count > 9 ? '9+' : count }}</BaseBadge>
     </template>
   </BaseIconButton>
 </template>
 
 <script setup>
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 
 const { t } = useI18n()
 

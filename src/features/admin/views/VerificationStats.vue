@@ -11,7 +11,7 @@
             <i class="bi bi-arrow-repeat"></i> {{ t('common.refresh') }}
           </BaseButton>
         </template>
-      <ErrorBanner
+      <FeedbackRegion
         :error="adminVerificationStatsStore.error"
         @dismiss="adminVerificationStatsStore.error = null"
       />
@@ -79,7 +79,7 @@
           <i class="card-title__icon bi bi-diagram-3"></i>
           {{ t('admin.verification.breakdownTitle') }}
         </h4>
-        <BaseTableShell density="compact" striped>
+        <BaseTableShell density="compact" striped mobile-mode="cards">
           <table class="table-shared">
             <thead>
               <tr>
@@ -92,11 +92,11 @@
             </thead>
             <tbody>
               <tr v-for="cat in stats.by_category" :key="cat.name">
-                <td>{{ cat.name }}</td>
-                <td class="text-center text-success">{{ cat.verified }}</td>
-                <td class="text-center text-warning">{{ cat.total - cat.verified }}</td>
-                <td class="text-center">{{ cat.total }}</td>
-                <td class="text-center">
+                <td :data-label="t('admin.verification.colCategory')">{{ cat.name }}</td>
+                <td class="text-center text-success" :data-label="t('admin.verification.colVerified')">{{ cat.verified }}</td>
+                <td class="text-center text-warning" :data-label="t('admin.verification.colUnverified')">{{ cat.total - cat.verified }}</td>
+                <td class="text-center" :data-label="t('admin.verification.colTotal')">{{ cat.total }}</td>
+                <td class="text-center" :data-label="t('admin.verification.colPercent')">
                   <span :class="categoryAccuracyClass(cat)">
                     {{ cat.total > 0 ? ((cat.verified / cat.total) * 100).toFixed(0) : 0 }}%
                   </span>
@@ -134,7 +134,7 @@ import { computed } from 'vue'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import StatTile from '@/components/base/StatTile.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import ExportButtons from '@/components/common/ExportButtons.vue'
 import ChartCard from '@/components/charts/ChartCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'

@@ -11,7 +11,7 @@
             <i class="bi bi-person-plus"></i> {{ t('admin.users.addButton') }}
           </BaseButton>
         </template>
-      <ErrorBanner
+      <FeedbackRegion
         :error="userStore.error"
         :retry="userStore.error ? true : false"
         @dismiss="userStore.error = null"
@@ -145,7 +145,7 @@
         v-if="pagination.totalPages.value > 1"
         :current="pagination.page.value"
         :total-pages="pagination.totalPages.value"
-        @page-change="pagination.goToPage"
+        @page-change="goToPage"
       />
 
       <UserFormModal ref="userFormModalRef" />
@@ -199,8 +199,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, reactive, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import Pagination from '@/components/base/BasePagination.vue'
@@ -211,7 +211,7 @@ import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import BulkActions from '@/components/common/BulkActions.vue'
 import UserFormModal from '../components/UserFormModal.vue'
 import { useUserStore } from '@/stores/userStore'
@@ -229,6 +229,7 @@ import { avatarToneClass } from '@/utils/avatar'
 const { t } = useI18n()
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 const authStore = useAuthStore()
 const { notify } = useNotify()
@@ -259,6 +260,23 @@ const fetchUsers = async () => {
   return result
 }
 const pagination = usePagination(fetchUsers, configStore.itemsPerPage || 20)
+pagination.page.value = Math.max(1, Number.parseInt(String(route.query.page || '1'), 10) || 1)
+
+async function goToPage(page) {
+  await pagination.goToPage(page)
+  router.replace({
+    query: {
+      ...route.query,
+      page: pagination.page.value === 1 ? undefined : String(pagination.page.value),
+    },
+  })
+}
+
+watch(() => route.query.page, async (page) => {
+  const next = Math.max(1, Number.parseInt(String(page || '1'), 10) || 1)
+  if (next === pagination.page.value) return
+  await pagination.goToPage(next)
+})
 
 const resetModalOpen = ref(false)
 const resetTargetUser = ref(null)

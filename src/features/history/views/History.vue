@@ -38,7 +38,7 @@
       page-class="history-page"
     >
 
-      <ErrorBanner
+      <FeedbackRegion
         :error="historyStore.error"
         @dismiss="historyStore.error = null"
       />
@@ -103,10 +103,11 @@
 <script setup>
 import '@/assets/history.css'
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import Pagination from '@/components/base/BasePagination.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseTableShell from '@/components/common/BaseTableShell.vue'
@@ -130,8 +131,11 @@ const props = defineProps({
 
 const historyStore = useTestHistoryStore()
 const authStore = useAuthStore()
+const route = useRoute()
+const router = useRouter()
 
-const currentPage = ref(1)
+const initialPage = Math.max(1, Number.parseInt(String(route.query.page || '1'), 10) || 1)
+const currentPage = ref(initialPage)
 
 const totalPages = computed(() => historyStore.pagination.total_pages || 1)
 
@@ -167,7 +171,9 @@ async function fetchHistory(page = 1) {
 }
 
 function handlePageChange(page) {
-  fetchHistory(page)
+  const next = Math.max(1, Number(page) || 1)
+  router.replace({ query: { ...route.query, page: next === 1 ? undefined : String(next) } })
+  fetchHistory(next)
 }
 
 // If the mode prop changes without unmounting — e.g. the user navigates
@@ -178,10 +184,16 @@ function handlePageChange(page) {
 // any future shape where they share a layout.
 watch(() => props.mode, () => {
   currentPage.value = 1
+  router.replace({ query: { ...route.query, page: undefined } })
   fetchHistory(1)
 })
 
+watch(() => route.query.page, (page) => {
+  const next = Math.max(1, Number.parseInt(String(page || '1'), 10) || 1)
+  if (next !== currentPage.value) fetchHistory(next)
+})
+
 onMounted(() => {
-  fetchHistory(1)
+  fetchHistory(currentPage.value)
 })
 </script>

@@ -1,7 +1,10 @@
 <!-- frontend/src/components/layout/ThemeDropdown.vue -->
 <template>
   <div ref="rootRef" class="theme-dropdown">
-    <button
+    <BaseButton
+      variant="ghost"
+      size="small"
+      raw-content
       class="theme-dropdown__toggle"
       :aria-label="t('theme.label')"
       :title="t('theme.label')"
@@ -14,11 +17,14 @@
         class="bi bi-chevron-down theme-dropdown__arrow"
         :class="{ 'theme-dropdown__arrow--open': isOpen }"
       ></i>
-    </button>
+    </BaseButton>
     <BasePopoverPanel :open="isOpen" panel-class="theme-dropdown__menu">
-        <button
+        <BaseButton
           v-for="theme in THEMES"
           :key="theme"
+          variant="ghost"
+          size="small"
+          raw-content
           class="theme-dropdown__item"
           :class="{ 'theme-dropdown__item--active': theme === currentTheme }"
           @click="selectTheme(theme)"
@@ -29,7 +35,7 @@
             v-if="theme === currentTheme"
             class="bi bi-check2 theme-dropdown__item-check"
           ></i>
-        </button>
+        </BaseButton>
     </BasePopoverPanel>
   </div>
 </template>
@@ -39,6 +45,7 @@ import { computed } from 'vue'
 import { useTheme } from '@/composables/useTheme'
 import { useDropdown } from '@/composables/useDropdown'
 import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 const { t } = useI18n()
 const { currentTheme, applyTheme, THEMES } = useTheme()

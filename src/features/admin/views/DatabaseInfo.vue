@@ -6,7 +6,7 @@
       icon="bi bi-database"
       page-class="database-info"
     >
-      <ErrorBanner :error="adminDatabaseStore.error" @dismiss="adminDatabaseStore.error = null" />
+      <FeedbackRegion :error="adminDatabaseStore.error" @dismiss="adminDatabaseStore.error = null" />
       <div class="grid-2col">
         <BaseCard>
           <h4 class="card-title">
@@ -183,9 +183,9 @@
                 }}
               </p>
               <div class="quality-report__counts">
-                <span v-for="entry in qualityIssueCounts" :key="entry.code" class="badge">
+                <BaseBadge v-for="entry in qualityIssueCounts" :key="entry.code" variant="secondary">
                   {{ qualityIssueLabel(entry.code) }}: {{ entry.count }}
-                </span>
+                </BaseBadge>
               </div>
               <div v-if="qualityReport.items?.length" class="quality-report__list">
                 <article
@@ -199,9 +199,9 @@
                   <span class="text-muted">
                     {{ item.issues.map((issue) => qualityIssueLabel(issue.code)).join(', ') }}
                   </span>
-                  <span v-if="item.has_open_quality_flag" class="badge badge-warning">
+                  <BaseBadge v-if="item.has_open_quality_flag" variant="warning">
                     {{ t('admin.database.qualityAlreadyFlagged') }}
-                  </span>
+                  </BaseBadge>
                 </article>
                 <p v-if="qualityReport.items.length > 50" class="text-muted">
                   {{ t('admin.database.qualityShowingFirst', { count: 50 }) }}
@@ -291,12 +291,13 @@ import { ref, computed, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseTableShell from '@/components/common/BaseTableShell.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import ExportButtons from '@/components/common/ExportButtons.vue'
 import ExportFilters from '../components/ExportFilters.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 import { useAdminDatabaseStore } from '@/stores/adminDatabaseStore'
 import { useNotify } from '@/composables/useNotify'
 import { formatDateTime } from '@/utils/formatters'

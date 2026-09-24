@@ -51,14 +51,14 @@
           :placeholder="t('tests.recallPlaceholder')"
           @keydown.ctrl.enter.prevent="revealChoices"
         ></textarea>
-        <button
-          type="button"
+        <BaseButton
+          variant="primary"
           class="btn btn-primary recall-prompt__reveal"
           :disabled="disabled || !preAnswer.trim()"
           @click="revealChoices"
         >
           <i class="bi bi-eye"></i> {{ t('tests.revealOptions') }}
-        </button>
+        </BaseButton>
         <small class="text-muted">{{ t('tests.recallPrivacyHint') }}</small>
       </div>
 
@@ -118,22 +118,22 @@
           <span class="reflection-prompt__hint">{{ t('tests.reflectionHint') }}</span>
         </div>
         <div class="reflection-prompt__buttons">
-          <button type="button" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('unknown')">
+          <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('unknown')">
             <i class="bi bi-x-octagon"></i>
             {{ t('tests.reflectionUnknown') }}
-          </button>
-          <button type="button" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('misread')">
+          </BaseButton>
+          <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('misread')">
             <i class="bi bi-eye-slash"></i>
             {{ t('tests.reflectionMisread') }}
-          </button>
-          <button type="button" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('confused')">
+          </BaseButton>
+          <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('confused')">
             <i class="bi bi-signpost-split"></i>
             {{ t('tests.reflectionConfused') }}
-          </button>
-          <button type="button" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('guessed')">
+          </BaseButton>
+          <BaseButton variant="secondary" size="small" class="reflection-prompt__btn" :disabled="disabled" @click="pickReason('guessed')">
             <i class="bi bi-dice-5"></i>
             {{ t('tests.reflectionGuessed') }}
-          </button>
+          </BaseButton>
         </div>
       </div>
       <slot name="feedback"></slot>
@@ -146,6 +146,7 @@ import { computed, ref, watch } from 'vue'
 import BaseMarkdown from '@/components/markdown/BaseMarkdown.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import { localizedQuestion } from '@/utils/localizedQuestion'
 import { normalizeConfidenceScore } from '@/utils/confidence'
 

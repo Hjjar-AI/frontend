@@ -30,3 +30,8 @@
   .knowledge-summary { grid-template-columns: repeat(2, 1fr); }
   .knowledge-object-card__header { flex-direction: column; }
 }
+@media (max-width: 480px) {
+  .knowledge-summary,
+  .knowledge-object-card__details { grid-template-columns: 1fr; }
+  .knowledge-grid { grid-template-columns: minmax(0, 1fr); }
+}

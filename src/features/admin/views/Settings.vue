@@ -8,7 +8,7 @@
       page-class="admin-settings"
     >
       <BaseCard>
-        <ErrorBanner :error="adminSettingsStore.error" @dismiss="adminSettingsStore.error = null" />
+        <FeedbackRegion :error="adminSettingsStore.error" @dismiss="adminSettingsStore.error = null" />
 
         <form @submit.prevent="saveSettings" class="settings-form">
           <fieldset class="settings-section">
@@ -121,7 +121,7 @@
 import { ref, computed, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'

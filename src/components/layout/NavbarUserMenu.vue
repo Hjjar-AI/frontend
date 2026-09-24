@@ -21,7 +21,10 @@
 -->
 <template>
   <div ref="rootRef" class="navbar__user">
-    <button
+    <BaseButton
+      variant="ghost"
+      size="small"
+      raw-content
       class="navbar__user-btn"
       :aria-expanded="isOpen"
       :aria-label="t('nav.userMenu')"
@@ -32,7 +35,7 @@
         class="bi bi-chevron-down navbar__user-arrow"
         :class="{ 'navbar__user-arrow--open': isOpen }"
       ></i>
-    </button>
+    </BaseButton>
 
     <BasePopoverPanel
         :open="isOpen"
@@ -80,9 +83,9 @@
           <i class="bi bi-sliders"></i> {{ t('nav.settings') }}
         </router-link>
         <div class="navbar__user-divider"></div>
-        <button class="nav-link nav-link--danger" @click="handleLogout">
+        <BaseButton variant="ghost" size="small" raw-content class="nav-link nav-link--danger" @click="handleLogout">
           <i class="bi bi-box-arrow-right"></i> {{ t('nav.logout') }}
-        </button>
+        </BaseButton>
     </BasePopoverPanel>
   </div>
 </template>
@@ -94,6 +97,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useDropdown } from '@/composables/useDropdown'
 import { roleLabelFor } from '@/utils/roleDisplay'
 import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 const { t } = useI18n()
 const router = useRouter()

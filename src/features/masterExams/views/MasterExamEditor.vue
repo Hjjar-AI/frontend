@@ -27,7 +27,7 @@
         <span>{{ t('masterExams.frozen') }}</span>
       </div>
 
-      <ErrorBanner
+      <FeedbackRegion
         :error="masterExamStore.error"
         :retry="masterExamStore.error ? true : false"
         @dismiss="masterExamStore.error = null"
@@ -198,40 +198,36 @@
             :class="{ 'master-exam-question-row--draft': questionsById[qid]?.is_draft }"
           >
             <div class="master-exam-question-row__reorder">
-              <button
-                type="button"
+              <BaseIconButton
+                icon="bi bi-chevron-up"
+                size="small"
+                :label="t('masterExams.moveUpAria')"
                 :disabled="idx === 0 || isFrozen"
-                :aria-label="t('masterExams.moveUpAria')"
                 @click="moveUp(idx)"
-              >
-                <i class="bi bi-chevron-up"></i>
-              </button>
-              <button
-                type="button"
+              />
+              <BaseIconButton
+                icon="bi bi-chevron-down"
+                size="small"
+                :label="t('masterExams.moveDownAria')"
                 :disabled="idx === form.question_ids.length - 1 || isFrozen"
-                :aria-label="t('masterExams.moveDownAria')"
                 @click="moveDown(idx)"
-              >
-                <i class="bi bi-chevron-down"></i>
-              </button>
+              />
             </div>
             <div class="master-exam-question-row__reorder">
-              <button
-                type="button"
+              <BaseIconButton
+                icon="bi bi-chevron-double-up"
+                size="small"
+                :label="t('masterExams.moveTopAria')"
                 :disabled="idx === 0 || isFrozen"
-                :aria-label="t('masterExams.moveTopAria')"
                 @click="moveTop(idx)"
-              >
-                <i class="bi bi-chevron-double-up"></i>
-              </button>
-              <button
-                type="button"
+              />
+              <BaseIconButton
+                icon="bi bi-chevron-double-down"
+                size="small"
+                :label="t('masterExams.moveBottomAria')"
                 :disabled="idx === form.question_ids.length - 1 || isFrozen"
-                :aria-label="t('masterExams.moveBottomAria')"
                 @click="moveBottom(idx)"
-              >
-                <i class="bi bi-chevron-double-down"></i>
-              </button>
+              />
             </div>
             <span class="master-exam-question-row__index">{{ idx + 1 }}</span>
             <div class="master-exam-question-row__body">
@@ -239,12 +235,14 @@
                 {{ questionsById[qid]?.question || `#${qid}` }}
               </p>
               <div class="master-exam-question-row__meta">
-                <span
+                <BaseBadge
                   v-if="questionsById[qid]?.is_draft"
+                  variant="warning"
+                  small
                   class="master-exam-question-row__draft-badge"
                 >
                   <i class="bi bi-pencil"></i> {{ t('masterExams.draftBadge') }}
-                </span>
+                </BaseBadge>
                 <span v-if="questionsById[qid]?.difficulty">
                   <i class="bi bi-speedometer"></i>
                   {{ difficultyLabel(questionsById[qid].difficulty) }}
@@ -258,15 +256,15 @@
               </div>
             </div>
             <div class="master-exam-question-row__actions">
-              <button
-                type="button"
+              <BaseIconButton
                 class="danger"
+                icon="bi bi-x-lg"
+                variant="danger"
+                size="small"
+                :label="t('masterExams.removeQuestionAria')"
                 :disabled="isFrozen"
-                :aria-label="t('masterExams.removeQuestionAria')"
                 @click="removeQuestion(idx)"
-              >
-                <i class="bi bi-x-lg"></i>
-              </button>
+              />
             </div>
           </div>
         </div>
@@ -358,18 +356,20 @@
               <div class="master-exam-picker__row-body">
                 <div class="master-exam-picker__row-text">{{ q.question }}</div>
                 <div class="master-exam-picker__row-meta">
-                  <span class="master-exam-picker__row-badge">
+                  <BaseBadge variant="secondary" small class="master-exam-picker__row-badge">
                     <i class="bi bi-speedometer"></i> {{ difficultyLabel(q.difficulty) }}
-                  </span>
-                  <span v-if="q.category_name" class="master-exam-picker__row-badge">
+                  </BaseBadge>
+                  <BaseBadge v-if="q.category_name" variant="info" small class="master-exam-picker__row-badge">
                     <i class="bi bi-folder2"></i> {{ q.category_name }}
-                  </span>
-                  <span
+                  </BaseBadge>
+                  <BaseBadge
                     v-if="form.question_ids.includes(q.id)"
+                    variant="success"
+                    small
                     class="master-exam-picker__row-badge"
                   >
                     <i class="bi bi-check-lg"></i> {{ t('masterExams.pickerAlready') }}
-                  </span>
+                  </BaseBadge>
                 </div>
               </div>
             </div>
@@ -412,12 +412,13 @@ import BaseTextarea from '@/components/base/BaseTextarea.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import DraftQuestionForm from '../components/DraftQuestionForm.vue'
 import { useMasterExamEditor } from '../composables/useMasterExamEditor'
 

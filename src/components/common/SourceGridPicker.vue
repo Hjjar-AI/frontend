@@ -35,14 +35,15 @@
           {{ t('common.optional') }}
         </span>
       </label>
-      <button
+      <BaseButton
         v-if="showClear && hasSelection"
-        type="button"
+        variant="ghost"
+        size="small"
         class="source-grid-picker__clear"
         @click="clear"
       >
         {{ t('common.clear') }}
-      </button>
+      </BaseButton>
     </div>
 
     <div v-if="loading" class="source-grid-picker__loading">
@@ -108,6 +109,7 @@
 <script setup>
 import { computed } from 'vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 const { t } = useI18n()
 

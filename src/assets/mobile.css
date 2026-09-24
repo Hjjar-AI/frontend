@@ -218,3 +218,10 @@
 @media (max-width: 768px) {
   .bottom-nav { display: block; }
 }
+
+@media (max-width: 360px) {
+  .bottom-nav__bar { padding-inline: 2px; }
+  .bottom-nav__item { min-width: 40px; padding-inline: 3px; }
+  .bottom-nav__label { max-width: 3.75rem; overflow: hidden; text-overflow: ellipsis; }
+  .sheet__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

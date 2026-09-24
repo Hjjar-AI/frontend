@@ -9,9 +9,9 @@
   >
     <div v-if="recentTags.length" class="tag-input__recent">
       <span class="tag-input__recent-label">{{ t('questions.recentLabel') }}</span>
-      <span v-for="tag in recentTags" :key="tag" class="chip" @click="appendTag(tag)">{{
-        tag
-      }}</span>
+      <BaseChip v-for="tag in recentTags" :key="tag" interactive @click="appendTag(tag)">
+        {{ tag }}
+      </BaseChip>
     </div>
 
     <div class="tag-input__wrap">
@@ -33,15 +33,16 @@
           class="tag-input__suggestions"
           @mousedown.prevent
         >
-          <button
+          <BaseButton
             v-for="tag in matchingTags"
             :key="tag"
-            type="button"
+            variant="ghost"
+            size="small"
             class="tag-input__suggestion"
             @mousedown.prevent="appendTag(tag)"
           >
             <i class="bi bi-tag"></i> {{ tag }}
-          </button>
+          </BaseButton>
         </div>
       </Transition>
     </div>
@@ -54,6 +55,8 @@ import { useRecentItems } from '@/composables/useRecentItems'
 import { useDebounceFn } from '@/composables/useDebounceFn'
 import { useTagStore } from '@/stores/tagStore'
 import BaseField from '@/components/base/BaseField.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
 
 const { t } = useI18n()
 

@@ -12,7 +12,7 @@
             <i class="bi bi-plus-circle"></i> {{ t('admin.blueprints.addButton') }}
           </BaseButton>
         </template>
-      <ErrorBanner
+      <FeedbackRegion
         :error="blueprintStore.error"
         :retry="blueprintStore.error ? true : false"
         @dismiss="blueprintStore.error = null"
@@ -87,7 +87,7 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import BaseChip from '@/components/base/BaseChip.vue'
 import EntityRow from '@/components/common/EntityRow.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import BlueprintFormModal from '../components/BlueprintFormModal.vue'
 import { useBlueprintStore } from '@/stores/blueprintStore'
 import { useCategoryStore } from '@/stores/categoryStore'

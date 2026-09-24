@@ -10,7 +10,7 @@
 <i class="bi bi-arrow-repeat"></i> {{ t('common.refresh') }}
 </BaseButton>
 </template>
-<ErrorBanner :error="flagStore.error" @dismiss="flagStore.error = null" />
+<FeedbackRegion :error="flagStore.error" @dismiss="flagStore.error = null" />
 
 <BulkActions
 v-if="selectedIds.length > 0"
@@ -66,7 +66,7 @@ import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import ModerationCard from '@/components/common/ModerationCard.vue'
 import BulkActions from '@/components/common/BulkActions.vue'
 import { useFlagStore } from '@/stores/flagStore'

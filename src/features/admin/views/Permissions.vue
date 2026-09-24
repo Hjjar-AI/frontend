@@ -15,20 +15,15 @@
             {{ t('admin.permissions.badgeRoles', { count: editableRoles.length }) }}
           </BaseBadge>
         </template>
-      <ErrorBanner
-        :error="catalogError"
-        :retry="Boolean(catalogError)"
-        @dismiss="catalogError = ''"
-        @retry="loadCatalog"
-      />
-
       <TabStrip v-model="activeTab" :tabs="tabs" :aria-label="t('admin.permissions.title')" />
 
-      <BaseCard v-if="loadingCatalog" class="permissions-page__loading">
-        <BaseSkeleton :count="6" height="40px" stacked />
-      </BaseCard>
-
-      <template v-else>
+      <AsyncContent
+        :loading="loadingCatalog"
+        :error="catalogError"
+        :skeleton-count="6"
+        skeleton-height="40px"
+        @retry="loadCatalog"
+      >
         <RoleCapabilityMatrix
           v-if="activeTab === 'roles'"
           :capability-catalog="capabilityCatalog"
@@ -42,21 +37,19 @@
           :initial-user-id="initialUserId"
           @user-selected="onUserSelected"
         />
-      </template>
+      </AsyncContent>
     </PageShell>
   </Layout>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import TabStrip from '@/components/common/TabStrip.vue'
-import BaseCard from '@/components/base/BaseCard.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
-import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import AsyncContent from '@/components/common/AsyncContent.vue'
 import RoleCapabilityMatrix from '../components/RoleCapabilityMatrix.vue'
 import UserOverrideEditor from '../components/UserOverrideEditor.vue'
 import { usePermissionStore } from '@/stores/permissionStore'
@@ -67,7 +60,23 @@ const route = useRoute()
 const router = useRouter()
 const permissionStore = usePermissionStore()
 
-const activeTab = ref(route.query.user ? 'users' : 'roles')
+const initialTab = route.query.tab === 'users' || route.query.user ? 'users' : 'roles'
+const activeTab = ref(initialTab)
+
+watch(activeTab, (tab) => {
+  router.replace({
+    query: {
+      ...route.query,
+      tab: tab === 'roles' ? undefined : tab,
+      user: tab === 'users' ? route.query.user : undefined,
+    },
+  })
+})
+
+watch(() => route.query.tab, (tab) => {
+  const next = tab === 'users' || route.query.user ? 'users' : 'roles'
+  activeTab.value = next
+})
 
 const loadingCatalog = ref(false)
 const catalogError = ref('')

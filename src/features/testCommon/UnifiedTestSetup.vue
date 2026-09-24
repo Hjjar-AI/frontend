@@ -66,10 +66,12 @@
       </legend>
 
       <div class="source-tabs" role="tablist">
-        <button
+        <BaseChip
           v-for="s in availableSources"
           :key="s.value"
-          type="button"
+          interactive
+          variant="primary"
+          :active="source === s.value"
           role="tab"
           class="source-tab"
           :class="{ 'source-tab--active': source === s.value }"
@@ -80,8 +82,8 @@
         >
           <i :class="s.icon"></i>
           <span>{{ t(s.labelKey) }}</span>
-          <span v-if="s.badge != null" class="source-tab__badge">{{ s.badge }}</span>
-        </button>
+          <BaseBadge v-if="s.badge != null" small class="source-tab__badge">{{ s.badge }}</BaseBadge>
+        </BaseChip>
       </div>
 
       <!-- Source-specific value picker. Category and Tag both use the
@@ -202,6 +204,8 @@ import '@/assets/blueprints.css'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
+import BaseChip from '@/components/base/BaseChip.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import SourceGridPicker from '@/components/common/SourceGridPicker.vue'

@@ -3,8 +3,9 @@
 <template>
   <BaseCard class="heatmap-card">
     
-    <button
-      type="button"
+    <BaseButton
+      variant="ghost"
+      raw-content
       class="heatmap-card__toggle"
       :aria-expanded="expanded"
       aria-controls="heatmap-body"
@@ -36,7 +37,7 @@
           🔥 <strong>{{ data.current_streak }}</strong>
         </span>
       </span>
-    </button>
+    </BaseButton>
 
     
     <div v-show="expanded" id="heatmap-body" class="heatmap-card__body">
@@ -103,6 +104,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import BaseCard from '@/components/base/BaseCard.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import { formatNumber } from '@/utils/formatters'
 
 const { t } = useI18n()

@@ -14,7 +14,7 @@
       {{ t('analytics.cohortComparisonEmpty') }}
     </div>
 
-    <BaseTableShell v-else density="compact" striped>
+    <BaseTableShell v-else density="compact" striped mobile-mode="cards">
       <table class="table-shared report-table">
         <thead>
           <tr>
@@ -28,15 +28,15 @@
         </thead>
         <tbody>
           <tr v-for="row in rows" :key="row.group_id">
-            <td>{{ row.group_name }}</td>
-            <td class="numeric">{{ row.member_count }}</td>
-            <td class="numeric">{{ row.active_users }}</td>
-            <td class="numeric">{{ row.session_count }}</td>
-            <td class="numeric">{{ row.total_questions }}</td>
-            <td class="numeric">
-              <span :class="accuracyChipClass(row.avg_accuracy)">
+            <td :data-label="t('analytics.cohortComparisonGroup')">{{ row.group_name }}</td>
+            <td class="numeric" :data-label="t('analytics.cohortComparisonMembers')">{{ row.member_count }}</td>
+            <td class="numeric" :data-label="t('analytics.cohortComparisonActive')">{{ row.active_users }}</td>
+            <td class="numeric" :data-label="t('analytics.cohortComparisonSessions')">{{ row.session_count }}</td>
+            <td class="numeric" :data-label="t('analytics.cohortComparisonQuestions')">{{ row.total_questions }}</td>
+            <td class="numeric" :data-label="t('analytics.cohortComparisonAccuracy')">
+              <BaseBadge :variant="accuracyVariant(row.avg_accuracy)">
                 {{ row.avg_accuracy.toFixed(1) }}%
-              </span>
+              </BaseBadge>
             </td>
           </tr>
         </tbody>
@@ -48,6 +48,7 @@
 <script setup>
 import { computed } from 'vue'
 import BaseTableShell from '@/components/common/BaseTableShell.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 
 const { t } = useI18n()
 
@@ -57,9 +58,9 @@ const props = defineProps({
 
 const rows = computed(() => props.data?.rows || [])
 
-function accuracyChipClass(acc) {
-  if (acc >= 80) return 'accuracy-chip accuracy-chip--great'
-  if (acc >= 50) return 'accuracy-chip accuracy-chip--ok'
-  return 'accuracy-chip accuracy-chip--low'
+function accuracyVariant(acc) {
+  if (acc >= 80) return 'success'
+  if (acc >= 50) return 'warning'
+  return 'danger'
 }
 </script>

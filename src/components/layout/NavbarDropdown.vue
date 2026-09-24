@@ -15,8 +15,10 @@
 -->
 <template>
   <div ref="rootRef" class="navbar-dropdown">
-    <button
-      type="button"
+    <BaseButton
+      variant="ghost"
+      size="small"
+      raw-content
       class="nav-link"
       :class="{ 'nav-link--active': isActive }"
       :aria-expanded="isOpen"
@@ -29,7 +31,7 @@
         class="bi bi-chevron-down navbar-dropdown__arrow"
         :class="{ 'navbar-dropdown__arrow--open': isOpen }"
       ></i>
-    </button>
+    </BaseButton>
     <BasePopoverPanel
         :open="isOpen"
         panel-class="navbar-dropdown__menu"
@@ -43,6 +45,7 @@
 <script setup>
 import { useDropdown } from '@/composables/useDropdown'
 import BasePopoverPanel from '@/components/base/BasePopoverPanel.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 defineProps({
   label: { type: String, required: true },

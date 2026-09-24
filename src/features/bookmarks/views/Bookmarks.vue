@@ -13,7 +13,7 @@
       </template>
 
       <BaseCard>
-        <ErrorBanner
+        <FeedbackRegion
           :error="bookmarkStore.error || questionStore.error"
           :retry="bookmarkStore.error || questionStore.error ? true : false"
           @dismiss="dismissErrors"
@@ -59,7 +59,7 @@ import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import QuestionCard from '@/features/questions/components/QuestionCard.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useBookmarkStore } from '@/stores/bookmarkStore'
 import { useQuestionStore } from '@/stores/questionStore'

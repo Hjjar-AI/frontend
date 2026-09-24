@@ -19,7 +19,7 @@
 -->
 <template>
   <div class="user-override-editor">
-    <ErrorBanner :error="error" :retry="Boolean(error)" @dismiss="error = ''" />
+    <FeedbackRegion scope="section" :error="error" :retry="Boolean(error)" @dismiss="error = ''" />
 
     <!-- ── User picker ──────────────────────────────────────────── -->
     <BaseCard class="user-picker-card">
@@ -33,10 +33,12 @@
           <BaseSkeleton :count="3" height="32px" stacked />
         </div>
         <div v-else class="user-picker__list">
-          <button
+          <BaseButton
             v-for="u in filteredUsers"
             :key="u.id"
-            type="button"
+            variant="ghost"
+            size="small"
+            raw-content
             class="user-picker__item"
             :class="{ 'user-picker__item--active': selectedUser && selectedUser.id === u.id }"
             @click="selectUser(u)"
@@ -55,7 +57,7 @@
                 {{ roleLabel(u.role) }}
               </span>
             </span>
-          </button>
+          </BaseButton>
           <p v-if="filteredUsers.length === 0" class="text-muted">
             {{ t('admin.permissions.userSearchEmpty') }}
           </p>
@@ -69,9 +71,9 @@
         <div>
           <h3 class="override-editor__title">
             {{ selectedUser.full_name || selectedUser.username }}
-            <span class="override-editor__role-badge">
+            <BaseBadge variant="info" small class="override-editor__role-badge">
               {{ roleLabel(selectedUser.role) }}
-            </span>
+            </BaseBadge>
           </h3>
           <p class="override-editor__hint">
             {{
@@ -145,33 +147,30 @@
               </span>
             </div>
             <div class="capability-row__tri">
-              <button
-                type="button"
+              <BaseIconButton
                 class="tri-button tri-button--inherit"
+                icon="bi bi-circle"
+                :label="t('admin.permissions.stateInherit')"
                 :class="{ 'tri-button--active': overrideState(cap) === 'inherit' }"
                 @click="setOverride(cap, null)"
                 :title="t('admin.permissions.stateInherit')"
-              >
-                <i class="bi bi-circle"></i>
-              </button>
-              <button
-                type="button"
+              />
+              <BaseIconButton
                 class="tri-button tri-button--on"
+                icon="bi bi-check-circle-fill"
+                :label="t('admin.permissions.stateOn')"
                 :class="{ 'tri-button--active': overrideState(cap) === 'on' }"
                 @click="setOverride(cap, true)"
                 :title="t('admin.permissions.stateOn')"
-              >
-                <i class="bi bi-check-circle-fill"></i>
-              </button>
-              <button
-                type="button"
+              />
+              <BaseIconButton
                 class="tri-button tri-button--off"
+                icon="bi bi-x-circle-fill"
+                :label="t('admin.permissions.stateOff')"
                 :class="{ 'tri-button--active': overrideState(cap) === 'off' }"
                 @click="setOverride(cap, false)"
                 :title="t('admin.permissions.stateOff')"
-              >
-                <i class="bi bi-x-circle-fill"></i>
-              </button>
+              />
             </div>
           </div>
         </div>
@@ -194,7 +193,9 @@ import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import { useUserOverrideEditor } from '../composables/useUserOverrideEditor'
 import { avatarToneClass } from '@/utils/avatar'
 

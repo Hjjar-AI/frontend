@@ -6,7 +6,7 @@
       icon="bi bi-calendar-check"
       page-class="planner-page"
     >
-      <ErrorBanner :error="store.error" @dismiss="store.error = null" />
+      <FeedbackRegion :error="store.error" @dismiss="store.error = null" />
 
       <BaseCard v-if="store.planner" class="planner-card">
         <div class="planner-summary">
@@ -19,7 +19,7 @@
               </svg>
               <span class="progress-text">{{ store.todayProgress }} / {{ store.planner.target_questions_per_day }}</span>
             </div>
-            <span v-if="store.targetReached" class="badge badge-success">{{ t('planner.targetReached') }}</span>
+            <BaseBadge v-if="store.targetReached" variant="success" status>{{ t('planner.targetReached') }}</BaseBadge>
           </div>
 
           <div class="planner-settings">
@@ -68,9 +68,10 @@ import BaseCard from '@/components/base/BaseCard.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 
 import { resolveIntlLocale } from '@/i18n/helpers/format'
 

@@ -11,10 +11,10 @@
       @retry="load"
     >
       <template #badges>
-        <span v-if="isActive" class="master-exam-results__live-indicator">
+        <BaseBadge v-if="isActive" variant="success" status class="master-exam-results__live-indicator">
           <span class="master-exam-results__live-indicator__dot"></span>
           {{ t('masterExams.resultsLive') }}
-        </span>
+        </BaseBadge>
       </template>
       <template #actions>
         <div class="master-exam-results__header-actions">
@@ -87,12 +87,12 @@
                   <tr v-for="row in items" :key="row.user_id">
                     <td>
                       <strong>{{ row.full_name }}</strong>
-                      <span v-if="row.is_makeup" class="master-exam-results__makeup-flag">{{
+                      <BaseBadge v-if="row.is_makeup" variant="info" small class="master-exam-results__makeup-flag">{{
                         t('masterExams.resultsMakeupFlag')
-                      }}</span>
-                      <span v-if="row.forced_finish" class="master-exam-results__forced-flag">{{
+                      }}</BaseBadge>
+                      <BaseBadge v-if="row.forced_finish" variant="warning" small class="master-exam-results__forced-flag">{{
                         t('masterExams.resultsForcedFlag')
-                      }}</span>
+                      }}</BaseBadge>
                     </td>
                     <td class="numeric">
                       {{ row.is_complete ? `${row.correct_count}/${row.total_questions}` : '—' }}
@@ -176,6 +176,7 @@ import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import CardHeader from '@/components/common/CardHeader.vue'
 import BaseTableShell from '@/components/common/BaseTableShell.vue'

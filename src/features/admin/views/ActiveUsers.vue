@@ -7,9 +7,9 @@
       page-class="active-users"
     >
         <template #badges>
-          <span class="live-indicator" :title="t('admin.activeUsers.liveTooltip')">
+          <BaseBadge variant="success" status class="live-indicator" :title="t('admin.activeUsers.liveTooltip')">
             <span class="live-dot"></span> {{ t('admin.activeUsers.liveBadge') }}
-          </span>
+          </BaseBadge>
           <BaseBadge variant="info">
             {{ t('admin.activeUsers.countBadge', { count: activeUserStore.count }) }}
           </BaseBadge>
@@ -20,7 +20,7 @@
             {{ t('admin.activeUsers.refresh') }}
           </BaseButton>
         </template>
-      <ErrorBanner
+      <FeedbackRegion
         :error="activeUserStore.error"
         :retry="activeUserStore.error ? true : false"
         @dismiss="activeUserStore.error = null"
@@ -68,7 +68,7 @@ import { computed } from 'vue'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import ModerationCard from '@/components/common/ModerationCard.vue'

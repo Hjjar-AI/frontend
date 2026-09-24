@@ -13,7 +13,7 @@
             {{ t('common.back') }}
           </BaseButton>
         </template>
-      <ErrorBanner
+      <FeedbackRegion
         :error="groupStore.error"
         :retry="groupStore.error ? true : false"
         @dismiss="groupStore.error = null"
@@ -147,7 +147,7 @@ import BaseModal from '@/components/base/BaseModal.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import { useGroupStore } from '@/stores/groupStore'
 import { useUserStore } from '@/stores/userStore'
 import { useDialog } from '@/composables/useDialog'

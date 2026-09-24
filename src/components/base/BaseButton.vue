@@ -15,7 +15,8 @@
   >
     <i v-if="loading" class="bi bi-arrow-repeat spin-icon"></i>
     <i v-else-if="icon" :class="icon" aria-hidden="true"></i>
-    <span v-if="!iconOnly && $slots.default" class="base-button__label"><slot /></span>
+    <slot v-if="rawContent && !iconOnly" />
+    <span v-else-if="!iconOnly && $slots.default" class="base-button__label"><slot /></span>
     <slot v-else-if="iconOnly && !icon" />
     <slot name="badge" />
   </button>
@@ -37,6 +38,7 @@ const props = defineProps({
   },
   icon: { type: String, default: '' },
   iconOnly: { type: Boolean, default: false },
+  rawContent: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   type: { type: String, default: 'button' },

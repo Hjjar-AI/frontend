@@ -61,6 +61,7 @@ import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import ListSearchInput from '@/components/common/ListSearchInput.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import ListToolbar from '@/components/common/ListToolbar.vue'
+import { BREAKPOINTS } from '@/constants/layout'
 
 const { t } = useI18n()
 
@@ -84,7 +85,7 @@ const emit = defineEmits(['update:filters', 'search', 'reset'])
 
 const collapsed = ref(
   typeof window !== 'undefined' &&
-  window.matchMedia('(max-width: 768px)').matches
+  window.matchMedia(`(max-width: ${BREAKPOINTS.navigation}px)`).matches
 )
 
 const { recentIds: recentCategoryIds } = useRecentItems('categories')

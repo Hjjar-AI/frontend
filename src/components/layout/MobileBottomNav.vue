@@ -13,14 +13,16 @@
         <span class="bottom-nav__label">{{ t(link.shortLabelKey || link.labelKey) }}</span>
       </router-link>
 
-      <button class="bottom-nav__item" :aria-label="t('nav.more')" @click="openSheet">
+      <BaseButton variant="ghost" size="small" raw-content class="bottom-nav__item" :aria-label="t('nav.more')" @click="openSheet">
         <span class="bottom-nav__icon"><i class="bi bi-three-dots"></i></span>
         <span class="bottom-nav__label">{{ t('nav.more') }}</span>
-        <span
+        <BaseBadge
           v-if="masterExamStore.needsAckCount > 0"
+          variant="danger"
+          small
           class="notification-bell__badge bottom-nav__badge"
-        >{{ masterExamStore.needsAckCount > 9 ? '9+' : masterExamStore.needsAckCount }}</span>
-      </button>
+        >{{ masterExamStore.needsAckCount > 9 ? '9+' : masterExamStore.needsAckCount }}</BaseBadge>
+      </BaseButton>
     </div>
   </nav>
 
@@ -103,6 +105,7 @@ import { ADMIN_LINKS } from '@/constants/adminLinks'
 import { navigationLinksFor, isNavigationLinkActive } from '@/constants/navigationLinks'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 
 const { t } = useI18n()
 const router = useRouter()

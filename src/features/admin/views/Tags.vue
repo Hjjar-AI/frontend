@@ -12,7 +12,7 @@
             <i class="bi bi-shuffle"></i> {{ t('admin.tags.mergeButton') }}
           </BaseButton>
         </template>
-      <ErrorBanner :error="tagError" @dismiss="dismissTagError" />
+      <FeedbackRegion :error="tagError" @dismiss="dismissTagError" />
       <BaseListContainer
         :loading="loading"
         :error="tagError"
@@ -52,9 +52,9 @@
               <i class="bi bi-check-square"></i>
               {{ t('admin.tags.selectedCount', { count: selectedTags.length }) }}
             </span>
-            <button type="button" class="clear-all-filters" @click="selectedTags = []">
+            <BaseButton variant="ghost" size="small" class="clear-all-filters" @click="selectedTags = []">
               {{ t('admin.tags.clearSelection') }}
-            </button>
+            </BaseButton>
           </div>
         </template>
       </BaseListContainer>
@@ -91,7 +91,7 @@
       >
         <p>{{ t('admin.tags.mergeCount', { count: selectedTags.length }) }}</p>
         <div class="merge-source-list">
-          <span v-for="tag in selectedTags" :key="tag" class="chip">{{ tag }}</span>
+          <BaseBadge v-for="tag in selectedTags" :key="tag" variant="secondary">{{ tag }}</BaseBadge>
         </div>
         <FormGrid>
           <BaseField :label="t('admin.tags.mergeTarget')" required>
@@ -131,8 +131,9 @@ import BaseModal from '@/components/base/BaseModal.vue'
 import BaseField from '@/components/base/BaseField.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseBadge from '@/components/base/BaseBadge.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 import TagTreeNode from '../components/TagTreeNode.vue'
 import { useTagStore } from '@/stores/tagStore'
 import { useNotify } from '@/composables/useNotify'

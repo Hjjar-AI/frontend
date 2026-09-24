@@ -9,17 +9,15 @@
         :overtime="config.overtime || false"
         @tick="onTimerTick"
       />
-      <button
+      <BaseIconButton
         v-if="isPauseSupported && store.isActive"
-        type="button"
         class="btn-icon pause-btn"
+        icon="bi bi-pause-circle"
+        :label="t('tests.pauseAria')"
         :disabled="navigationDisabled"
         @click="pauseSession"
-        :aria-label="t('tests.pauseAria')"
         :title="t('tests.pause')"
-      >
-        <i class="bi bi-pause-circle"></i>
-      </button>
+      />
       <ProgressBar
         :progress="store.progress"
         :label="`${store.currentIndex + 1}/${store.totalQuestions}`"
@@ -71,9 +69,9 @@
 
     <div v-else-if="questionLoadFailed" class="test-question__loading">
       <p>{{ t('notifications.questionLoadFailed') }}</p>
-      <button type="button" class="btn btn-primary" @click="retryLoadQuestion">
+      <BaseButton variant="primary" @click="retryLoadQuestion">
         {{ t('common.retry') }}
-      </button>
+      </BaseButton>
     </div>
 
     <div v-else class="test-question__loading">
@@ -92,6 +90,8 @@ import ExplanationSection from './ExplanationSection.vue'
 import QuestionNavDots from '@/components/base/QuestionNavDots.vue'
 import ShortcutHint from '@/components/common/ShortcutHint.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import { useTestQuestionController } from './composables/useTestQuestionController'
 import { MODES } from './modes'
 import { localizedQuestion } from '@/utils/localizedQuestion'

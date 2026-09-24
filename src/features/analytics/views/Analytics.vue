@@ -19,7 +19,7 @@
             <i class="bi bi-arrow-repeat"></i>
           </BaseButton>
         </template>
-      <ErrorBanner :error="store.error" @dismiss="store.error = null" />
+      <FeedbackRegion :error="store.error" @dismiss="store.error = null" />
 
       <!-- ═══ Summary charts (existing) ═══════════════════════════ -->
       <div v-if="store.summary" class="analytics-grid">
@@ -78,19 +78,15 @@
               {{ t('analytics.categoryMasteryDesc') }}
             </p>
 
-            <BaseSkeleton
-              v-if="store.isCategoryMasteryLoading"
-              :count="3"
-              height="32px"
-              stacked
-            />
-            <ErrorBanner
-              v-else-if="store.categoryMasteryError"
+            <AsyncContent
+              :loading="store.isCategoryMasteryLoading"
               :error="store.categoryMasteryError"
-              retry
+              :skeleton-count="3"
+              skeleton-height="32px"
               @retry="store.fetchCategoryMastery({ force: true })"
-            />
-            <CategoryMasteryCard v-else :data="store.categoryMastery" />
+            >
+              <CategoryMasteryCard :data="store.categoryMastery" />
+            </AsyncContent>
           </BaseCard>
 
           <BaseCard>
@@ -102,19 +98,15 @@
               {{ t('analytics.streakHistoryDesc') }}
             </p>
 
-            <BaseSkeleton
-              v-if="store.isStreakHistoryLoading"
-              :count="2"
-              height="48px"
-              stacked
-            />
-            <ErrorBanner
-              v-else-if="store.streakHistoryError"
+            <AsyncContent
+              :loading="store.isStreakHistoryLoading"
               :error="store.streakHistoryError"
-              retry
+              :skeleton-count="2"
+              skeleton-height="48px"
               @retry="store.fetchStreakHistory({ force: true })"
-            />
-            <StreakHistoryCard v-else :data="store.streakHistory" />
+            >
+              <StreakHistoryCard :data="store.streakHistory" />
+            </AsyncContent>
           </BaseCard>
         </div>
       </section>
@@ -207,7 +199,8 @@
 
 <script setup>
 import '@/assets/analytics.css'
-import { ref, computed, reactive, onMounted } from 'vue'
+import { ref, computed, reactive, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useAnalyticsStore } from '@/stores/analyticsStore'
 import { useAuthStore } from '@/stores/authStore'
@@ -221,8 +214,8 @@ import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
-import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
+import AsyncContent from '@/components/common/AsyncContent.vue'
+import FeedbackRegion from '@/components/common/FeedbackRegion.vue'
 
 import ReportAccordion from '../components/ReportAccordion.vue'
 import CategoryMasteryCard from '../components/CategoryMasteryCard.vue'
@@ -237,6 +230,8 @@ const { t } = useI18n()
 
 const store = useAnalyticsStore()
 const authStore = useAuthStore()
+const route = useRoute()
+const router = useRouter()
 
 const canViewActiveUsers = computed(() => authStore.can('admin.active_users'))
 const canViewAll = computed(() => authStore.can('analytics.view_all'))
@@ -250,7 +245,9 @@ const {
   activeUsersChartData,
 } = useAnalyticsCharts({ store, palette })
 
-const days = ref(30)
+const allowedDays = new Set([7, 30, 90])
+const initialDays = Number(route.query.days)
+const days = ref(allowedDays.has(initialDays) ? initialDays : 30)
 
 const dayOptions = computed(() => [
   { value: 7,  label: t('analytics.days7') },
@@ -333,9 +330,20 @@ async function refresh() {
 }
 
 function updateDays(val) {
-  days.value = val
+  days.value = Number(val)
   refresh()
 }
+
+watch(days, (value) => {
+  router.replace({ query: { ...route.query, days: value === 30 ? undefined : String(value) } })
+})
+
+watch(() => route.query.days, (value) => {
+  const next = Number(value || 30)
+  if (!allowedDays.has(next) || next === days.value) return
+  days.value = next
+  refresh()
+})
 
 onMounted(refresh)
 </script>
