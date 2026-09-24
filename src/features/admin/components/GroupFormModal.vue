@@ -9,7 +9,14 @@
   >
     <form @submit.prevent="submit">
       <FormGrid>
-        <BaseInput v-model="form.name" :label="t('admin.groups.createName')" required />
+        <BaseInput
+          v-model="form.name"
+          :label="t('admin.groups.createName')"
+          :error="errors.name"
+          required
+          @blur="touch('name')"
+          @input="revalidate('name')"
+        />
         <BaseInput v-model="form.description" :label="t('admin.groups.createDescription')" />
       </FormGrid>
       <div class="form-actions">
@@ -27,6 +34,7 @@ import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import { useGroupStore } from '@/stores/groupStore'
+import { useFormValidation } from '@/composables/useFormValidation'
 
 const { t } = useI18n()
 
@@ -40,10 +48,14 @@ const form = reactive({
   name: '',
   description: '',
 })
+const { errors, touch, revalidate, validateAll, resetValidation } = useFormValidation({
+  name: () => form.name.trim() ? '' : t('validation.required'),
+})
 
 // Public API — see the sibling BlueprintFormModal for the
 // conventions. No argument: this modal is create-only.
 function open() {
+  resetValidation()
   form.name = ''
   form.description = ''
   isOpen.value = true
@@ -54,7 +66,7 @@ function close() {
 }
 
 async function submit() {
-  if (!form.name.trim()) return
+  if (!validateAll()) return
   const result = await groupStore.createGroup({
     name: form.name.trim(),
     description: form.description.trim(),

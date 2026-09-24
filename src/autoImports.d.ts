@@ -93,6 +93,7 @@ declare global {
   const useDirection: typeof import('./composables/useDirection.js').useDirection
   const useDropdown: typeof import('./composables/useDropdown.js').useDropdown
   const useFocusReturn: typeof import('./composables/useFocusReturn.js').useFocusReturn
+  const useFormValidation: typeof import('./composables/useFormValidation.js').useFormValidation
   const useI18n: typeof import('vue-i18n').useI18n
   const useId: typeof import('vue').useId
   const useLink: typeof import('vue-router').useLink
@@ -116,6 +117,7 @@ declare global {
   const useTestPage: typeof import('./composables/useTestPage.js').useTestPage
   const useTheme: typeof import('./composables/useTheme.js').useTheme
   const useTimer: typeof import('./composables/useTimer.js').useTimer
+  const useUnsavedChanges: typeof import('./composables/useUnsavedChanges.js').useUnsavedChanges
   const watch: typeof import('vue').watch
   const watchEffect: typeof import('vue').watchEffect
   const watchPostEffect: typeof import('vue').watchPostEffect

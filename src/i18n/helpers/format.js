@@ -17,6 +17,30 @@ export const INTL_LOCALE = {
   en: 'en-US',
 }
 
+export const EMPTY_FORMATTED_VALUE = '—'
+
+export function formatNumberForLocale(locale, value, fractionDigits = 0) {
+  if (value === null || value === undefined || value === '' || Number.isNaN(Number(value))) {
+    return EMPTY_FORMATTED_VALUE
+  }
+  return new Intl.NumberFormat(locale, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(Number(value))
+}
+
+export function formatPercentForLocale(locale, value, fractionDigits = 0, valueIsRatio = false) {
+  if (value === null || value === undefined || value === '' || Number.isNaN(Number(value))) {
+    return EMPTY_FORMATTED_VALUE
+  }
+  const ratio = valueIsRatio ? Number(value) : Number(value) / 100
+  return new Intl.NumberFormat(locale, {
+    style: 'percent',
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(ratio)
+}
+
 export function resolveIntlLocale(appLocale, fallback) {
   return INTL_LOCALE[appLocale] || fallback
 }
@@ -51,17 +75,17 @@ export function useLocaleFormatters() {
   const intlLocale = () => resolveIntlLocale(locale.value, 'en-US')
 
   function formatNumber(value, fractionDigits = 0) {
-    if (value === null || value === undefined || isNaN(value)) return '0'
-    return Number(value).toLocaleString(intlLocale(), {
-      minimumFractionDigits: fractionDigits,
-      maximumFractionDigits: fractionDigits,
-    })
+    return formatNumberForLocale(intlLocale(), value, fractionDigits)
+  }
+
+  function formatPercent(value, fractionDigits = 0, valueIsRatio = false) {
+    return formatPercentForLocale(intlLocale(), value, fractionDigits, valueIsRatio)
   }
 
   function formatDate(date, options = {}) {
-    if (!date) return ''
+    if (!date) return EMPTY_FORMATTED_VALUE
     const d = typeof date === 'string' ? new Date(date) : date
-    if (isNaN(d.getTime())) return ''
+    if (isNaN(d.getTime())) return EMPTY_FORMATTED_VALUE
     const resolved = intlLocale()
     return d.toLocaleDateString(
       resolved,
@@ -91,5 +115,5 @@ export function useLocaleFormatters() {
     )
   }
 
-  return { formatNumber, formatDate, formatDateTime }
+  return { formatNumber, formatPercent, formatDate, formatDateTime }
 }

@@ -1,14 +1,17 @@
 <!-- frontend/src/features/testCommon/TestResults.vue -->
 <template>
   <Layout>
-    <div class="test-results">
+    <PageShell
+      :title="t(config.resultsTitleKey)"
+      icon="bi bi-trophy"
+      page-class="test-results"
+    >
       <BaseCard class="test-results__summary">
-        <h2>{{ t(config.resultsTitleKey) }}</h2>
         <p v-if="tag" class="text-muted"><i class="bi bi-tag"></i> {{ t('tests.resultsTagLabel') }}: <span class="test-tag">{{ tag }}</span></p>
         <AlertBox v-if="showWarning" variant="warning" :message="warningMessage" />
         <div class="test-results__score">
           <span class="score-number" :class="scoreClass">{{ formatNumber(correctCount) }}/{{ formatNumber(totalQuestions) }}</span>
-          <span class="score-percent" :class="scoreClass">{{ formatNumber(animatedAccuracy, 1) }}%</span>
+          <span class="score-percent" :class="scoreClass">{{ formatPercent(animatedAccuracy, 1) }}</span>
         </div>
         <ProgressBar :progress="animatedAccuracy" :label="t('tests.resultsAccuracy')" />
         <div class="test-results__stats">
@@ -37,14 +40,14 @@
             <h5>{{ t('tests.breakdownByCategory') }}</h5>
             <div v-for="cat in categoryBreakdown" :key="cat.name" class="breakdown-row">
               <span class="breakdown-label">{{ cat.name }}</span>
-              <span class="breakdown-value">{{ cat.correct }}/{{ cat.total }} ({{ cat.accuracy }}%)</span>
+              <span class="breakdown-value">{{ cat.correct }}/{{ cat.total }} ({{ formatPercent(cat.accuracy) }})</span>
             </div>
           </div>
           <div v-if="difficultyBreakdown.length" class="breakdown-group">
             <h5>{{ t('tests.breakdownByDifficulty') }}</h5>
             <div v-for="diff in difficultyBreakdown" :key="diff.name" class="breakdown-row">
               <span class="breakdown-label">{{ diff.name }}</span>
-              <span class="breakdown-value">{{ diff.correct }}/{{ diff.total }} ({{ diff.accuracy }}%)</span>
+              <span class="breakdown-value">{{ diff.correct }}/{{ diff.total }} ({{ formatPercent(diff.accuracy) }})</span>
             </div>
           </div>
         </div>
@@ -62,10 +65,10 @@
             </thead>
             <tbody>
               <tr v-for="cat in categoryBreakdown" :key="cat.name">
-                <td>{{ cat.name }}</td><td>{{ cat.correct }}</td><td>{{ cat.total }}</td><td>{{ cat.accuracy }}%</td>
+                <td>{{ cat.name }}</td><td>{{ cat.correct }}</td><td>{{ cat.total }}</td><td>{{ formatPercent(cat.accuracy) }}</td>
               </tr>
               <tr v-for="diff in difficultyBreakdown" :key="diff.name">
-                <td>{{ diff.name }}</td><td>{{ diff.correct }}</td><td>{{ diff.total }}</td><td>{{ diff.accuracy }}%</td>
+                <td>{{ diff.name }}</td><td>{{ diff.correct }}</td><td>{{ diff.total }}</td><td>{{ formatPercent(diff.accuracy) }}</td>
               </tr>
             </tbody>
           </table>
@@ -75,9 +78,13 @@
           <Transition name="fade" mode="out-in">
             <p :key="quoteKey"><i class="bi bi-quote"></i> {{ randomQuote }}</p>
           </Transition>
-          <button class="quote-refresh" @click="refreshQuote" :title="t('tests.newQuote')" :aria-label="t('tests.newQuote')">
-            <i class="bi bi-arrow-repeat"></i>
-          </button>
+          <BaseIconButton
+            class="quote-refresh"
+            icon="bi bi-arrow-repeat"
+            variant="ghost"
+            :label="t('tests.newQuote')"
+            @click="refreshQuote"
+          />
         </div>
 
         <div class="test-results__actions no-print">
@@ -93,21 +100,24 @@
         </div>
       </BaseCard>
 
-      <h3 class="no-print"><i class="bi bi-list-check"></i> {{ t('tests.reviewDetail') }}</h3>
+      <SectionHeader class="no-print" :title="t('tests.reviewDetail')" icon="bi bi-list-check" />
       <ReviewItem v-for="(result, idx) in results.results" :key="idx" :result="result" :index="idx + 1" />
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import Layout from '@/components/common/Layout.vue'
+import PageShell from '@/components/common/PageShell.vue'
+import SectionHeader from '@/components/common/SectionHeader.vue'
+import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import ProgressBar from '@/components/common/ProgressBar.vue'
 import ReviewItem from '@/components/common/ReviewItem.vue'
 import StatTile from '@/components/base/StatTile.vue'
 import AlertBox from '@/components/common/AlertBox.vue'
 import { formatTime } from '@/utils/timer'
-import { formatNumber } from '@/utils/formatters'
+import { useLocaleFormatters } from '@/i18n/helpers/format'
 import { useCountUp } from '@/composables/useCountUp'
 import { useRotatingContent } from '@/composables/useRotatingContent'
 import { copyTextToClipboard } from '@/utils/clipboard'
@@ -116,6 +126,7 @@ import { MODES } from './modes'
 import { selectMotivationalQuotes, DIFFICULTY_LABEL_KEYS } from '@/utils/constants'
 
 const { t, locale } = useI18n()
+const { formatNumber, formatPercent } = useLocaleFormatters()
 
 const props = defineProps({
   results: { type: Object, required: true },

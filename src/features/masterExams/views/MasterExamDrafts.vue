@@ -20,10 +20,10 @@
         </template>
       <ListToolbar :aria-label="t('masterExams.draftsTitle')">
         <template #search>
-          <BaseInput
-            :model-value="searchInput"
+          <ListSearchInput
+            v-model="searchInput"
             :placeholder="t('masterExams.draftsSearchPlaceholder')"
-            @update:model-value="onSearchInput"
+            @search="load"
           />
         </template>
         <template #filters>
@@ -39,13 +39,6 @@
         </template>
       </ListToolbar>
 
-      <ErrorBanner
-        :error="masterExamStore.draftsError"
-        :retry="masterExamStore.draftsError ? true : false"
-        @dismiss="masterExamStore.draftsError = null"
-        @retry="load"
-      />
-
       <BaseListContainer
         :loading="masterExamStore.isDraftsLoading"
         :error="masterExamStore.draftsError"
@@ -53,6 +46,7 @@
         :empty-title="t('masterExams.draftsEmpty')"
         :empty-message="t('masterExams.draftsEmptyHint')"
         empty-icon="bi-journal-x"
+        :empty-reason="searchInput || usage ? 'filtered' : 'first-use'"
         @retry="load"
       >
         <template #emptyActions>
@@ -126,25 +120,23 @@
 
 <script setup>
 import '@/assets/master.css'
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseChip from '@/components/base/BaseChip.vue'
-import BaseInput from '@/components/base/BaseInput.vue'
 import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import ListToolbar from '@/components/common/ListToolbar.vue'
+import ListSearchInput from '@/components/common/ListSearchInput.vue'
 import DraftQuestionForm from '../components/DraftQuestionForm.vue'
 import { useMasterExamStore } from '@/stores/masterExamStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useCaseStore } from '@/stores/caseStore'
 import { useDialog } from '@/composables/useDialog'
-import { useDebounceFn } from '@/composables/useDebounceFn'
 import { formatDate } from '@/utils/formatters'
 import { difficultyLabelFor } from '@/utils/constants'
 import { normalizeQuestionChoices } from '@/utils/questionValidators'
@@ -152,13 +144,14 @@ import { normalizeQuestionChoices } from '@/utils/questionValidators'
 const { t } = useI18n()
 
 const router = useRouter()
+const route = useRoute()
 const masterExamStore = useMasterExamStore()
 const categoryStore = useCategoryStore()
 const caseStore = useCaseStore()
 const { confirm } = useDialog()
 
-const searchInput = ref(masterExamStore.draftsSearch)
-const usage = ref(masterExamStore.draftsUsageFilter)
+const searchInput = ref(String(route.query.search || masterExamStore.draftsSearch || ''))
+const usage = ref(String(route.query.usage || masterExamStore.draftsUsageFilter || ''))
 const availableCases = computed(() => caseStore.items)
 
 // Shared difficulty-registry lookup. The previous local function
@@ -169,25 +162,25 @@ function difficultyLabel(d) {
 }
 
 async function load() {
+  masterExamStore.setDraftsSearch(searchInput.value)
+  masterExamStore.setDraftsUsageFilter(usage.value)
   const params = {}
-  if (searchInput.value) params.search = searchInput.value
+  if (searchInput.value.trim()) params.search = searchInput.value.trim()
   if (usage.value) params.usage = usage.value
   await masterExamStore.fetchDrafts(params)
 }
 
-const { debounced: debouncedLoad } = useDebounceFn(() => load(), 400)
-
-function onSearchInput(v) {
-  searchInput.value = v
-  masterExamStore.setDraftsSearch(v)
-  debouncedLoad()
-}
-
 function setUsage(u) {
   usage.value = u
-  masterExamStore.setDraftsUsageFilter(u)
   load()
 }
+
+watch([searchInput, usage], () => {
+  const query = {}
+  if (searchInput.value.trim()) query.search = searchInput.value.trim()
+  if (usage.value) query.usage = usage.value
+  router.replace({ query })
+})
 
 const editModalOpen = ref(false)
 const editForm = ref({

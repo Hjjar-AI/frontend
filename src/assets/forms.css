@@ -50,6 +50,20 @@
 /* Shared field composition: every text input, select, and textarea uses
    this label/control/feedback rhythm. */
 .base-field { display: flex; flex-direction: column; gap: var(--space-xs); width: 100%; min-width: 0; }
+.base-field.base-field--width-auto { width: auto; }
+.base-field--width-full { width: 100%; }
+.base-field.base-field--small :where(.form-control, .base-select__field, .base-input__number) { min-height: var(--control-height-compact); padding-block: 0.3rem; font-size: var(--font-size-xs); }
+.base-field.base-field--large :where(.form-control, .base-select__field, .base-input__number) { min-height: calc(var(--control-height) + 0.5rem); padding-block: 0.7rem; font-size: var(--font-size-base); }
+.base-field--small .base-textarea__field { min-block-size: calc(var(--control-height-compact) * 2); }
+.base-field--large .base-textarea__field { min-block-size: calc((var(--control-height) + 0.5rem) * 2); }
+
+@media (pointer: coarse) {
+  .base-field.base-field--small :where(.form-control, .base-select__field, .base-input__number) {
+    min-height: var(--control-height);
+  }
+  .base-checkbox,
+  .base-radio { min-height: var(--control-height); }
+}
 .base-field__label-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); }
 .base-field__label { color: var(--color-text-secondary); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); }
 .base-field__required { color: var(--color-danger); margin-inline-start: var(--space-2xs); }

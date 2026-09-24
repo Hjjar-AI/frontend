@@ -7,8 +7,6 @@
       </div>
     </Transition>
 
-    <h2>{{ formTitle }}</h2>
-
     <form class="question-form__form" @submit.prevent="submitWithGuard">
       <!--
         Case section (feature: case-based question chains).
@@ -350,6 +348,7 @@ import BaseTextarea from '@/components/base/BaseTextarea.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import { useSubmitGuard } from '@/composables/useSubmitGuard'
+import { useUnsavedChanges } from '@/composables/useUnsavedChanges'
 import { formatDate } from '@/utils/formatters'
 import {
   normalizeQuestionChoices,
@@ -374,9 +373,6 @@ const caseStore = useCaseStore()
 
 const isLoading = computed(() => Boolean(props.loading))
 const isEdit = computed(() => !!props.question)
-const formTitle = computed(() =>
-  isEdit.value ? t('questions.editTitle') : t('questions.addTitle'),
-)
 const submitLabel = computed(() => (isEdit.value ? t('questions.update') : t('questions.save')))
 const showSplash = ref(false)
 
@@ -431,6 +427,17 @@ const form = reactive({
   case_key: '',
   case_stem: '',
 })
+
+const { isDirty, markClean, allowNextNavigation } = useUnsavedChanges(
+  () => ({
+    form,
+    pendingImageFile: pendingImageFile.value,
+    imageCleared: imageCleared.value,
+  }),
+  { message: () => t('common.unsavedChanges') },
+)
+
+defineExpose({ isDirty, markClean, allowNextNavigation })
 
 const selectedKnowledgeObject = computed(() =>
   knowledgeObjects.value.find((item) => Number(item.id) === Number(form.knowledge_object)),
@@ -490,6 +497,8 @@ onMounted(async () => {
       imagePreview.value = props.question.image_url
     }
   }
+
+  markClean()
 
   // Populate the datalist. Failures are non-fatal — the picker
   // degrades to a plain text input.

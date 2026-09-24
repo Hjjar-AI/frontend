@@ -12,7 +12,10 @@
           v-model="form.username"
           :label="t('admin.users.formUsername')"
           :disabled="editMode"
+          :error="errors.username"
           required
+          @blur="touch('username')"
+          @input="revalidate('username')"
         />
         <BaseInput v-model="form.full_name" :label="t('admin.users.formFullName')" />
         <BaseInput
@@ -22,8 +25,9 @@
           :required="!editMode"
           :minlength="8"
           autocomplete="new-password"
-          :error="passwordError"
-          @input="passwordError = ''"
+          :error="errors.password"
+          @blur="touch('password')"
+          @input="revalidate('password')"
         />
         <BaseSelect
           v-model="form.role"
@@ -48,8 +52,9 @@
           :placeholder="t('admin.users.formAdminPasswordPlaceholder')"
           required
           autocomplete="current-password"
-          :error="adminPasswordError"
-          @input="adminPasswordError = ''"
+          :error="errors.adminPassword"
+          @blur="touch('adminPassword')"
+          @input="revalidate('adminPassword')"
         />
       </FormGrid>
 
@@ -80,6 +85,7 @@ import { useUserStore } from '@/stores/userStore'
 import { useAdminSettingsStore } from '@/stores/adminSettingsStore'
 import { ROLE_LABEL_KEYS, ROLES } from '@/utils/constants'
 import { daysUntilExpiry } from '@/utils/formatters'
+import { useFormValidation } from '@/composables/useFormValidation'
 
 const { t } = useI18n()
 
@@ -89,8 +95,6 @@ const adminSettingsStore = useAdminSettingsStore()
 const isOpen = ref(false)
 const editMode = ref(false)
 const editingId = ref(null)
-const passwordError = ref('')
-const adminPasswordError = ref('')
 
 // Role options are built from the ROLES constant, not hardcoded.
 // Order here is the display order in the picker: most-privileged
@@ -119,6 +123,11 @@ const form = reactive({
   is_active: true,
   admin_password: '',
 })
+const { errors, touch, revalidate, validateAll, resetValidation } = useFormValidation({
+  username: () => form.username.trim() ? '' : t('validation.required'),
+  password: () => editMode.value || form.password ? '' : t('validation.required'),
+  adminPassword: () => form.admin_password ? '' : t('admin.users.formAdminPasswordRequired'),
+})
 
 onMounted(async () => {
   await adminSettingsStore.fetchSettings()
@@ -138,8 +147,7 @@ function applyDefaults() {
 }
 
 function open(user = null) {
-  passwordError.value = ''
-  adminPasswordError.value = ''
+  resetValidation()
   form.admin_password = ''
 
   if (user) {
@@ -171,15 +179,7 @@ function close() {
 }
 
 async function handleSubmit() {
-  if (!editMode.value && !form.password) {
-    passwordError.value = t('validation.required')
-    return
-  }
-
-  if (!form.admin_password) {
-    adminPasswordError.value = t('admin.users.formAdminPasswordRequired')
-    return
-  }
+  if (!validateAll()) return
 
   const data = {
     username: form.username,

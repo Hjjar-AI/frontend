@@ -1,6 +1,13 @@
 <!-- frontend/src/components/base/BaseField.vue -->
 <template>
-  <div class="base-field" :class="{ 'base-field--error': error, 'base-field--disabled': disabled }">
+  <div
+    class="base-field"
+    :class="[
+      `base-field--${size}`,
+      `base-field--width-${width}`,
+      { 'base-field--error': error, 'base-field--disabled': disabled },
+    ]"
+  >
     <div v-if="label || $slots.label" class="base-field__label-row">
       <label :for="fieldId" class="base-field__label">
         <slot name="label">{{ label }}</slot>
@@ -43,7 +50,11 @@
     <div v-if="error || hint || hasCount" class="base-field__feedback">
       <span v-if="error" :id="errorId" class="base-field__error" role="alert">{{ error }}</span>
       <span v-else-if="hint" :id="hintId" class="base-field__hint">{{ hint }}</span>
-      <span v-if="hasCount" class="base-field__count" :class="{ 'base-field__count--limit': atLimit }">
+      <span
+        v-if="hasCount"
+        class="base-field__count"
+        :class="{ 'base-field__count--limit': atLimit }"
+      >
         {{ currentLength }}/{{ maxLength }}
       </span>
     </div>
@@ -63,6 +74,16 @@ const props = defineProps({
   currentLength: { type: Number, default: null },
   maxLength: { type: Number, default: null },
   id: { type: String, default: '' },
+  size: {
+    type: String,
+    default: 'medium',
+    validator: (value) => ['small', 'medium', 'large'].includes(value),
+  },
+  width: {
+    type: String,
+    default: 'full',
+    validator: (value) => ['auto', 'full'].includes(value),
+  },
 })
 
 const instance = getCurrentInstance()

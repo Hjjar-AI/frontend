@@ -15,7 +15,7 @@
         <slot name="badges" />
       </template>
       <template v-if="$slots.actions" #actions>
-        <slot name="actions" />
+        <PageActions><slot name="actions" /></PageActions>
       </template>
     </PageHeader>
 
@@ -23,8 +23,18 @@
       <slot name="intro">{{ subtitle }}</slot>
     </div>
 
-    <div v-if="$slots.feedback" class="page-shell__feedback">
-      <slot name="feedback" />
+    <div v-if="$slots.feedback || error || warning || success || info" class="page-shell__feedback">
+      <slot name="feedback">
+        <FeedbackRegion
+          :error="error"
+          :warning="warning"
+          :success="success"
+          :info="info"
+          :retry="retry"
+          @dismiss="$emit('dismiss-feedback')"
+          @retry="$emit('retry')"
+        />
+      </slot>
     </div>
 
     <slot />
@@ -33,6 +43,8 @@
 
 <script setup>
 import PageHeader from './PageHeader.vue'
+import PageActions from './PageActions.vue'
+import FeedbackRegion from './FeedbackRegion.vue'
 
 defineProps({
   title: { type: String, required: true },
@@ -47,5 +59,12 @@ defineProps({
     type: [String, Array, Object],
     default: '',
   },
+  error: { type: String, default: '' },
+  warning: { type: String, default: '' },
+  success: { type: String, default: '' },
+  info: { type: String, default: '' },
+  retry: { type: Boolean, default: false },
 })
+
+defineEmits(['dismiss-feedback', 'retry'])
 </script>

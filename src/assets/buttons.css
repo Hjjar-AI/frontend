@@ -76,4 +76,8 @@
     min-height: var(--control-height);
   }
   .btn-icon { min-width: var(--control-height); }
+  .base-button--small.base-button--icon-only {
+    inline-size: var(--control-height);
+    min-inline-size: var(--control-height);
+  }
 }

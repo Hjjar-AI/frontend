@@ -99,6 +99,11 @@
 .base-chip:disabled { opacity: var(--opacity-disabled); cursor: not-allowed; }
 .base-chip__remove { display: grid; place-items: center; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
 
+@media (pointer: coarse) {
+  .base-chip--interactive { min-height: var(--control-height); padding-inline: var(--space-sm); }
+  .base-chip__remove { min-width: var(--control-height); min-height: var(--control-height); }
+}
+
 .icon-hero { width: 64px; height: 64px; border-radius: var(--radius-circle); display: grid; place-items: center; font-size: var(--icon-xl); background: color-mix(in srgb, currentColor 12%, transparent); color: var(--color-primary); }
 .icon-hero--lg { width: 96px; height: 96px; font-size: var(--icon-2xl); }
 .icon-hero--sm { width: 48px; height: 48px; font-size: var(--icon-lg); }

@@ -32,7 +32,13 @@
 // unchanged.
 
 import { i18n } from '@/i18n'
-import { resolveIntlLocale, buildDateOptions } from '@/i18n/helpers/format'
+import {
+  resolveIntlLocale,
+  buildDateOptions,
+  EMPTY_FORMATTED_VALUE,
+  formatNumberForLocale,
+  formatPercentForLocale,
+} from '@/i18n/helpers/format'
 
 function currentIntlLocale() {
   const raw = i18n?.global?.locale?.value
@@ -43,17 +49,17 @@ function currentIntlLocale() {
 }
 
 export function formatNumber(value, fractionDigits = 0) {
-  if (value === null || value === undefined || isNaN(value)) return '0'
-  return Number(value).toLocaleString(currentIntlLocale(), {
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  })
+  return formatNumberForLocale(currentIntlLocale(), value, fractionDigits)
+}
+
+export function formatPercent(value, fractionDigits = 0, valueIsRatio = false) {
+  return formatPercentForLocale(currentIntlLocale(), value, fractionDigits, valueIsRatio)
 }
 
 export function formatDate(date, format = 'short') {
-  if (!date) return ''
+  if (!date) return EMPTY_FORMATTED_VALUE
   const d = typeof date === 'string' ? new Date(date) : date
-  if (isNaN(d.getTime())) return ''
+  if (isNaN(d.getTime())) return EMPTY_FORMATTED_VALUE
   const locale = currentIntlLocale()
   const options = {
     year: 'numeric',

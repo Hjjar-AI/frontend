@@ -5,41 +5,33 @@
       :title="t('masterExams.resultsTitle', { name: exam?.name || '' })"
       icon="bi bi-bar-chart"
       page-class="master-exam-results-page"
+      :error="masterExamStore.error || ''"
+      retry
+      @dismiss-feedback="masterExamStore.error = null"
+      @retry="load"
     >
-        <template #badges>
-          <span v-if="isActive" class="master-exam-results__live-indicator">
-            <span class="master-exam-results__live-indicator__dot"></span>
-            {{ t('masterExams.resultsLive') }}
-          </span>
-        </template>
-        <template #actions>
-          <div class="master-exam-results__header-actions">
-            <BaseButton variant="ghost" size="small" @click="load">
-              <i class="bi bi-arrow-repeat"></i> {{ t('masterExams.resultsRefresh') }}
-            </BaseButton>
-            <BaseButton variant="ghost" size="small" @click="downloadSummaryCsv">
-              <i class="bi bi-filetype-csv"></i> {{ t('masterExams.resultsSummaryCsv') }}
-            </BaseButton>
-            <BaseButton variant="ghost" size="small" @click="downloadMatrixCsv">
-              <i class="bi bi-filetype-csv"></i> {{ t('masterExams.resultsMatrixCsv') }}
-            </BaseButton>
-            <BaseButton
-              v-if="canPublishToBank"
-              variant="primary"
-              size="small"
-              @click="publishToBank"
-            >
-              <i class="bi bi-cloud-upload"></i> {{ t('masterExams.resultsPublish') }}
-            </BaseButton>
-          </div>
-        </template>
-      <ErrorBanner
-        :error="masterExamStore.error"
-        :retry="masterExamStore.error ? true : false"
-        @dismiss="masterExamStore.error = null"
-        @retry="load"
-      />
-
+      <template #badges>
+        <span v-if="isActive" class="master-exam-results__live-indicator">
+          <span class="master-exam-results__live-indicator__dot"></span>
+          {{ t('masterExams.resultsLive') }}
+        </span>
+      </template>
+      <template #actions>
+        <div class="master-exam-results__header-actions">
+          <BaseButton variant="ghost" size="small" @click="load">
+            <i class="bi bi-arrow-repeat"></i> {{ t('masterExams.resultsRefresh') }}
+          </BaseButton>
+          <BaseButton variant="ghost" size="small" @click="downloadSummaryCsv">
+            <i class="bi bi-filetype-csv"></i> {{ t('masterExams.resultsSummaryCsv') }}
+          </BaseButton>
+          <BaseButton variant="ghost" size="small" @click="downloadMatrixCsv">
+            <i class="bi bi-filetype-csv"></i> {{ t('masterExams.resultsMatrixCsv') }}
+          </BaseButton>
+          <BaseButton v-if="canPublishToBank" variant="primary" size="small" @click="publishToBank">
+            <i class="bi bi-cloud-upload"></i> {{ t('masterExams.resultsPublish') }}
+          </BaseButton>
+        </div>
+      </template>
       <ResultStatGrid v-if="results" :items="statItems" />
 
       <!-- Flags raised during exam -->
@@ -73,7 +65,13 @@
           empty-icon="bi-people"
         >
           <template #default="{ items }">
-            <BaseTableShell mobile-mode="columns" :aria-label="t('masterExams.resultsParticipants')" sticky max-height="600px" striped>
+            <BaseTableShell
+              mobile-mode="columns"
+              :aria-label="t('masterExams.resultsParticipants')"
+              sticky
+              max-height="600px"
+              striped
+            >
               <table class="table-shared master-exam-results__table">
                 <thead>
                   <tr>
@@ -100,13 +98,15 @@
                       {{ row.is_complete ? `${row.correct_count}/${row.total_questions}` : '—' }}
                     </td>
                     <td class="numeric">
-                      {{ row.is_complete ? `${row.accuracy}%` : '—' }}
+                      {{ row.is_complete ? formatPercent(row.accuracy, 1) : '—' }}
                     </td>
                     <td class="numeric">
-                      {{ row.is_complete ? `${row.weighted_score}%` : '—' }}
+                      {{ row.is_complete ? formatPercent(row.weighted_score, 1) : '—' }}
                     </td>
                     <td data-priority="medium">{{ formatDateTime(row.started_at) }}</td>
-                    <td data-priority="low">{{ row.finished_at ? formatDateTime(row.finished_at) : '—' }}</td>
+                    <td data-priority="low">
+                      {{ row.finished_at ? formatDateTime(row.finished_at) : '—' }}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -118,7 +118,13 @@
       <!-- Per-question table -->
       <BaseCard v-if="results && results.per_question && results.per_question.length">
         <CardHeader :title="t('masterExams.resultsDistribution')" icon="bi bi-list-ol" />
-        <BaseTableShell mobile-mode="columns" :aria-label="t('masterExams.resultsDistribution')" sticky max-height="600px" striped>
+        <BaseTableShell
+          mobile-mode="columns"
+          :aria-label="t('masterExams.resultsDistribution')"
+          sticky
+          max-height="600px"
+          striped
+        >
           <table class="table-shared master-exam-results__table">
             <thead>
               <tr>
@@ -138,7 +144,7 @@
                 </td>
                 <td class="numeric" data-priority="medium">{{ row.answered_count }}</td>
                 <td class="numeric" data-priority="medium">{{ row.correct_count }}</td>
-                <td class="numeric">{{ row.correct_rate }}%</td>
+                <td class="numeric">{{ formatPercent(row.correct_rate, 1) }}</td>
                 <td data-priority="low">
                   <div class="master-exam-distribution">
                     <div
@@ -171,7 +177,6 @@ import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import CardHeader from '@/components/common/CardHeader.vue'
 import BaseTableShell from '@/components/common/BaseTableShell.vue'
 import ResultStatGrid from '../components/ResultStatGrid.vue'
@@ -179,10 +184,11 @@ import { useMasterExamStore } from '@/stores/masterExamStore'
 import { useAuthStore } from '@/stores/authStore'
 import { useDialog } from '@/composables/useDialog'
 import { useAutoRefresh } from '@/composables/useAutoRefresh'
-import { formatDateTime } from '@/utils/formatters'
+import { useLocaleFormatters } from '@/i18n/helpers/format'
 import { downloadUrl } from '@/utils/downloadFile'
 
 const { t } = useI18n()
+const { formatDateTime, formatPercent } = useLocaleFormatters()
 
 const route = useRoute()
 const masterExamStore = useMasterExamStore()
@@ -254,7 +260,7 @@ const statItems = computed(() => {
     },
     {
       key: 'avg-accuracy',
-      value: `${s.avg_accuracy}%`,
+      value: formatPercent(s.avg_accuracy, 1),
       label: t('masterExams.resultsAvgAccuracy'),
       accent: 'var(--color-success)',
     },

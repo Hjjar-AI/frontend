@@ -1,11 +1,11 @@
 <template>
   <header class="section-header" :class="{ 'section-header--compact': compact }">
     <div class="section-header__content">
-      <component :is="`h${level}`" class="section-header__title">
+      <component :is="`h${level}`" class="section-header__title" dir="auto">
         <i v-if="icon" :class="icon" aria-hidden="true"></i>
         {{ title }}
       </component>
-      <p v-if="description" class="section-header__description">{{ description }}</p>
+      <p v-if="description" class="section-header__description" dir="auto">{{ description }}</p>
     </div>
     <div v-if="$slots.badges" class="section-header__badges"><slot name="badges" /></div>
     <div v-if="$slots.actions" class="section-header__actions"><slot name="actions" /></div>

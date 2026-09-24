@@ -6,6 +6,11 @@
 :root,
 [data-theme="stone"],
 [data-theme="light"] {
+  /* ----- RESPONSIVE BREAKPOINT POLICY -----
+     CSS custom properties cannot be used in media-query conditions, so
+     components use these five literal tiers and JavaScript mirrors them in
+     constants/layout.js: compact 360, narrow 480, content 640,
+     navigation 768, and wide 900 pixels. */
   /* ----- ROOT FONT SIZE -----
      Every --font-size-*, --space-*, --radius-*, and --icon-*
      token below is expressed in `rem`, which is relative to the

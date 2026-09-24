@@ -93,6 +93,14 @@
     "discard": "Discard"
   },
 
+  "emptyStates": {
+    "firstUse": "Nothing here yet",
+    "noResults": "No results",
+    "filtered": "No matching results",
+    "unavailable": "Content unavailable",
+    "generic": "No content"
+  },
+
   "nav": {
     "home": "Home",
     "content": "Content",

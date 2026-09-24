@@ -10,46 +10,24 @@
 
     <div class="master-exam-card__body">
       <div class="d-flex justify-between align-center flex-wrap gap-2 mb-2">
-        <h3 class="master-exam-card__name">{{ exam.name }}</h3>
-        <span
-          class="master-exam-card__status-badge"
-          :class="`master-exam-card__status-badge--${status}`"
-        >
+        <h3 class="master-exam-card__name" dir="auto">{{ exam.name }}</h3>
+        <BaseBadge :variant="statusVariant" status>
           <i :class="statusIconSmall"></i>
           {{ statusLabel }}
-        </span>
+        </BaseBadge>
       </div>
 
-      <p v-if="exam.description" class="master-exam-card__description">
+      <p v-if="exam.description" class="master-exam-card__description" dir="auto">
         {{ exam.description }}
       </p>
 
-      <div class="master-exam-card__meta">
-        <span class="master-exam-card__meta-item">
-          <i class="bi bi-question-circle"></i>
-          {{ t('masterExams.questionCount', { n: exam.question_count || 0 }) }}
-        </span>
-        <span class="master-exam-card__meta-item">
-          <i class="bi bi-clock"></i>
-          {{ t('masterExams.minutesShort', { n: exam.duration_minutes }) }}
-        </span>
-        <span class="master-exam-card__meta-item">
-          <i class="bi bi-calendar-event"></i>
-          {{ formatDate(exam.opens_at) }}
-        </span>
-        <span class="master-exam-card__meta-item">
-          <i class="bi bi-person"></i>
-          {{ exam.primary_attending_name || exam.primary_attending_username }}
-        </span>
-      </div>
+      <MetadataList :items="metadataItems" />
 
       <div v-if="showCountdown && countdownText" class="mt-2">
-        <span
-          :class="['master-exam-card__status-badge', `master-exam-card__status-badge--${status}`]"
-        >
+        <BaseBadge :variant="statusVariant" status>
           <i class="bi bi-hourglass-split"></i>
           {{ countdownText }}
-        </span>
+        </BaseBadge>
       </div>
     </div>
 
@@ -144,9 +122,12 @@
 <script setup>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import { formatDate } from '@/utils/formatters'
+import BaseBadge from '@/components/base/BaseBadge.vue'
+import MetadataList from '@/components/common/MetadataList.vue'
+import { useLocaleFormatters } from '@/i18n/helpers/format'
 
 const { t } = useI18n()
+const { formatDate } = useLocaleFormatters()
 
 const props = defineProps({
   exam: { type: Object, required: true },
@@ -177,12 +158,41 @@ const canMakeup = computed(
     !hasCompleted.value,
 )
 const isMakeup = computed(() => Boolean(props.exam.my_attempt?.is_makeup))
+const metadataItems = computed(() => [
+  {
+    key: 'questions',
+    icon: 'bi bi-question-circle',
+    value: t('masterExams.questionCount', { n: props.exam.question_count || 0 }),
+  },
+  {
+    key: 'duration',
+    icon: 'bi bi-clock',
+    value: t('masterExams.minutesShort', { n: props.exam.duration_minutes }),
+  },
+  { key: 'opens', icon: 'bi bi-calendar-event', value: formatDate(props.exam.opens_at) },
+  {
+    key: 'attending',
+    icon: 'bi bi-person',
+    value: props.exam.primary_attending_name || props.exam.primary_attending_username || '—',
+  },
+])
 
 function emitAction(type) {
   emit('action', type)
 }
 
 const status = computed(() => props.exam.status || 'draft')
+const statusVariant = computed(
+  () =>
+    ({
+      draft: 'secondary',
+      scheduled: 'info',
+      active: 'success',
+      completed: 'success',
+      published_to_bank: 'info',
+      cancelled: 'danger',
+    })[status.value] || 'secondary',
+)
 
 const statusIcon = computed(
   () =>

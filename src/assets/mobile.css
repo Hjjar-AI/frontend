@@ -177,36 +177,6 @@
   white-space: nowrap;
 }
 
-.sheet-overlay {
-  position: fixed;
-  inset: 0;
-  background: var(--color-overlay);
-  z-index: var(--z-modal-overlay);
-  display: flex;
-  align-items: flex-end;
-}
-.sheet {
-  width: 100%;
-  background: var(--color-bg-card);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  padding: var(--space-md);
-  padding-bottom: calc(var(--space-xl) + env(safe-area-inset-bottom));
-  max-height: 70vh;
-  overflow-y: auto;
-}
-.sheet__handle {
-  width: 32px;
-  height: 3px;
-  background: var(--color-border);
-  border-radius: var(--radius-pill);
-  margin: 0 auto var(--space-md);
-}
-.sheet__title {
-  text-align: center;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-md);
-}
 .sheet__section-title {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
@@ -244,36 +214,6 @@
   height: 1px;
   background: var(--color-border);
   margin: var(--space-md) 0;
-}
-.sheet__logout {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-  width: 100%;
-  padding: var(--space-sm);
-  border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--color-danger) 8%, transparent);
-  color: var(--color-danger);
-  border: var(--border-width) solid color-mix(in srgb, var(--color-danger) 20%, transparent);
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition: background var(--motion-fast);
-}
-.sheet__logout:active {
-  background: color-mix(in srgb, var(--color-danger) 15%, transparent);
-}
-.sheet-enter-active { animation: sheet-up var(--motion-base-out); }
-.sheet-leave-active { animation: sheet-down var(--motion-fast-in); }
-@keyframes sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-@keyframes sheet-down {
-  from { transform: translateY(0); }
-  to { transform: translateY(100%); }
 }
 @media (max-width: 768px) {
   .bottom-nav { display: block; }

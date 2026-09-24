@@ -93,6 +93,14 @@
     "discard": "تجاهل"
   },
 
+  "emptyStates": {
+    "firstUse": "لا توجد عناصر بعد",
+    "noResults": "لا توجد نتائج",
+    "filtered": "لا توجد نتائج مطابقة",
+    "unavailable": "المحتوى غير متاح",
+    "generic": "لا يوجد محتوى"
+  },
+
   "nav": {
     "home": "الرئيسية",
     "content": "المحتوى",

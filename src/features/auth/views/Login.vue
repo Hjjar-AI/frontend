@@ -30,7 +30,8 @@
           :error="errors.username"
           required
           autocomplete="username"
-          @input="clearAuthError"
+          @blur="touch('username')"
+          @input="handleFieldInput('username')"
         />
         <BaseInput
           v-model="password"
@@ -40,7 +41,8 @@
           :error="errors.password"
           required
           autocomplete="current-password"
-          @input="clearAuthError"
+          @blur="touch('password')"
+          @input="handleFieldInput('password')"
         />
         <BaseButton
           type="submit"
@@ -74,10 +76,11 @@
 
 <script setup>
 import '@/assets/auth.css'
-import { ref, reactive, computed, onBeforeUnmount } from 'vue'
+import { ref, computed, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { useSubmitGuard } from '@/composables/useSubmitGuard'
+import { useFormValidation } from '@/composables/useFormValidation'
 import { validateUsername, validateLoginPassword } from '@/utils/validators'
 import BaseInput from '@/components/base/BaseInput.vue'
 import AlertBox from '@/components/common/AlertBox.vue'
@@ -91,9 +94,15 @@ const { isSubmitting, guard } = useSubmitGuard()
 
 const username = ref('')
 const password = ref('')
-const errors = reactive({ username: '', password: '' })
 const loginSuccess = ref(false)
 let successTimer = null
+
+const { errors, touch, revalidate, validateAll } = useFormValidation({
+  username: () =>
+    validateUsername(username.value).valid ? '' : t('validation.usernameMin'),
+  password: () =>
+    validateLoginPassword(password.value).valid ? '' : t('validation.passwordRequired'),
+})
 
 function safeRedirect(raw) {
   if (typeof raw !== 'string') return '/'
@@ -118,27 +127,17 @@ const showInsecureWarning = computed(() => {
   return true
 })
 
-function validateUsernameField() {
-  const r = validateUsername(username.value)
-  // Validators return { valid, message }; the message is a fallback
-  // Arabic string. Map the failure to a translation key instead so the
-  // message follows the active locale.
-  errors.username = r.valid ? '' : t('validation.usernameMin')
-  return r.valid
-}
-
-function validatePasswordField() {
-  const r = validateLoginPassword(password.value)
-  errors.password = r.valid ? '' : t('validation.passwordRequired')
-  return r.valid
-}
-
 function clearAuthError() {
   if (authStore.error) authStore.error = null
 }
 
+function handleFieldInput(name) {
+  clearAuthError()
+  revalidate(name)
+}
+
 async function handleLogin() {
-  if (!validateUsernameField() || !validatePasswordField()) return
+  if (!validateAll()) return
   const success = await authStore.login(username.value, password.value)
   if (success) {
     loginSuccess.value = true

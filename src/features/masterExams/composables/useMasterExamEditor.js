@@ -4,12 +4,14 @@ import { useMasterExamStore } from '@/stores/masterExamStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useNotify } from '@/composables/useNotify'
 import { useDebounceFn } from '@/composables/useDebounceFn'
+import { useUnsavedChanges } from '@/composables/useUnsavedChanges'
 import { questionService } from '@/services/questionService'
 import { adminService } from '@/services/adminService'
 import { groupService } from '@/services/groupService'
 import { caseService } from '@/services/caseService'
 import { difficultyLabelFor } from '@/utils/constants'
 import { normalizeQuestionChoices } from '@/utils/questionValidators'
+import { LIST_SEARCH_DEBOUNCE_MS } from '@/constants/layout'
 
 function emptyDraftForm() {
   return {
@@ -71,6 +73,9 @@ export function useMasterExamEditor(t) {
     shuffle_questions: true,
     shuffle_choices: false,
     question_ids: [],
+  })
+  const { isDirty, markClean } = useUnsavedChanges(() => form, {
+    message: () => t('common.unsavedChanges'),
   })
 
   const draftFormOpen = ref(false)
@@ -183,7 +188,7 @@ export function useMasterExamEditor(t) {
     }
   }
 
-  const { debounced: debouncedPicker } = useDebounceFn(loadPicker, 400)
+  const { debounced: debouncedPicker } = useDebounceFn(loadPicker, LIST_SEARCH_DEBOUNCE_MS)
 
   function onPickerSearch(value) {
     pickerSearch.value = value
@@ -270,6 +275,7 @@ export function useMasterExamEditor(t) {
       const synced = await syncQuestions(result.question_ids || [])
       if (!synced) return result
       await masterExamStore.fetchOne(examId.value)
+      markClean()
       return result
     }
 
@@ -277,6 +283,7 @@ export function useMasterExamEditor(t) {
       ...payload,
       question_ids: form.question_ids,
     })
+    if (result) markClean()
     if (result && navigateAfterCreate) {
       router.replace(`/master-exams/${result.id}/edit`)
     }
@@ -339,6 +346,7 @@ export function useMasterExamEditor(t) {
 
   onMounted(async () => {
     await Promise.all([loadAuxiliaryData(), loadExam(), loadPicker()])
+    markClean()
   })
 
   return {
@@ -348,6 +356,7 @@ export function useMasterExamEditor(t) {
     isEdit,
     examId,
     isFrozen,
+    isDirty,
     form,
     questionsById,
     availableGroups,

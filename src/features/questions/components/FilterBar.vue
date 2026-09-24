@@ -11,11 +11,12 @@
     @reset="resetFilters"
   >
     <template #search>
-      <BaseInput
+      <ListSearchInput
         :model-value="filters.search"
         :placeholder="t('questions.searchPlaceholder')"
         :aria-label="t('common.search')"
         @update:model-value="onSearchInput"
+        @search="$emit('search')"
       />
     </template>
     <template #filters>
@@ -55,10 +56,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRecentItems } from '@/composables/useRecentItems'
-import { useDebounceFn } from '@/composables/useDebounceFn'
 import DifficultySelector from './DifficultySelector.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-import BaseInput from '@/components/base/BaseInput.vue'
+import ListSearchInput from '@/components/common/ListSearchInput.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import ListToolbar from '@/components/common/ListToolbar.vue'
 
@@ -126,11 +126,8 @@ const activeFilterCount = computed(() => {
   return count
 })
 
-const { debounced: debouncedSearch } = useDebounceFn(() => emit('search'), 400)
-
 function onSearchInput(value) {
   emit('update:filters', { ...props.filters, search: value })
-  debouncedSearch()
 }
 
 function onFilterChange(key, value) {

@@ -3,11 +3,10 @@
 <BaseCard
 class="category-card"
 :accent-color="category.color"
-hover
-tabindex="0"
-role="button"
+:hover="isAdmin"
+:interactive="isAdmin"
 :aria-label="t('categories.editAria', { name: category.name })"
-@keydown.enter="$emit('edit')"
+@activate="$emit('edit')"
 >
 <div class="category-card__content">
 <div class="category-card__info">

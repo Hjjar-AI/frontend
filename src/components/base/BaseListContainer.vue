@@ -8,6 +8,7 @@
       :empty-title="emptyTitle"
       :empty-message="emptyMessage"
       :empty-icon="emptyIcon"
+      :empty-reason="emptyReason"
       :skeleton-count="skeletonCount"
       :skeleton-height="skeletonHeight"
       @retry="$emit('retry')"
@@ -44,7 +45,8 @@ defineProps({
   items: { type: Array, required: true },
   emptyTitle: { type: String, default: '' },
   emptyMessage: { type: String, default: '' },
-  emptyIcon: { type: String, default: 'bi-inbox' },
+  emptyIcon: { type: String, default: '' },
+  emptyReason: { type: String, default: 'generic' },
   skeletonCount: { type: Number, default: 3 },
   skeletonHeight: { type: String, default: '120px' },
 })

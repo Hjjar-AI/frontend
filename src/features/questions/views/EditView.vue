@@ -6,10 +6,12 @@
       icon="bi bi-pencil-square"
       size="base"
       page-class="question-form-page"
+      :error="questionStore.error || ''"
+      @dismiss-feedback="questionStore.error = null"
     >
-      <ErrorBanner :error="questionStore.error" @dismiss="questionStore.error = null" />
       <QuestionForm
         v-if="question"
+        ref="questionFormRef"
         :question="question"
         :loading="questionStore.isLoading"
         @save="handleSave"
@@ -27,7 +29,6 @@ import { useRouter, useRoute } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
 import QuestionForm from '../components/QuestionForm.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import { useQuestionStore } from '@/stores/questionStore'
 import { useAuthStore } from '@/stores/authStore'
@@ -44,6 +45,7 @@ const { notify } = useNotify()
 const { extractSentinels, finishSave } = useQuestionSave()
 
 const question = ref(null)
+const questionFormRef = ref(null)
 
 onMounted(async () => {
   const id = parseInt(route.params.id)
@@ -87,6 +89,7 @@ async function handleSave(formData) {
     uploadFailureKey: 'questions.imageUploadFailedUpdate',
   })
 
+  questionFormRef.value?.markClean()
   router.push('/questions')
 }
 </script>

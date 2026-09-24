@@ -1,6 +1,11 @@
 <!-- frontend/src/components/common/AlertBox.vue -->
 <template>
-  <div class="alert-box" :class="`alert-box--${variant}`" role="alert">
+  <div
+    class="alert-box"
+    :class="`alert-box--${variant}`"
+    :role="variant === 'danger' || variant === 'warning' ? 'alert' : 'status'"
+    :aria-live="variant === 'danger' || variant === 'warning' ? 'assertive' : 'polite'"
+  >
     <i :class="icon"></i>
     <span>{{ message }}</span>
   </div>

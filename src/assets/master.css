@@ -142,57 +142,6 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.master-exam-card__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-md);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-.master-exam-card__meta-item {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-}
-.master-exam-card__meta-item i {
-  color: var(--color-primary);
-}
-
-.master-exam-card__status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  padding: 0.15rem 0.6rem;
-  border-radius: var(--radius-pill);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  white-space: nowrap;
-}
-.master-exam-card__status-badge--draft {
-  background: var(--color-bg-alt);
-  color: var(--color-text-muted);
-}
-.master-exam-card__status-badge--scheduled {
-  background: color-mix(in srgb, var(--color-info) 15%, transparent);
-  color: var(--color-info);
-}
-.master-exam-card__status-badge--active {
-  background: color-mix(in srgb, var(--color-success) 15%, transparent);
-  color: var(--color-success-dark);
-}
-.master-exam-card__status-badge--completed {
-  background: color-mix(in srgb, var(--color-warning) 15%, transparent);
-  color: var(--color-warning-dark);
-}
-.master-exam-card__status-badge--published_to_bank {
-  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
-  color: var(--color-primary-dark);
-}
-.master-exam-card__status-badge--cancelled {
-  background: color-mix(in srgb, var(--color-danger) 15%, transparent);
-  color: var(--color-danger-dark);
-}
-
 .master-exam-card__actions {
   display: flex;
   align-items: center;
@@ -503,41 +452,6 @@
 }
 
 /* ── DRAFTS LIBRARY ──────────────────────────────────────────────── */
-
-.master-exam-drafts-toolbar {
-  display: flex;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-  margin-bottom: var(--space-md);
-  align-items: center;
-}
-.master-exam-drafts-toolbar__search {
-  flex: 1;
-  min-width: 200px;
-}
-.master-exam-drafts-toolbar__usage {
-  display: flex;
-  gap: var(--space-2xs);
-}
-.master-exam-drafts-toolbar__usage button {
-  padding: 0.3rem 0.8rem;
-  border-radius: var(--radius-pill);
-  border: var(--border-width) solid var(--color-border);
-  background: var(--color-bg-card);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  font-family: var(--font-family-base);
-  cursor: pointer;
-  transition: background var(--motion-fast), color var(--motion-fast);
-}
-.master-exam-drafts-toolbar__usage button:hover {
-  background: var(--color-bg-alt);
-}
-.master-exam-drafts-toolbar__usage button.active {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  border-color: var(--color-primary);
-}
 
 .master-exam-drafts-list {
   display: flex;
@@ -971,6 +885,12 @@
   font-size: 0.65rem;
   font-weight: var(--font-weight-bold);
   transition: flex var(--motion-fast);
+}
+@media (pointer: coarse) {
+  .master-exam-question-row__reorder button {
+    min-width: var(--control-height);
+    min-height: var(--control-height);
+  }
 }
 .master-exam-distribution__segment--correct {
   background: var(--color-success);

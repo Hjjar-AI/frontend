@@ -6,12 +6,12 @@
       icon="bi bi-trophy"
       page-class="master-exam-results-page"
     >
-        <template #actions>
-          <BaseButton variant="secondary" @click="router.push('/master-exams')">
-            <DirectionalIcon ltr="bi bi-arrow-left" rtl="bi bi-arrow-right" />
-            {{ t('common.back') }}
-          </BaseButton>
-        </template>
+      <template #actions>
+        <BaseButton variant="secondary" @click="router.push('/master-exams')">
+          <DirectionalIcon ltr="bi bi-arrow-left" rtl="bi bi-arrow-right" />
+          {{ t('common.back') }}
+        </BaseButton>
+      </template>
       <AsyncContent
         :loading="loading"
         :error="error || ''"
@@ -72,9 +72,10 @@ import CardHeader from '@/components/common/CardHeader.vue'
 import BaseTableShell from '@/components/common/BaseTableShell.vue'
 import ResultStatGrid from '../components/ResultStatGrid.vue'
 import { useMasterExamStore } from '@/stores/masterExamStore'
-import { formatDateTime } from '@/utils/formatters'
+import { useLocaleFormatters } from '@/i18n/helpers/format'
 
 const { t } = useI18n()
+const { formatDateTime, formatPercent } = useLocaleFormatters()
 
 const route = useRoute()
 const router = useRouter()
@@ -85,13 +86,6 @@ const exam = computed(() => masterExamStore.byId[examId.value] || null)
 const attempt = computed(() => exam.value?.my_attempt || null)
 const loading = ref(true)
 const error = ref(null)
-
-// The four tiles shown to the participant.
-function formatPercent(value) {
-  const n = Number(value)
-  if (!Number.isFinite(n)) return '—'
-  return `${n.toFixed(1)}%`
-}
 
 const statItems = computed(() => {
   if (!attempt.value) return []
@@ -110,13 +104,13 @@ const statItems = computed(() => {
     },
     {
       key: 'accuracy',
-      value: formatPercent(attempt.value.accuracy),
+      value: formatPercent(attempt.value.accuracy, 1),
       label: t('masterExams.resultsColAccuracy'),
       accent: 'var(--color-primary)',
     },
     {
       key: 'weighted',
-      value: formatPercent(attempt.value.weighted_score),
+      value: formatPercent(attempt.value.weighted_score, 1),
       label: t('masterExams.resultsColWeighted'),
       accent: 'var(--color-warning)',
     },

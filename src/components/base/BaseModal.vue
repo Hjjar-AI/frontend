@@ -42,6 +42,7 @@ let savedHtmlPaddingRight = null
           class="base-modal"
           :class="[`base-modal--${size}`]"
           :role="role"
+          tabindex="-1"
           :aria-modal="true"
           :aria-labelledby="titleId"
           @keydown="handleKeydown"
@@ -85,6 +86,7 @@ const props = defineProps({
   role: { type: String, default: 'dialog' },
   staticBackdrop: { type: Boolean, default: false },
   dismissable: { type: Boolean, default: true },
+  initialFocus: { type: [String, Function], default: '' },
 })
 
 const emit = defineEmits(['update:isOpen', 'close'])
@@ -147,6 +149,42 @@ function handleBackdrop() {
   if (!props.staticBackdrop) close()
 }
 
+function getFocusableElements() {
+  if (!modalRef.value) return []
+  return Array.from(
+    modalRef.value.querySelectorAll(
+      'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+    ),
+  ).filter((element) => element.getAttribute('aria-hidden') !== 'true')
+}
+
+function resolveInitialFocus() {
+  if (!modalRef.value) return null
+
+  if (typeof props.initialFocus === 'function') {
+    const target = props.initialFocus()
+    return target?.$el || target || null
+  }
+
+  if (props.initialFocus) {
+    try {
+      const target = modalRef.value.querySelector(props.initialFocus)
+      if (target) return target
+    } catch {
+      // An invalid consumer selector falls back to the safe defaults below.
+    }
+  }
+
+  return (
+    modalRef.value.querySelector('[autofocus], [data-modal-initial-focus]') ||
+    modalRef.value.querySelector(
+      'input:not(:disabled), select:not(:disabled), textarea:not(:disabled)',
+    ) ||
+    getFocusableElements()[0] ||
+    modalRef.value
+  )
+}
+
 function handleKeydown(e) {
   if (e.key === 'Escape' && props.dismissable) {
     close()
@@ -154,9 +192,7 @@ function handleKeydown(e) {
   }
 
   if (e.key === 'Tab' && modalRef.value) {
-    const focusable = modalRef.value.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    )
+    const focusable = getFocusableElements()
     if (focusable.length === 0) return
     const first = focusable[0]
     const last = focusable[focusable.length - 1]
@@ -184,12 +220,7 @@ watch(
 
       try {
         await nextTick()
-        if (modalRef.value) {
-          const focusable = modalRef.value.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-          )
-          if (focusable.length > 0) focusable[0].focus()
-        }
+        resolveInitialFocus()?.focus()
       } catch (e) {
         // Focus failed; the lock stays held until close.
       }

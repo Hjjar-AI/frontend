@@ -18,7 +18,7 @@
 // two outliers that have been brought into line.
 
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useQuestionStore } from '@/stores/questionStore'
 import { useBookmarkStore } from '@/stores/bookmarkStore'
 import { useFlagStore } from '@/stores/flagStore'
@@ -38,6 +38,7 @@ export function useQuestionListController(modeRef, t) {
   const readMode = () => (typeof modeRef === 'function' ? modeRef() : modeRef.value)
 
   const router = useRouter()
+  const route = useRoute()
   const questionStore = useQuestionStore()
   const bookmarkStore = useBookmarkStore()
   const flagStore = useFlagStore()
@@ -251,6 +252,41 @@ export function useQuestionListController(modeRef, t) {
     }
     return adapter.value.emptyIcon
   })
+  const emptyReason = computed(() => {
+    if (readMode() === 'all') return activeFilterCount.value > 0 ? 'filtered' : 'first-use'
+    return 'no-results'
+  })
+
+  function queryValue(value) {
+    return Array.isArray(value) ? value[0] : value
+  }
+
+  function hydrateListState() {
+    const page = Number(queryValue(route.query.page))
+    const pageSize = Number(queryValue(route.query.per_page))
+    if (Number.isInteger(page) && page > 0) currentPage.value = page
+    if (Number.isInteger(pageSize) && pageSize > 0 && pageSize <= 100) perPage.value = pageSize
+
+    if (readMode() !== 'all') return
+    for (const key of ['search', 'category', 'difficulty', 'verified', 'tag']) {
+      const value = queryValue(route.query[key])
+      if (value !== undefined) filters[key] = String(value)
+    }
+  }
+
+  function syncListState() {
+    const query = {}
+    if (currentPage.value > 1) query.page = String(currentPage.value)
+    if (perPage.value !== (preferencesStore.defaultPerPage || 20)) {
+      query.per_page = String(perPage.value)
+    }
+    if (readMode() === 'all') {
+      for (const [key, value] of Object.entries(filters)) {
+        if (value !== '') query[key] = String(value)
+      }
+    }
+    router.replace({ query })
+  }
 
   function clearError() {
     adapter.value.clearError()
@@ -288,6 +324,7 @@ export function useQuestionListController(modeRef, t) {
       target = totalPages.value
     }
     currentPage.value = target
+    syncListState()
     await adapter.value.fetch(target)
   }
 
@@ -377,6 +414,7 @@ export function useQuestionListController(modeRef, t) {
   }
 
   onMounted(async () => {
+    hydrateListState()
     const prerequisites = [bookmarkStore.fetchBookmarks()]
     if (readMode() === 'all') {
       prerequisites.push(
@@ -390,7 +428,7 @@ export function useQuestionListController(modeRef, t) {
     }
     await Promise.all(prerequisites)
     if (readMode() === 'all') loadLastViewed()
-    await fetchPage(1)
+    await fetchPage(currentPage.value)
   })
 
   watch(readMode, () => {
@@ -429,6 +467,7 @@ export function useQuestionListController(modeRef, t) {
     emptyTitle,
     emptyMessage,
     emptyIcon,
+    emptyReason,
     totalPages,
     activeFilterCount,
     filterChips,

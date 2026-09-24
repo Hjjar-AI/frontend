@@ -1,15 +1,14 @@
 <!-- frontend/src/features/testCommon/TestSetup.vue -->
 <template>
   <Layout>
-    <div class="test-setup">
+    <PageShell
+      :title="setupTitle"
+      :subtitle="setupDescription"
+      icon="bi bi-sliders"
+      size="form"
+      page-class="test-setup"
+    >
       <BaseCard>
-        <div class="test-setup__header">
-          <h2>{{ setupTitle }}</h2>
-          <p class="text-muted test-setup__description">
-            {{ setupDescription }}
-          </p>
-        </div>
-
         <div v-if="hasSavedProgress" class="resume-box">
           <BaseButton @click="$emit('resume')">{{ safeT('tests.resume') }}</BaseButton>
           <BaseButton variant="danger" @click="$emit('discard')">
@@ -27,13 +26,14 @@
           @update:mode="$emit('update:mode', $event)"
         />
       </BaseCard>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import Layout from '@/components/common/Layout.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import UnifiedTestSetup from './UnifiedTestSetup.vue'
 import { useSafeI18n } from '@/composables/useSafeI18n'
 

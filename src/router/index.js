@@ -34,7 +34,7 @@ export function createChunkLoadErrorComponent() {
       const t = i18n.global.t
       return h('div', { style: wrapperStyle }, [
         h('i', { class: 'bi bi-wifi-off', style: iconStyle }),
-        h('h2', null, t('errors.chunkLoad')),
+        h('h1', null, t('errors.chunkLoad')),
         h('p', { style: mutedStyle }, t('errors.chunkLoadMessage')),
         h(
           'button',
@@ -473,6 +473,17 @@ const routes = [
       ],
     },
   },
+
+  ...(import.meta.env.DEV
+    ? [
+        {
+          path: '/__ui',
+          name: 'ComponentShowcase',
+          component: lazyLoad(() => import('@/features/dev/views/ComponentShowcase.vue')),
+          meta: { requiresAuth: true },
+        },
+      ]
+    : []),
 
   // ═══════════════════════════════════════════════════════════════════
   // 404

@@ -12,8 +12,9 @@
           v-model="form.name"
           :label="t('categories.nameLabel')"
           required
-          :error="nameError"
-          @input="nameError = ''"
+          :error="errors.name"
+          @blur="touch('name')"
+          @input="revalidate('name')"
         />
         <BaseInput v-model="form.description" :label="t('categories.descriptionLabel')" />
         <BaseField :label="t('categories.colorLabel')" id="cat-color">
@@ -57,6 +58,7 @@ import BaseSelect from '@/components/base/BaseSelect.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import FormGrid from '@/components/common/FormGrid.vue'
 import { useCategoryStore } from '@/stores/categoryStore'
+import { useFormValidation } from '@/composables/useFormValidation'
 
 const { t } = useI18n()
 
@@ -65,7 +67,6 @@ const categoryStore = useCategoryStore()
 const isOpen = ref(false)
 const editMode = ref(false)
 const editingId = ref(null)
-const nameError = ref('')
 
 const DEFAULT_CATEGORY_COLOR = '#6a3f24'
 const colorPresets = [
@@ -101,9 +102,12 @@ const iconOptions = computed(() => [
 ])
 
 const form = reactive({ name: '', description: '', color: DEFAULT_CATEGORY_COLOR, icon: 'bi-folder' })
+const { errors, touch, revalidate, validateAll, resetValidation } = useFormValidation({
+  name: () => form.name.trim() ? '' : t('categories.nameRequired'),
+})
 
 function open(category = null) {
-  nameError.value = ''
+  resetValidation()
   if (category) {
     editMode.value = true
     editingId.value = category.id
@@ -125,10 +129,7 @@ function open(category = null) {
 function close() { isOpen.value = false }
 
 async function handleSubmit() {
-  if (!form.name.trim()) {
-    nameError.value = t('categories.nameRequired')
-    return
-  }
+  if (!validateAll()) return
   const data = { name: form.name.trim(), description: form.description.trim() || '', color: form.color, icon: form.icon }
   let result
   if (editMode.value) {

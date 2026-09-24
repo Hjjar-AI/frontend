@@ -88,7 +88,7 @@
 /* Responsive strategies are explicit per table: horizontal scrolling is the
    safe default, low-priority columns can collapse, and record-oriented tables
    can opt into stacked cards using data-label on each cell. */
-@media (max-width: 760px) {
+@media (max-width: 768px) {
   .table-shell--mobile-columns [data-priority="low"] { display: none; }
 
   .table-shell--mobile-cards {
@@ -136,6 +136,6 @@
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 480px) {
   .table-shell--mobile-columns [data-priority="medium"] { display: none; }
 }

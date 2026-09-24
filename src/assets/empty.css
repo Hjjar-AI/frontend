@@ -67,3 +67,11 @@
 .loading-placeholder {
   margin-top: var(--space-xl);
 }
+
+.base-empty-state__actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-block-start: var(--space-lg);
+}

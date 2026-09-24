@@ -18,7 +18,11 @@
 -->
 <template>
   <Layout>
-    <PageShell :title="headerTitle" :icon="headerIcon" :page-class="containerClass">
+    <PageShell
+      :title="headerTitle"
+      :icon="headerIcon"
+      :page-class="containerClass"
+    >
         <template v-if="headerBadge" #badges>
           <BaseBadge :variant="headerBadge.variant">
             {{ headerBadge.label }}
@@ -72,14 +76,6 @@
           @click="clearLastViewed"
         />
       </div>
-
-      <ErrorBanner
-        v-if="error"
-        :error="error"
-        :retry="Boolean(error)"
-        @dismiss="clearError"
-        @retry="() => fetchPage(currentPage)"
-      />
 
       <!-- Filter bar + chips (all only) -->
       <FilterBar
@@ -178,31 +174,27 @@
         </div>
       </div>
 
-      <!-- Notebook celebration empty state (mistakes only). -->
-      <div
-        v-if="mode === 'mistakes' && !isLoading && items.length === 0"
-        class="notebook-empty"
-      >
-        <i class="bi bi-check-circle-fill"></i>
-        <h4>{{ t('questions.emptyMistakes') }}</h4>
-        <p>{{ t('questions.emptyMistakesDesc') }}</p>
-      </div>
-
       <!-- Main list -->
       <BaseListContainer
-        v-else
         :loading="isLoading"
+        :error="error"
         :items="items"
         :empty-title="emptyTitle"
         :empty-message="emptyMessage"
         :empty-icon="emptyIcon"
+        :empty-reason="emptyReason"
+        @retry="() => fetchPage(currentPage)"
       >
-        <template
-          v-if="mode === 'all' && authStore.can('questions.create')"
-          #emptyActions
-        >
-          <BaseButton variant="primary" @click="router.push('/questions/add')">
+        <template v-if="mode === 'all'" #emptyActions>
+          <BaseButton
+            v-if="activeFilterCount === 0 && authStore.can('questions.create')"
+            variant="primary"
+            @click="router.push('/questions/add')"
+          >
             {{ t('questions.emptyAddNow') }}
+          </BaseButton>
+          <BaseButton v-else-if="activeFilterCount > 0" variant="ghost" @click="handleReset">
+            {{ t('common.clearAll') }}
           </BaseButton>
         </template>
 
@@ -251,7 +243,6 @@
 <script setup>
 import Layout from '@/components/common/Layout.vue'
 import PageShell from '@/components/common/PageShell.vue'
-import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import BulkActions from '@/components/common/BulkActions.vue'
 import BulkTagEditor from '@/components/common/BulkTagEditor.vue'
 import FilterBar from '../components/FilterBar.vue'
@@ -307,10 +298,10 @@ const {
   emptyTitle,
   emptyMessage,
   emptyIcon,
+  emptyReason,
   totalPages,
   activeFilterCount,
   filterChips,
-  clearError,
   onFiltersUpdate,
   handleSearch,
   handleReset,

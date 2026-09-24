@@ -327,6 +327,9 @@
   min-width: 1.75em;
   text-align: center;
 }
+@media (pointer: coarse) {
+  .role-matrix .role-chip { min-height: var(--control-height); }
+}
 .role-matrix .role-header {
   display: flex;
   flex-wrap: wrap;

@@ -8,30 +8,6 @@
   flex-wrap: wrap;
 }
 
-.notebook-empty {
-  text-align: center;
-  padding: var(--space-2xl) var(--space-lg);
-  background: color-mix(in srgb, var(--color-success) 5%, var(--color-bg-card));
-  border-radius: var(--radius-lg);
-  border-inline-start: 4px solid var(--color-success);
-}
-.notebook-empty > i {
-  font-size: var(--icon-2xl);
-  color: var(--color-success);
-  margin-bottom: var(--space-md);
-  display: block;
-}
-.notebook-empty h4 {
-  margin: 0 0 var(--space-xs);
-  font-size: var(--font-size-xl);
-}
-.notebook-empty p {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-  max-width: 45ch;
-  margin-inline: auto;
-}
-
 /* Attempt summary grid — used on Dashboard. Four small tiles that
    describe the user's personal memory state. */
 .attempt-summary {

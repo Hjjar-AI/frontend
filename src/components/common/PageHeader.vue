@@ -1,7 +1,7 @@
 <!-- frontend/src/components/common/PageHeader.vue -->
 <template>
   <div class="page-header">
-    <component :is="`h${level}`" class="page-header__title">
+    <component :is="`h${level}`" class="page-header__title" dir="auto">
       <i v-if="icon" :class="icon"></i>
       {{ title }}
     </component>
