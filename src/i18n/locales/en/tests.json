@@ -21,6 +21,7 @@
 
     "exam": "Exam",
     "study": "Study",
+    "recall": "Answer before options",
     "examTitle": "Choose a category or tag for the exam",
     "studyTitle": "Set up self-study",
     "examDesc": "One answer per question. The score is calculated at the end.",
@@ -96,7 +97,7 @@
     "recallPrompt": "Write the answer you would give before seeing the options",
     "recallPlaceholder": "Type your answer or reasoning...",
     "revealOptions": "Save and reveal options",
-    "recallPrivacyHint": "Your written recall is saved with this attempt for later review.",
+    "recallPrivacyHint": "Your written recall is saved in this session and shown in the detailed results.",
     "recallSaveFailed": "Could not save your written answer.",
 
     "reflectionTitle": "Why did you get it wrong?",
@@ -128,6 +129,8 @@
     "reviewCorrect": "Correct",
     "reviewWrong": "Wrong",
     "reviewExplanation": "Explanation:",
+    "reviewRecallAnswer": "Your answer before seeing the options:",
+    "reviewConfidence": "Confidence",
 
     "retry": "Try again",
     "home": "Home",

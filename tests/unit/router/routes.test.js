@@ -67,6 +67,7 @@ describe('router — capability-gated routes', () => {
     ['QuestionEdit', 'questions.edit_own'],
     ['ExamSetup', 'tests.start'],
     ['TestSetup', 'tests.start'],
+    ['RecallSetup', 'tests.start'],
     ['AdminUsers', 'admin.users'],
     ['AdminSettings', 'admin.settings'],
     ['VerificationStats', 'admin.verification_stats'],
@@ -80,7 +81,6 @@ describe('router — capability-gated routes', () => {
     ['AdminBlueprints', 'admin.blueprints'],
     ['AdminHistory', 'tests.view_all_history'],
     ['AdminPermissions', 'admin.permissions'],
-    ['Analytics', 'analytics.view_all'],
     ['MasterExamCreate', 'master_exams.create'],
     ['MasterExamDrafts', 'master_exams.drafts_library'],
   ])('%s requires capability %s', (name, capability) => {
@@ -112,10 +112,14 @@ describe('router — unguarded authenticated routes', () => {
     'WrongAnswers',
     'FragileAnswers',
     'Bookmarks',
+    'KnowledgeMap',
+    'Analytics',
     'ExamQuestion',
     'StudyQuestion',
+    'RecallQuestion',
     'ExamResults',
     'StudyResults',
+    'RecallResults',
     'About',
     'History',
     'Categories',
@@ -148,6 +152,11 @@ describe('router — mode-carrying routes', () => {
 
   it('StudyResults carries mode=study', () => {
     expect(propsOf('StudyResults')?.mode).toBe('study')
+  })
+
+  it('RecallSetup and results carry mode=recall', () => {
+    expect(propsOf('RecallSetup')?.mode).toBe('recall')
+    expect(propsOf('RecallResults')?.mode).toBe('recall')
   })
 
   it('History carries mode=own', () => {

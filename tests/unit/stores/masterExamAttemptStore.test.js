@@ -156,9 +156,9 @@ describe('masterExamAttemptStore — submitAnswer (happy path)', () => {
     const store = useMasterExamAttemptStore()
     setupActiveAttempt(store)
 
-    await store.submitAnswer(2, true)
+    await store.submitAnswer(2, 3)
 
-    expect(store.answers['42']).toEqual({ answer: 2, confidence: true })
+    expect(store.answers['42']).toEqual({ answer: 2, confidence: 3 })
     expect(store.currentQuestionId).toBe(43)
   })
 
@@ -179,12 +179,12 @@ describe('masterExamAttemptStore — submitAnswer (happy path)', () => {
     const store = useMasterExamAttemptStore()
     setupActiveAttempt(store)
 
-    await store.submitAnswer(3, false)
+    await store.submitAnswer(3, 2)
 
     expect(masterExamService.submitAnswer).toHaveBeenCalledWith(1, {
       questionId: 42,
       answer: 3,
-      confidence: false,
+      confidence: 2,
     })
   })
 })
@@ -394,7 +394,7 @@ describe('masterExamAttemptStore — fetchCurrentQuestion', () => {
     await store.fetchCurrentQuestion()
 
     expect(store.currentQuestion.id).toBe(42)
-    expect(store.answers['42']).toEqual({ answer: 2, confidence: false })
+    expect(store.answers['42']).toEqual({ answer: 2, confidence: 2 })
   })
 
   it('does not overwrite answers when the server reports no saved answer', async () => {

@@ -180,7 +180,7 @@ const isTestsActive = computed(() =>
 )
 
 const isQuestionsActive = computed(() =>
-  ['/questions', '/categories'].some(p => route.path.startsWith(p))
+  ['/questions', '/categories', '/knowledge-map'].some(p => route.path.startsWith(p))
 )
 
 // Same registry the desktop navbar uses. Iterating it fixes the

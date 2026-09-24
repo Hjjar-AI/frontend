@@ -5,10 +5,7 @@
 // CLAMPING CONTRACT
 // -----------------
 // `goToPage(n)` clamps `n` to `[1, totalPages.value]`. `totalPages`
-// derives from `total.value` and `perPage.value` and has a minimum
-// of 1 — an empty list still has exactly one (empty) page. A test
-// that wants to observe `page.value === 3` after `goToPage(3)` must
-// therefore set `total.value` high enough that `totalPages >= 3`.
+// is supplied by the server response, so tests set it explicitly.
 
 import { describe, it, expect, vi } from 'vitest'
 import { usePagination } from '@/composables/usePagination'
@@ -29,9 +26,8 @@ describe('usePagination', () => {
 
   it('goToPage changes page and calls the fetch function', async () => {
     const fetchFn = vi.fn()
-    const { page, total, goToPage } = usePagination(fetchFn, 20)
-    // Give the paginator enough pages for page 3 to be reachable.
-    total.value = 100  // ceil(100 / 20) = 5
+    const { page, totalPages, goToPage } = usePagination(fetchFn, 20)
+    totalPages.value = 5
     await goToPage(3)
     expect(page.value).toBe(3)
     expect(fetchFn).toHaveBeenCalledTimes(1)
@@ -46,8 +42,8 @@ describe('usePagination', () => {
 
   it('goToPage clamps to the upper bound of totalPages', async () => {
     const fetchFn = vi.fn()
-    const { page, total, goToPage } = usePagination(fetchFn, 20)
-    total.value = 100
+    const { page, totalPages, goToPage } = usePagination(fetchFn, 20)
+    totalPages.value = 5
     await goToPage(999)
     expect(page.value).toBe(5)
   })
@@ -63,33 +59,28 @@ describe('usePagination', () => {
     expect(fetchFn).toHaveBeenCalledTimes(1)
   })
 
-  it('totalPages reflects total / perPage, with a minimum of 1', () => {
-    const { total, perPage, totalPages } = usePagination(null, 20)
-    total.value = 40
-    expect(totalPages.value).toBe(2)
-    total.value = 0
-    expect(totalPages.value).toBe(1)
-    total.value = 21
-    expect(totalPages.value).toBe(2)
-    // perPage change is reflected immediately.
-    perPage.value = 10
-    expect(totalPages.value).toBe(3)
+  it('totalPages accepts the server-provided page count', () => {
+    const { totalPages } = usePagination(null, 20)
+    totalPages.value = 7
+    expect(totalPages.value).toBe(7)
   })
 
   it('reset returns page, perPage and total to their defaults', () => {
-    const { page, perPage, total, reset } = usePagination(null, 50)
+    const { page, perPage, total, totalPages, reset } = usePagination(null, 50)
     page.value = 3
     perPage.value = 10
     total.value = 100
+    totalPages.value = 10
     reset()
     expect(page.value).toBe(1)
     expect(perPage.value).toBe(50)
     expect(total.value).toBe(0)
+    expect(totalPages.value).toBe(1)
   })
 
   it('goToPage without a fetch function does not throw', async () => {
-    const { page, total, goToPage } = usePagination(null, 20)
-    total.value = 100
+    const { page, totalPages, goToPage } = usePagination(null, 20)
+    totalPages.value = 5
     await expect(goToPage(2)).resolves.toBeUndefined()
     expect(page.value).toBe(2)
   })

@@ -516,7 +516,9 @@ onMounted(async () => {
 
 async function loadKnowledgeObjects() {
   try {
-    const result = await knowledgeService.list({ status: 'active' })
+    // Include draft/retired objects so an existing question never loses its
+    // visible selection merely because the linked objective changed status.
+    const result = await knowledgeService.list()
     knowledgeObjects.value = result?.items || []
   } catch {
     knowledgeObjects.value = []

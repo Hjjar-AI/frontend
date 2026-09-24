@@ -9,7 +9,7 @@
     :show-share="config.showShare"
     :show-warning="!isCompleted"
     :warning-message="warningMessage"
-    :show-answered-count="mode === 'study'"
+    :show-answered-count="mode === 'study' || mode === 'recall'"
     @retry="router.push(`/${mode}`)"
     @home="router.push('/')"
   />
@@ -44,7 +44,9 @@ const isCompleted = computed(() => {
 
 const warningMessage = computed(() => {
   if (props.mode === 'exam') return t('tests.warningExamIncomplete')
-  if (props.mode === 'study') return t('tests.warningStudyIncomplete')
+  if (props.mode === 'study' || props.mode === 'recall') {
+    return t('tests.warningStudyIncomplete')
+  }
   return t('tests.warningExamIncomplete')
 })
 

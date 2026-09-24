@@ -19,6 +19,15 @@
 .review-choice__check { color: var(--color-success); }
 .review-choice__cross { color: var(--color-danger); }
 .review-item__explanation { margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: var(--color-bg-alt); border-radius: var(--radius-md); }
+.review-item__recall {
+  margin-bottom: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-inline-start: 3px solid var(--color-info);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-info) 8%, var(--color-bg-card));
+}
+.review-item__recall p { margin: var(--space-xs) 0 0; white-space: pre-wrap; }
+.review-item__confidence { margin-bottom: var(--space-sm); color: var(--color-text-muted); font-size: var(--font-size-sm); }
 
 .review-queue { padding: var(--space-lg) 0; }
 .review-queue__bulk { display: flex; gap: var(--space-sm); margin-bottom: var(--space-md); }

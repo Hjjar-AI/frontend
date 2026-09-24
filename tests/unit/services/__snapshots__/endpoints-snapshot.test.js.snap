@@ -142,11 +142,6 @@ exports[`ENDPOINTS snapshot > every endpoint in the registry 1`] = `
   },
   {
     "kind": "string",
-    "path": "ENDPOINTS.ANALYTICS.VERIFICATION_STATS",
-    "value": "/analytics/verification-stats/",
-  },
-  {
-    "kind": "string",
     "path": "ENDPOINTS.AUTH.CHANGE_PASSWORD",
     "value": "/auth/change-password/",
   },
@@ -227,6 +222,11 @@ exports[`ENDPOINTS snapshot > every endpoint in the registry 1`] = `
     "kind": "string",
     "path": "ENDPOINTS.DATABASE.CLEAR",
     "value": "/database/clear/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.DATABASE.DATA_QUALITY",
+    "value": "/database/data-quality/",
   },
   {
     "arity": 1,
@@ -503,6 +503,17 @@ exports[`ENDPOINTS snapshot > every endpoint in the registry 1`] = `
   },
   {
     "kind": "string",
+    "path": "ENDPOINTS.PERMISSIONS.ROLES",
+    "value": "/auth/admin/permissions/",
+  },
+  {
+    "arity": 1,
+    "kind": "function",
+    "path": "ENDPOINTS.PERMISSIONS.USER",
+    "value": "/auth/admin/permissions/users/1/",
+  },
+  {
+    "kind": "string",
     "path": "ENDPOINTS.QUESTIONS.ATTEMPT_SUMMARY",
     "value": "/questions/attempt-summary/",
   },
@@ -579,6 +590,22 @@ exports[`ENDPOINTS snapshot > every endpoint in the registry 1`] = `
   },
   {
     "kind": "string",
+    "path": "ENDPOINTS.QUESTIONS.KNOWLEDGE_MAP",
+    "value": "/questions/knowledge-map/",
+  },
+  {
+    "arity": 1,
+    "kind": "function",
+    "path": "ENDPOINTS.QUESTIONS.KNOWLEDGE_OBJECT",
+    "value": "/questions/knowledge-objects/1/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.QUESTIONS.KNOWLEDGE_OBJECTS",
+    "value": "/questions/knowledge-objects/",
+  },
+  {
+    "kind": "string",
     "path": "ENDPOINTS.QUESTIONS.MISTAKES",
     "value": "/questions/mistakes/",
   },
@@ -624,6 +651,46 @@ exports[`ENDPOINTS snapshot > every endpoint in the registry 1`] = `
     "kind": "function",
     "path": "ENDPOINTS.QUESTIONS.VERIFY",
     "value": "/questions/1/verify/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.RECALL.ANSWER",
+    "value": "/recall/answer/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.RECALL.DISCARD",
+    "value": "/recall/discard/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.RECALL.PAUSE",
+    "value": "/recall/pause/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.RECALL.QUESTION",
+    "value": "/recall/question/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.RECALL.RESULTS",
+    "value": "/recall/results/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.RECALL.RESUME",
+    "value": "/recall/resume/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.RECALL.START",
+    "value": "/recall/start/recall/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.RECALL.STATUS",
+    "value": "/recall/status/",
   },
   {
     "kind": "string",
@@ -689,6 +756,11 @@ exports[`ENDPOINTS snapshot > every endpoint in the registry 1`] = `
     "kind": "string",
     "path": "ENDPOINTS.STUDY.STATUS",
     "value": "/study/status/",
+  },
+  {
+    "kind": "string",
+    "path": "ENDPOINTS.TIPS",
+    "value": "/tips/",
   },
 ]
 `;

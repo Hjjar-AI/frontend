@@ -38,7 +38,7 @@ export function useTestQuestionController(modeRef) {
   let finishing = false
 
   const examTotalSeconds = computed(() => {
-    if ((mode() === 'exam' || mode() === 'study') && store.durationMinutes) {
+    if (['exam', 'study', 'recall'].includes(mode()) && store.durationMinutes) {
       return store.durationMinutes * 60
     }
     return null

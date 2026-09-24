@@ -42,7 +42,7 @@ describe('useAnswerSubmission', () => {
     const store = makeStore(async () => 'ok')
     const { submitAnswer } = useAnswerSubmission(store)
     await submitAnswer(1, 'next', null, true, null)
-    expect(store.submitAnswer).toHaveBeenCalledWith(1, 'next', null, true, null)
+    expect(store.submitAnswer).toHaveBeenCalledWith(1, 'next', null, true, null, null)
   })
 
   it('returns the result of store.submitAnswer', async () => {

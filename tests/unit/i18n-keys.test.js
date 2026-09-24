@@ -81,6 +81,7 @@ const EXPECTED_DYNAMIC_PREFIXES = new Set([
   'about.a11y.',
   'about.contact.',
   'admin.permissions.capability.',
+  'knowledge.status.',
   'theme.',
 ])
 

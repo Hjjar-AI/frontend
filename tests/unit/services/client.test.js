@@ -108,9 +108,15 @@ vi.mock('@/i18n', () => ({
   },
 }))
 
-const routerPush = vi.fn()
+const routerReplace = vi.fn()
+const routerCurrentRoute = { value: { name: 'Dashboard' } }
 vi.mock('@/router', () => ({
-  default: { push: routerPush },
+  default: { replace: routerReplace, currentRoute: routerCurrentRoute },
+}))
+
+const clearSession = vi.fn()
+vi.mock('@/stores/authStore', () => ({
+  useAuthStore: () => ({ clearSession }),
 }))
 
 vi.mock('@/services/api/errorHandler', () => ({
@@ -138,6 +144,7 @@ function defaultRawImpl(config) {
 beforeEach(() => {
   vi.clearAllMocks()
   clearCsrfToken()
+  routerCurrentRoute.value = { name: 'Dashboard' }
 
   mocks.rawAxiosImpl.mockReset()
   mocks.rawAxiosImpl.mockImplementation(defaultRawImpl)
@@ -301,10 +308,9 @@ describe('client — 401 handling', () => {
       }),
     )
     await expect(apiClient.get('/x/')).rejects.toMatchObject({ code: 401 })
-    // The router push is scheduled inside a dynamic import; give
-    // the import a macrotask to resolve.
+    expect(clearSession).toHaveBeenCalledOnce()
     await new Promise((r) => setTimeout(r, 0))
-    expect(routerPush).toHaveBeenCalledWith({
+    expect(routerReplace).toHaveBeenCalledWith({
       name: 'Login',
       query: { redirect: expect.any(String) },
     })
@@ -314,6 +320,7 @@ describe('client — 401 handling', () => {
     const originalPath = window.location.pathname
     try {
       window.history.pushState({}, '', '/login')
+      routerCurrentRoute.value = { name: 'Login' }
       mocks.rawAxiosImpl.mockImplementation(() =>
         Promise.reject({
           response: { status: 401, data: {} },
@@ -322,7 +329,7 @@ describe('client — 401 handling', () => {
       )
       await expect(apiClient.get('/x/')).rejects.toMatchObject({ code: 401 })
       await new Promise((r) => setTimeout(r, 0))
-      expect(routerPush).not.toHaveBeenCalled()
+      expect(routerReplace).not.toHaveBeenCalled()
     } finally {
       window.history.pushState({}, '', originalPath)
     }

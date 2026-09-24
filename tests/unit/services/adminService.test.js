@@ -7,6 +7,7 @@ vi.mock('@/services/api/client', () => ({
 
 import { apiClient } from '@/services/api/client'
 import { adminService } from '@/services/adminService'
+import { flagService } from '@/services/flagService'
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -258,23 +259,23 @@ describe('adminService — state envelope', () => {
   })
 })
 
-describe('adminService — flags and maintenance', () => {
+describe('flagService and adminService — flags and maintenance', () => {
   it('flagQuestion POSTs reason', async () => {
-    await adminService.flagQuestion(42, 'wrong answer')
+    await flagService.flagQuestion(42, 'wrong answer')
     expect(apiClient.post).toHaveBeenCalledWith('/questions/42/flag/', {
       reason: 'wrong answer',
     })
   })
 
   it('listPendingFlags GETs with pagination params', async () => {
-    await adminService.listPendingFlags(2, 25)
+    await flagService.listPendingFlags(2, 25)
     expect(apiClient.get).toHaveBeenCalledWith('/questions/admin/flags/', {
       params: { page: 2, per_page: 25 },
     })
   })
 
   it('resolveFlag POSTs to the resolve URL', async () => {
-    await adminService.resolveFlag(9)
+    await flagService.resolveFlag(9)
     expect(apiClient.post).toHaveBeenCalledWith('/questions/admin/flags/9/resolve/')
   })
 

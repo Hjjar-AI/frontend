@@ -35,7 +35,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
 import { nextTick } from 'vue'
 
-const { routerPush } = vi.hoisted(() => ({ routerPush: vi.fn() }))
+const testState = vi.hoisted(() => ({ routerPush: vi.fn(), store: null }))
+const routerPush = testState.routerPush
 
 vi.mock('vue-router', async (importOriginal) => {
   const actual = await importOriginal()
@@ -61,7 +62,11 @@ vi.mock('@/stores/configStore', () => ({
   useConfigStore: () => ({ maxChoices: 8 }),
 }))
 
-import TestQuestion from '@/features/test_common/TestQuestion.vue'
+vi.mock('@/stores/testSessionStore', () => ({
+  useTestSessionStore: () => testState.store,
+}))
+
+import TestQuestion from '@/features/testCommon/TestQuestion.vue'
 import { mountWithGlobals } from '../../../helpers/mountWithGlobals'
 
 beforeEach(() => {
@@ -75,7 +80,7 @@ afterEach(() => {
 })
 
 function makeStoreMock(overrides = {}) {
-  return {
+  const store = {
     isActive: true,
     isComplete: false,
     currentIndex: 0,
@@ -104,6 +109,8 @@ function makeStoreMock(overrides = {}) {
     restoreFullState: vi.fn().mockResolvedValue(undefined),
     ...overrides,
   }
+  testState.store = store
+  return store
 }
 
 const COMMON_STUBS = {

@@ -15,6 +15,16 @@
       </BaseBadge>
     </div>
 
+    <div v-if="result.pre_answer" class="review-item__recall">
+      <strong><i class="bi bi-pencil-square"></i> {{ t('tests.reviewRecallAnswer') }}</strong>
+      <p dir="auto">{{ result.pre_answer }}</p>
+    </div>
+
+    <div v-if="result.confidence_score" class="review-item__confidence">
+      <i class="bi bi-speedometer2"></i>
+      {{ t('tests.reviewConfidence') }}: {{ confidenceLabel(result.confidence_score) }}
+    </div>
+
     <div class="review-item__choices">
       <div
         v-for="(choice, cidx) in result.choices"
@@ -51,4 +61,10 @@ defineProps({
   result: { type: Object, required: true },
   index: { type: Number, required: true },
 })
+
+function confidenceLabel(value) {
+  if (Number(value) === 1) return t('tests.confidenceGuessing')
+  if (Number(value) === 2) return t('tests.confidenceUncertain')
+  return t('tests.confidenceCertain')
+}
 </script>

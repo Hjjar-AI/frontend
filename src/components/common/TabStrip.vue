@@ -7,8 +7,8 @@
     <TabStrip
       v-model="activeTab"
       :tabs="[
-        { key: 'roles', label: t('…'), icon: 'bi bi-people-fill' },
-        { key: 'users', label: t('…'), icon: 'bi bi-person-gear' },
+        { key: 'roles', label: rolesLabel, icon: 'bi bi-people-fill' },
+        { key: 'users', label: usersLabel, icon: 'bi bi-person-gear' },
       ]"
     />
 

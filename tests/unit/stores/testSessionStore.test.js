@@ -137,8 +137,32 @@ describe('testSessionStore — submitAnswer', () => {
     mocks.service.submitAnswer.mockResolvedValueOnce({ new_index: 0 })
     const store = useTestSessionStore()
     await store.start('exam', {})
-    await store.submitAnswer(1, 'next', null, false)
-    expect(store.confidence[0]).toBe(false)
+    await store.submitAnswer(1, 'next', null, 2)
+    expect(store.confidence[0]).toBe(2)
+  })
+
+  it('saves a recall pre-answer without counting the question as answered', async () => {
+    mocks.service.start.mockResolvedValueOnce({
+      session_id: 'recall-1',
+      question_ids: [10],
+    })
+    mocks.service.submitAnswer.mockResolvedValueOnce({ new_index: 0 })
+    const store = useTestSessionStore()
+    await store.start('recall', {})
+
+    await store.submitAnswer(null, 'same', null, 3, null, 'My free recall')
+
+    expect(mocks.service.submitAnswer).toHaveBeenCalledWith(
+      'recall-1',
+      null,
+      'same',
+      null,
+      3,
+      null,
+      'My free recall',
+    )
+    expect(store.answeredCount).toBe(0)
+    expect(store.mode).toBe('recall')
   })
 })
 

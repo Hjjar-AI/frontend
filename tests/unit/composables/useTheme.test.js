@@ -13,8 +13,8 @@ beforeEach(() => {
   vi.useFakeTimers()
   localStorage.clear()
   // Reset the DOM to a known baseline. `loadSavedTheme` with an
-  // empty storage defaults `currentTheme` to 'light' and writes
-  // `data-theme="light"` on the html element.
+  // empty storage defaults `currentTheme` to Stone and writes it on
+  // the html element.
   loadSavedTheme()
 })
 
@@ -35,10 +35,10 @@ describe('useTheme — applyTheme', () => {
     expect(storageService.getItem('theme')).toBe('blossom')
   })
 
-  it('falls back to light for an unknown theme', () => {
+  it('falls back to Stone for an unknown theme', () => {
     const { currentTheme } = useTheme()
     applyTheme('not-a-real-theme')
-    expect(currentTheme.value).toBe('light')
+    expect(currentTheme.value).toBe('stone')
   })
 
   it('adds then removes the theme-transition class', () => {
@@ -67,17 +67,17 @@ describe('useTheme — loadSavedTheme', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('fresh')
   })
 
-  it('falls back to light when the stored value is not a known theme', () => {
+  it('falls back to Stone when the stored value is not a known theme', () => {
     storageService.setItem('theme', 'pink')
     const { currentTheme } = useTheme()
     loadSavedTheme()
-    expect(currentTheme.value).toBe('light')
+    expect(currentTheme.value).toBe('stone')
   })
 
-  it('falls back to light when storage is empty', () => {
+  it('falls back to Stone when storage is empty', () => {
     const { currentTheme } = useTheme()
     loadSavedTheme()
-    expect(currentTheme.value).toBe('light')
+    expect(currentTheme.value).toBe('stone')
   })
 })
 
@@ -92,8 +92,11 @@ describe('useTheme — getters', () => {
     expect(isDark.value).toBe(false)
   })
 
-  it('THEMES exposes the four supported themes', () => {
+  it('THEMES exposes every supported theme', () => {
     const { THEMES } = useTheme()
-    expect([...THEMES].sort()).toEqual(['blossom', 'dark', 'fresh', 'light'])
+    expect([...THEMES].sort()).toEqual([
+      'blossom', 'contrast', 'dark', 'fresh', 'ink',
+      'onyx', 'sepia', 'slate', 'stone',
+    ])
   })
 })

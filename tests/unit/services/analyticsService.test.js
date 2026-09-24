@@ -7,6 +7,7 @@ vi.mock('@/services/api/client', () => ({
 
 import { apiClient } from '@/services/api/client'
 import { analyticsService } from '@/services/analyticsService'
+import { adminService } from '@/services/adminService'
 
 beforeEach(() => { vi.clearAllMocks() })
 
@@ -32,8 +33,8 @@ describe('analyticsService — top-level', () => {
     })
   })
 
-  it('verificationStats GETs /analytics/verification-stats/', async () => {
-    await analyticsService.verificationStats()
+  it('admin verification stats use the single admin-service endpoint', async () => {
+    await adminService.getVerificationStats()
     expect(apiClient.get).toHaveBeenCalledWith('/analytics/verification-stats/')
   })
 })

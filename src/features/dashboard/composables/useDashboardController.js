@@ -71,10 +71,15 @@ export function useDashboardController() {
     const mode = testSessionStore.mode
     const total = testSessionStore.totalQuestions
     const current = testSessionStore.currentIndex || 0
+    const modePresentation = {
+      exam: { label: 'tests.exam', icon: 'bi bi-journal-check' },
+      study: { label: 'tests.study', icon: 'bi bi-book-half' },
+      recall: { label: 'tests.recall', icon: 'bi bi-eye' },
+    }[mode] || { label: 'tests.exam', icon: 'bi bi-journal-check' }
     return {
       mode,
-      label: t(mode === 'study' ? 'tests.study' : 'tests.exam'),
-      icon: mode === 'study' ? 'bi bi-book-half' : 'bi bi-journal-check',
+      label: t(modePresentation.label),
+      icon: modePresentation.icon,
       currentIndex: current,
       totalQuestions: total,
       progress: Math.round((current / total) * 100),
