@@ -91,12 +91,16 @@ export function useDashboardController() {
     if (!breakdown) return ''
     const parts = []
     if (breakdown.srs_due) parts.push(`${breakdown.srs_due} ${t('dashboard.breakdownSrs')}`)
+    if (breakdown.planner_targets) {
+      parts.push(`${breakdown.planner_targets} ${t('dashboard.breakdownPlanner')}`)
+    }
     if (breakdown.fragile) parts.push(`${breakdown.fragile} ${t('dashboard.breakdownFragile')}`)
     if (breakdown.wrong_open) parts.push(`${breakdown.wrong_open} ${t('dashboard.breakdownWrong')}`)
     if (breakdown.weak_categories) {
       parts.push(`${breakdown.weak_categories} ${t('dashboard.breakdownWeak')}`)
     }
     if (breakdown.fresh) parts.push(`${breakdown.fresh} ${t('dashboard.breakdownFresh')}`)
+    if (breakdown.general) parts.push(`${breakdown.general} ${t('dashboard.breakdownGeneral')}`)
     return parts.length ? t('dashboard.studyNowBreakdown', { parts: parts.join(' · ') }) : ''
   })
 

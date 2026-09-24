@@ -22,10 +22,11 @@
     "sectionAdmin": "تحليلات الفصل",
 
     "categoryMasteryTitle": "إتقان التصنيفات",
-    "categoryMasteryDesc": "دقتك الحالية في كل تصنيف جرّبته. التصنيفات التي فيها محاولة واحدة تظهر للاكتمال وقد لا تكون موثوقة.",
+    "categoryMasteryDesc": "دليل إتقانك الحالي حسب التصنيف، مع احتساب التغطية والثقة والتكرار والأخطاء الحالية.",
     "categoryMasteryEmpty": "ابدأ بالتدرب على بعض الأسئلة لرؤية إتقانك للتصنيفات.",
     "categoryMasteryTotal": "التصنيفات المتتبعة",
     "categoryMasteryMastered": "متقن",
+    "categoryMasteryScore": "متوسط الإتقان",
     "categoryMasteryAttempts": "محاولة",
     "categoryMasteryAccuracy": "دقة",
     "categoryMasteryQuestions": "سؤال",

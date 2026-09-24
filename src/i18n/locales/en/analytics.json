@@ -22,10 +22,11 @@
     "sectionAdmin": "Class-wide analytics",
 
     "categoryMasteryTitle": "Category mastery",
-    "categoryMasteryDesc": "Your current accuracy in every category you have attempted. Categories with a single attempt are shown for completeness but may not be reliable.",
+    "categoryMasteryDesc": "Your current evidence of mastery by category, including coverage, confidence, repetition, and current lapses.",
     "categoryMasteryEmpty": "Attempt some questions to see your category mastery.",
     "categoryMasteryTotal": "Categories tracked",
     "categoryMasteryMastered": "Mastered",
+    "categoryMasteryScore": "Average mastery",
     "categoryMasteryAttempts": "attempts",
     "categoryMasteryAccuracy": "accuracy",
     "categoryMasteryQuestions": "questions",

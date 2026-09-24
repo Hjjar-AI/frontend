@@ -34,6 +34,7 @@ export function useTestSetupState(props, emit, t) {
   const numQuestions = ref(10)
   const tags = ref([])
   const tagsLoading = ref(false)
+  let countRequestId = 0
 
   const filters = reactive({
     difficulty: '',
@@ -188,7 +189,7 @@ export function useTestSetupState(props, emit, t) {
 
   const canStart = computed(() => {
     if (props.loading) return false
-    return activeSourceBehavior.value?.isReady() || false
+    return Boolean(activeSourceBehavior.value?.isReady() && props.maxAvailable > 0)
   })
 
   const hintForDisabled = computed(() => {
@@ -200,7 +201,7 @@ export function useTestSetupState(props, emit, t) {
     if (next === mode.value) return
     mode.value = next
     emit('update:mode', next)
-    recomputeAvailableCount()
+    queueAvailableCount()
   }
 
   function setSource(next) {
@@ -209,7 +210,7 @@ export function useTestSetupState(props, emit, t) {
     if (next !== 'tag') selectedTags.value = []
     if (next !== 'category') selectedCategories.value = []
     if (next !== 'blueprint') selectedBlueprintId.value = null
-    recomputeAvailableCount()
+    queueAvailableCount()
   }
 
   function buildSelectionPayload(forCount = false) {
@@ -236,28 +237,29 @@ export function useTestSetupState(props, emit, t) {
   }
 
   async function fetchAvailableCount() {
-    if (source.value === 'srs') {
-      emit('max-update', wrongAnswerStore.srsDueCount || 0)
-      return
-    }
-    if (source.value === 'bookmarks') {
-      emit('max-update', bookmarkStore.count || 0)
-      return
-    }
+    const requestId = countRequestId
     if (!activeSourceBehavior.value) {
-      emit('max-update', 0)
+      if (requestId === countRequestId) emit('max-update', 0)
       return
     }
 
     try {
       const result = await questionService.availableCount(buildSelectionPayload(true))
-      if (result.count !== undefined) emit('max-update', result.count)
+      if (requestId === countRequestId && result.count !== undefined) {
+        emit('max-update', result.count)
+      }
     } catch {
       // The available count is a hint; starting remains governed by the API.
     }
   }
 
   const { debounced: recomputeAvailableCount } = useDebounceFn(fetchAvailableCount, 300)
+
+  function queueAvailableCount() {
+    countRequestId += 1
+    emit('max-update', 0)
+    recomputeAvailableCount()
+  }
 
   function submit() {
     if (!canStart.value) return
@@ -273,7 +275,7 @@ export function useTestSetupState(props, emit, t) {
 
   watch(
     [source, selectedTags, selectedCategories, selectedBlueprintId, filters],
-    recomputeAvailableCount,
+    queueAvailableCount,
     { deep: true },
   )
 
@@ -296,7 +298,7 @@ export function useTestSetupState(props, emit, t) {
       setSource('bookmarks')
     }
 
-    recomputeAvailableCount()
+    queueAvailableCount()
   })
 
   return {

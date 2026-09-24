@@ -29,8 +29,8 @@
           <span class="report-stat__label">{{ t('analytics.categoryMasteryMastered') }}</span>
         </div>
         <div class="report-stat">
-          <span class="report-stat__value">{{ avgAccuracy.toFixed(1) }}%</span>
-          <span class="report-stat__label">{{ t('analytics.seriesAccuracy') }}</span>
+          <span class="report-stat__value">{{ avgMastery.toFixed(1) }}%</span>
+          <span class="report-stat__label">{{ t('analytics.categoryMasteryScore') }}</span>
         </div>
       </div>
 
@@ -58,13 +58,13 @@
             <div
               class="report-bar__fill"
               :style="{
-                width: cat.accuracy + '%',
+                width: scoreFor(cat) + '%',
                 background: cat.category_color,
               }"
             ></div>
           </div>
           <span class="report-bar__value">
-            {{ cat.accuracy.toFixed(1) }}%
+            {{ scoreFor(cat).toFixed(1) }}%
             <small class="text-muted">({{ cat.attempts }})</small>
           </span>
         </div>
@@ -91,9 +91,11 @@ const masteredCount = computed(
   () => categories.value.filter(c => c.mastered).length
 )
 
-const avgAccuracy = computed(() => {
+const scoreFor = (category) => category.mastery_score ?? category.accuracy ?? 0
+
+const avgMastery = computed(() => {
   if (!categories.value.length) return 0
-  const sum = categories.value.reduce((s, c) => s + c.accuracy, 0)
+  const sum = categories.value.reduce((sum, category) => sum + scoreFor(category), 0)
   return sum / categories.value.length
 })
 </script>
