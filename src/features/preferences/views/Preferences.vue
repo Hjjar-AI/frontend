@@ -1,11 +1,14 @@
 <!-- frontend/src/features/preferences/views/Preferences.vue -->
 <template>
   <Layout>
-    <div class="preferences-page">
+    <PageShell
+      :title="t('preferences.title')"
+      icon="bi bi-sliders"
+      :subtitle="t('preferences.subtitle')"
+      size="narrow"
+      page-class="preferences-page"
+    >
       <BaseCard>
-        <PageHeader :title="t('preferences.title')" icon="bi bi-sliders" />
-        <p class="text-muted">{{ t('preferences.subtitle') }}</p>
-
         <form @submit.prevent class="preferences-form">
           <FormGrid>
      
@@ -34,7 +37,7 @@
           </FormGrid>
         </form>
       </BaseCard>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -42,7 +45,7 @@
 import '@/assets/profile.css'
 import { computed } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import FormGrid from '@/components/common/FormGrid.vue'

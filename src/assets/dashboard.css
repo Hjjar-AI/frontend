@@ -9,7 +9,6 @@
    profile.css). Only the file location changed. */
 
 /* ── Shell ─────────────────────────────────────────────────────── */
-.dashboard { padding: var(--space-lg) 0; }
 .dashboard__welcome {
   text-align: center;
   margin-bottom: var(--space-xl);

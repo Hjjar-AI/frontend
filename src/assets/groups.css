@@ -1,10 +1,6 @@
 /* frontend/src/assets/groups.css */
 /* FEATURE #9 — group list, group detail, and the leaderboard table. */
 
-.groups-page {
-  padding: var(--space-lg) 0;
-}
-
 .groups-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

@@ -1,4 +1,3 @@
-.knowledge-map-page__intro { margin-top: calc(-1 * var(--space-sm)); }
 .knowledge-map-page__loading { margin-top: var(--space-lg); }
 .knowledge-summary {
   display: grid;

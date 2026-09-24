@@ -2,10 +2,6 @@
 /* FEATURE #1 / #2 / #5 — wrong-answer notebook, fragile list,
    SRS review start card, and the attempt-summary tile grid. */
 
-.notebook-page {
-  padding: var(--space-lg) 0;
-}
-
 .notebook-page__header-actions {
   display: flex;
   gap: var(--space-sm);

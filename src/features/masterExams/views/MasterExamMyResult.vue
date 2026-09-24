@@ -1,19 +1,17 @@
 <!-- frontend/src/features/masterExams/views/MasterExamMyResult.vue -->
 <template>
   <Layout>
-    <div class="master-exam-results-page">
-      <PageHeader
-        :title="t('masterExams.myResultTitle', { name: exam?.name || '' })"
-        icon="bi bi-trophy"
-      >
+    <PageShell
+      :title="t('masterExams.myResultTitle', { name: exam?.name || '' })"
+      icon="bi bi-trophy"
+      page-class="master-exam-results-page"
+    >
         <template #actions>
           <BaseButton variant="secondary" @click="router.push('/master-exams')">
             <DirectionalIcon ltr="bi bi-arrow-left" rtl="bi bi-arrow-right" />
             {{ t('common.back') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
       <ErrorBanner :error="error" @dismiss="error = null" />
 
       <BaseCard
@@ -67,7 +65,7 @@
         :message="t('masterExams.myResultEmptyDesc')"
         icon="bi-trophy"
       />
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -76,7 +74,7 @@ import '@/assets/master.css'
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'

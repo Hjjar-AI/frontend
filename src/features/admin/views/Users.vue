@@ -1,15 +1,16 @@
 <!-- frontend/src/features/admin/views/Users.vue -->
 <template>
   <Layout>
-    <div class="admin-users">
-      <PageHeader :title="t('admin.users.title')" icon="bi bi-people-fill">
+    <PageShell
+      :title="t('admin.users.title')"
+      icon="bi bi-people-fill"
+      page-class="admin-users"
+    >
         <template #actions>
           <BaseButton variant="primary" @click="userFormModalRef?.open()">
             <i class="bi bi-person-plus"></i> {{ t('admin.users.addButton') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
       <ErrorBanner
         :error="userStore.error"
         :retry="userStore.error ? true : false"
@@ -207,7 +208,7 @@
           </div>
         </div>
       </BaseModal>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -215,7 +216,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import Pagination from '@/components/base/BasePagination.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'

@@ -1,7 +1,5 @@
 /* frontend/src/assets/analytics.css */
 
-.analytics-page { padding: var(--space-lg) 0; }
-
 .analytics-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

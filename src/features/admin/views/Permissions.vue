@@ -1,8 +1,12 @@
 <!-- frontend/src/features/admin/views/Permissions.vue -->
 <template>
   <Layout>
-    <div class="permissions-page">
-      <PageHeader :title="t('admin.permissions.title')" icon="bi bi-shield-check">
+    <PageShell
+      :title="t('admin.permissions.title')"
+      icon="bi bi-shield-check"
+      :subtitle="t('admin.permissions.intro')"
+      page-class="permissions-page"
+    >
         <template #badges>
           <BaseBadge variant="info">
             {{ t('admin.permissions.badgeCapabilities', { count: capabilityCatalog.length }) }}
@@ -11,10 +15,6 @@
             {{ t('admin.permissions.badgeRoles', { count: editableRoles.length }) }}
           </BaseBadge>
         </template>
-      </PageHeader>
-
-      <p class="permissions-page__intro">{{ t('admin.permissions.intro') }}</p>
-
       <ErrorBanner
         :error="catalogError"
         :retry="Boolean(catalogError)"
@@ -43,7 +43,7 @@
           @user-selected="onUserSelected"
         />
       </template>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -51,7 +51,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import TabStrip from '@/components/common/TabStrip.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'

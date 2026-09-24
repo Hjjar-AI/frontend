@@ -7,7 +7,6 @@
 .category-form__preset--active { border-color: var(--color-primary); transform: scale(1.2); }
 .category-form__preset-check { color: var(--color-text-inverse); font-size: var(--icon-md); font-weight: var(--font-weight-bold); text-shadow: 0 0 2px rgba(0,0,0,0.5); }
 .category-form__custom-input { width: var(--control-height); height: var(--control-height); padding: var(--space-xs); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer; }
-.categories-page { padding: var(--space-lg) 0; }
 .categories-page__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

@@ -1,10 +1,6 @@
 /* frontend/src/assets/blueprints.css */
 /* FEATURE #8 — blueprint list and editor. */
 
-.blueprints-page {
-  padding: var(--space-lg) 0;
-}
-
 .blueprint-list {
   display: flex;
   flex-direction: column;

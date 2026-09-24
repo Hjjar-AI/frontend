@@ -2,16 +2,16 @@
 <!-- FEATURE #9 — admin group management (list + create). -->
 <template>
   <Layout>
-    <div class="groups-page">
-      <PageHeader :title="t('admin.groups.title')" icon="bi bi-people-fill">
+    <PageShell
+      :title="t('admin.groups.title')"
+      icon="bi bi-people-fill"
+      page-class="groups-page"
+    >
         <template #actions>
           <BaseButton variant="primary" @click="formModalRef?.open()">
             <i class="bi bi-plus-circle"></i> {{ t('admin.groups.addButton') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
- 
       <ErrorBanner
         :error="groupStore.error"
         :retry="groupStore.error ? true : false"
@@ -77,7 +77,7 @@
       </BaseListContainer>
 
       <GroupFormModal ref="formModalRef" @saved="loadGroups" />
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -85,7 +85,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'

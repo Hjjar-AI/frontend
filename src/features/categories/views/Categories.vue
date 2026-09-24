@@ -1,8 +1,11 @@
 <!-- frontend/src/features/categories/views/Categories.vue -->
 <template>
   <Layout>
-    <div class="categories-page">
-      <PageHeader :title="t('categories.title')" icon="bi bi-folder2-open">
+    <PageShell
+      :title="t('categories.title')"
+      icon="bi bi-folder2-open"
+      page-class="categories-page"
+    >
         <template #actions>
           <BaseButton
             v-if="authStore.can('categories.manage')"
@@ -12,8 +15,6 @@
             <i class="bi bi-plus-circle"></i> {{ t('categories.addButton') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
       <ErrorBanner
         :error="categoryStore.error"
         :retry="categoryStore.error ? true : false"
@@ -47,7 +48,7 @@
           </div>
         </template>
       </BaseListContainer>
-    </div>
+    </PageShell>
     <CategoryForm ref="categoryFormRef" @saved="handleCategorySaved" />
   </Layout>
 </template>
@@ -56,7 +57,7 @@
 import '@/assets/categories.css'
 import { ref, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import CategoryCard from '../components/CategoryCard.vue'
 import CategoryForm from '../components/CategoryForm.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'

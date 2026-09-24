@@ -1,10 +1,13 @@
 <!-- frontend/src/features/admin/views/Settings.vue -->
 <template>
   <Layout>
-    <div class="admin-settings">
+    <PageShell
+      :title="t('admin.settings.title')"
+      icon="bi bi-gear"
+      size="narrow"
+      page-class="admin-settings"
+    >
       <BaseCard>
-        <PageHeader :title="t('admin.settings.title')" icon="bi bi-gear" />
-
         <ErrorBanner :error="adminSettingsStore.error" @dismiss="adminSettingsStore.error = null" />
 
         <form @submit.prevent="saveSettings" class="settings-form">
@@ -110,14 +113,14 @@
           </div>
         </div>
       </BaseCard>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseInput from '@/components/base/BaseInput.vue'

@@ -1,8 +1,11 @@
 <!-- frontend/src/features/dashboard/views/Dashboard.vue -->
 <template>
   <Layout>
-    <div class="dashboard">
-      <PageHeader :title="t('dashboard.title')" icon="bi bi-speedometer2" />
+    <PageShell
+      :title="t('dashboard.title')"
+      icon="bi bi-speedometer2"
+      page-class="dashboard"
+    >
 
       <div class="dashboard__welcome" :class="{ 'dashboard__welcome--animated': bannerAnimated }">
         <h1>
@@ -254,13 +257,13 @@
         :data="groupStore.heatmap"
         class="dashboard__heatmap"
       />
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import QuestionCard from '@/features/questions/components/QuestionCard.vue'
 import MasterExamCard from '@/features/masterExams/components/MasterExamCard.vue'
 import StudyActivityHeatmap from '@/components/dashboard/StudyActivityHeatmap.vue'

@@ -1,17 +1,18 @@
 <!-- frontend/src/features/bookmarks/views/Bookmarks.vue -->
 <template>
   <Layout>
-    <div class="bookmarks-page">
-      <BaseCard>
-        <PageHeader :title="t('questions.bookmarksTitle')" icon="bi bi-bookmark-heart-fill">
-          <template #actions>
-            <!-- MERGE: single study button replaces the two old buttons -->
-            <BaseButton variant="success" size="small" @click="startFromBookmarks">
-              <i class="bi bi-book-half"></i> {{ t('questions.startFromBookmarks') }}
-            </BaseButton>
-          </template>
-        </PageHeader>
+    <PageShell
+      :title="t('questions.bookmarksTitle')"
+      icon="bi bi-bookmark-heart-fill"
+      page-class="bookmarks-page"
+    >
+      <template #actions>
+        <BaseButton variant="success" size="small" @click="startFromBookmarks">
+          <i class="bi bi-book-half"></i> {{ t('questions.startFromBookmarks') }}
+        </BaseButton>
+      </template>
 
+      <BaseCard>
         <ErrorBanner
           :error="bookmarkStore.error || questionStore.error"
           :retry="bookmarkStore.error || questionStore.error ? true : false"
@@ -46,7 +47,7 @@
           </template>
         </BaseListContainer>
       </BaseCard>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -55,7 +56,7 @@ import '@/assets/bookmarks.css'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import QuestionCard from '@/features/questions/components/QuestionCard.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'

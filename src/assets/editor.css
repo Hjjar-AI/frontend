@@ -113,12 +113,6 @@
 @keyframes splash-glow { 0% { box-shadow: 0 0 0 0 var(--color-success), var(--shadow-lg); } 50% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-success) 30%, transparent), var(--shadow-lg); } 100% { box-shadow: 0 0 0 4px var(--color-success), var(--shadow-lg); } }
 @keyframes splash-pop { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
 
-.question-form-page {
-  padding: var(--space-lg) 0;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
 .question-form__case-hint {
   font-size: var(--font-size-xs);
   margin-top: var(--space-xs);

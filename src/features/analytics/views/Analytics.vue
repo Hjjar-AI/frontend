@@ -1,8 +1,7 @@
 <!-- frontend/src/features/analytics/views/Analytics.vue -->
 <template>
   <Layout>
-    <div class="analytics-page">
-      <PageHeader :title="t('analytics.title')" icon="bi bi-graph-up">
+    <PageShell :title="t('analytics.title')" icon="bi bi-graph-up" page-class="analytics-page">
         <template #actions>
           <BaseDropdown
             :model-value="days"
@@ -20,8 +19,6 @@
             <i class="bi bi-arrow-repeat"></i>
           </BaseButton>
         </template>
-      </PageHeader>
-
       <ErrorBanner :error="store.error" @dismiss="store.error = null" />
 
       <!-- ═══ Summary charts (existing) ═══════════════════════════ -->
@@ -204,7 +201,7 @@
           <WeeklyRetentionCard :data="store.weeklyRetention" />
         </ReportAccordion>
       </section>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -218,7 +215,7 @@ import { useChartPalette } from '@/composables/useChartPalette'
 import { useAnalyticsCharts } from '@/composables/useAnalyticsCharts'
 
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import ChartCard from '@/components/charts/ChartCard.vue'
 import BaseEmptyState from '@/components/base/BaseEmptyState.vue'
 import BaseCard from '@/components/base/BaseCard.vue'

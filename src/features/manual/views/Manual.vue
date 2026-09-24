@@ -1,19 +1,22 @@
 <!-- frontend/src/features/manual/views/Manual.vue -->
 <template>
   <Layout>
-    <div class="manual-page">
-      <BaseCard class="manual-page__card">
-        <PageHeader :title="t('content.manual.title')" icon="bi bi-book">
-          <template #badges>
-            <BaseBadge variant="info">
-              {{ t('content.manual.badgeSections', { count: sanitizedSections.length }) }}
-            </BaseBadge>
-            <BaseBadge variant="secondary">
-              {{ t('content.manual.badgeVersion', { version: APP_VERSION }) }}
-            </BaseBadge>
-          </template>
-        </PageHeader>
+    <PageShell
+      :title="t('content.manual.title')"
+      icon="bi bi-book"
+      size="base"
+      page-class="manual-page"
+    >
+      <template #badges>
+        <BaseBadge variant="info">
+          {{ t('content.manual.badgeSections', { count: sanitizedSections.length }) }}
+        </BaseBadge>
+        <BaseBadge variant="secondary">
+          {{ t('content.manual.badgeVersion', { version: APP_VERSION }) }}
+        </BaseBadge>
+      </template>
 
+      <BaseCard class="manual-page__card">
         <div v-if="!content" class="manual-page__loading">
           <i class="bi bi-hourglass-split"></i>
           {{ loadError ? t('content.manual.loadFailed') : t('content.manual.loading') }}
@@ -60,7 +63,7 @@
           </div>
         </template>
       </BaseCard>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -68,7 +71,7 @@
 import '@/assets/privacy.css'
 import { computed } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import { APP_VERSION } from '@/utils/constants'

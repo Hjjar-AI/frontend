@@ -1,8 +1,12 @@
 <!-- frontend/src/features/questions/views/EditView.vue -->
 <template>
   <Layout>
-    <div class="question-form-page">
-      <PageHeader :title="t('questions.editTitle')" icon="bi bi-pencil-square" />
+    <PageShell
+      :title="t('questions.editTitle')"
+      icon="bi bi-pencil-square"
+      size="base"
+      page-class="question-form-page"
+    >
       <ErrorBanner :error="questionStore.error" @dismiss="questionStore.error = null" />
       <QuestionForm
         v-if="question"
@@ -13,7 +17,7 @@
       <div v-else class="loading-placeholder">
         <BaseSkeleton height="400px" />
       </div>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -21,7 +25,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import QuestionForm from '../components/QuestionForm.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'

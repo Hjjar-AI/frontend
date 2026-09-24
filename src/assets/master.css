@@ -2,10 +2,6 @@
 
 /* ── LIST PAGE ────────────────────────────────────────────────────── */
 
-.master-exams-page {
-  padding: var(--space-lg) 0;
-}
-
 .master-exams-page__header-actions {
   display: flex;
   gap: var(--space-sm);
@@ -247,12 +243,6 @@
 }
 
 /* ── EDITOR ──────────────────────────────────────────────────────── */
-
-.master-exam-editor {
-  padding: var(--space-lg) 0;
-  max-width: var(--content-wide);
-  margin: 0 auto;
-}
 
 .master-exam-editor__section {
   margin-bottom: var(--space-xl);
@@ -514,9 +504,6 @@
 
 /* ── DRAFTS LIBRARY ──────────────────────────────────────────────── */
 
-.master-exam-drafts-page {
-  padding: var(--space-lg) 0;
-}
 .master-exam-drafts-toolbar {
   display: flex;
   gap: var(--space-sm);
@@ -837,10 +824,6 @@
 
 /* ── RESULTS DASHBOARD ───────────────────────────────────────────── */
 
-.master-exam-results-page {
-  padding: var(--space-lg) 0;
-}
-
 .master-exam-results__header-actions {
   display: flex;
   gap: var(--space-sm);
@@ -1146,8 +1129,4 @@
 .master-exam-picker__row-body {
   flex: 1;
   min-width: 0;
-}
-.master-exam-drafts__intro {
-  font-size: var(--font-size-sm);
-  margin-bottom: var(--space-lg);
 }

@@ -32,11 +32,6 @@
 .import-preview-table__more { color: var(--color-text-muted); font-style: italic; }
 .import-preview-table__more-info { text-align: center; color: var(--color-text-muted); font-size: var(--font-size-sm); margin-top: var(--space-sm); }
 
-.import-page {
-padding: var(--space-lg) 0;
-max-width: 700px;
-margin: 0 auto;
-}
 .import-tabs {
 display: flex;
 gap: var(--space-sm);

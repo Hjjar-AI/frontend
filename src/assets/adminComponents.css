@@ -631,12 +631,8 @@
   flex-direction: column;
   gap: var(--space-lg);
 }
-.permissions-page__intro {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-  max-width: 75ch;
-  margin: 0;
-}
+.permissions-page > .page-header,
+.permissions-page > .page-shell__intro { margin-block: 0; }
 .permissions-page__loading {
   padding: var(--space-xl);
   display: flex;

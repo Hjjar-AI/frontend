@@ -26,23 +26,15 @@
 }
 
 .user-form { display: flex; flex-direction: column; gap: var(--space-md); }
-.active-users { padding: var(--space-lg) 0; }
 .users-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: var(--space-md); }
 .user-time { cursor: help; }
-.database-info { padding: var(--space-lg) 0; }
 .backup-list { margin-top: var(--space-md); }
 .backup-item { display: flex; justify-content: space-between; align-items: center; padding: var(--space-xs) 0; border-bottom: var(--border-width) solid var(--color-border); font-size: var(--font-size-sm); flex-wrap: wrap; gap: var(--space-xs); }
 .danger-description { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: var(--space-md); }
-.admin-flags { padding: var(--space-lg) 0; }
-.admin-settings { padding: var(--space-lg) 0; max-width: var(--content-narrow); margin: 0 auto; }
 .settings-form { display: flex; flex-direction: column; gap: var(--space-md); }
 .settings-section { border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-md); margin-bottom: var(--space-lg); }
 .settings-section legend { font-weight: var(--font-weight-bold); font-size: var(--font-size-lg); padding: 0 var(--space-sm); color: var(--color-primary); }
-.admin-tags { padding: var(--space-lg) 0; }
 .tag-tree-root { list-style: none; padding: 0; margin: 0; }
-.admin-history { padding: var(--space-lg) 0; }
-.admin-users { padding: var(--space-lg) 0; }
-.verification-stats { padding: var(--space-lg) 0; }
 .verifier-item { display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: var(--border-width) solid var(--color-border); }
 .rank { font-weight: var(--font-weight-bold); width: 30px; }
 .name { flex: 1; margin-inline-start: var(--space-sm); }

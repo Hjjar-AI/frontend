@@ -1,8 +1,11 @@
 <!-- frontend/src/features/masterExams/views/MasterExamList.vue -->
 <template>
   <Layout>
-    <div class="master-exams-page">
-      <PageHeader :title="t('masterExams.listTitle')" icon="bi bi-mortarboard">
+    <PageShell
+      :title="t('masterExams.listTitle')"
+      icon="bi bi-mortarboard"
+      page-class="master-exams-page"
+    >
         <template #actions>
           <div class="master-exams-page__header-actions">
             <BaseButton
@@ -21,8 +24,6 @@
             </BaseButton>
           </div>
         </template>
-      </PageHeader>
-
       <ErrorBanner
         :error="masterExamStore.error"
         :retry="masterExamStore.error ? true : false"
@@ -60,7 +61,7 @@
           </div>
         </template>
       </BaseListContainer>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -69,7 +70,7 @@ import '@/assets/master.css'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import TabStrip from '@/components/common/TabStrip.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'

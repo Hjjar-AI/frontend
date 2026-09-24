@@ -32,11 +32,11 @@
 -->
 <template>
   <Layout>
-    <div class="history-page">
-      <PageHeader
-        :title="t('history.title')"
-        icon="bi bi-clock-history"
-      />
+    <PageShell
+      :title="t('history.title')"
+      icon="bi bi-clock-history"
+      page-class="history-page"
+    >
 
       <ErrorBanner
         :error="historyStore.error"
@@ -96,7 +96,7 @@
         :total-pages="totalPages"
         @page-change="handlePageChange"
       />
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -104,7 +104,7 @@
 import '@/assets/history.css'
 import { ref, computed, onMounted, watch } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import Pagination from '@/components/base/BasePagination.vue'

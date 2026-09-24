@@ -54,6 +54,7 @@ declare module 'vue' {
     NavbarUserMenu: typeof import('./components/layout/NavbarUserMenu.vue')['default']
     NotificationBell: typeof import('./components/layout/NotificationBell.vue')['default']
     PageHeader: typeof import('./components/common/PageHeader.vue')['default']
+    PageShell: typeof import('./components/common/PageShell.vue')['default']
     ProgressBar: typeof import('./components/common/ProgressBar.vue')['default']
     QuestionNavDots: typeof import('./components/base/QuestionNavDots.vue')['default']
     ReviewItem: typeof import('./components/common/ReviewItem.vue')['default']

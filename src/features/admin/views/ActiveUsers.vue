@@ -1,8 +1,11 @@
 <!-- frontend/src/features/admin/views/ActiveUsers.vue -->
 <template>
   <Layout>
-    <div class="active-users">
-      <PageHeader :title="t('admin.activeUsers.title')" icon="bi bi-people">
+    <PageShell
+      :title="t('admin.activeUsers.title')"
+      icon="bi bi-people"
+      page-class="active-users"
+    >
         <template #badges>
           <span class="live-indicator" :title="t('admin.activeUsers.liveTooltip')">
             <span class="live-dot"></span> {{ t('admin.activeUsers.liveBadge') }}
@@ -19,8 +22,6 @@
             {{ t('admin.activeUsers.refresh') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
       <ErrorBanner
         :error="activeUserStore.error"
         :retry="activeUserStore.error ? true : false"
@@ -60,14 +61,14 @@
           </div>
         </template>
       </BaseListContainer>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'

@@ -1,17 +1,9 @@
 /* StudyPlanner */
-.planner-page { padding: var(--space-lg) 0; }
 .planner-summary { display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-xl); }
 @media (max-width: 768px) { .planner-summary { grid-template-columns: 1fr; } }
 
 /* Preferences */
-.preferences-page { padding: var(--space-lg) 0; max-width: var(--content-narrow); margin: 0 auto; }
-
 /* Profile */
-.profile-page {
-  padding: var(--space-lg) 0;
-  max-width: var(--content-base);
-  margin: 0 auto;
-}
 .profile-grid {
   display: flex;
   flex-direction: column;

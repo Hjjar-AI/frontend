@@ -1,18 +1,22 @@
 <!-- frontend/src/features/questions/views/AddView.vue -->
 <template>
   <Layout>
-    <div class="question-form-page">
-      <PageHeader :title="t('questions.addTitle')" icon="bi bi-plus-circle" />
+    <PageShell
+      :title="t('questions.addTitle')"
+      icon="bi bi-plus-circle"
+      size="base"
+      page-class="question-form-page"
+    >
       <ErrorBanner :error="questionStore.error" @dismiss="questionStore.error = null" />
       <QuestionForm @save="handleSave" :loading="questionStore.isLoading" />
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import QuestionForm from '../components/QuestionForm.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import { useQuestionStore } from '@/stores/questionStore'

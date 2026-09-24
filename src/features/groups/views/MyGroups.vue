@@ -2,14 +2,10 @@
 <!-- FEATURE #9 — member-facing groups + leaderboard. -->
 <template>
   <Layout>
-    <div class="groups-page">
-      <PageHeader :title="t('groups.title')" icon="bi bi-people-fill">
+    <PageShell :title="t('groups.title')" icon="bi bi-people-fill" page-class="groups-page">
         <template #badges>
           <BaseBadge variant="info">{{ t('groups.badge', { count: groupStore.myGroupCount }) }}</BaseBadge>
         </template>
-      </PageHeader>
-
-
       <ErrorBanner
         :error="groupStore.error"
         :retry="groupStore.error ? true : false"
@@ -131,14 +127,14 @@
           </BaseListContainer>
         </BaseCard>
       </template>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'

@@ -1,11 +1,11 @@
 <!-- frontend/src/features/masterExams/views/MasterExamResults.vue -->
 <template>
   <Layout>
-    <div class="master-exam-results-page">
-      <PageHeader
-        :title="t('masterExams.resultsTitle', { name: exam?.name || '' })"
-        icon="bi bi-bar-chart"
-      >
+    <PageShell
+      :title="t('masterExams.resultsTitle', { name: exam?.name || '' })"
+      icon="bi bi-bar-chart"
+      page-class="master-exam-results-page"
+    >
         <template #badges>
           <span v-if="isActive" class="master-exam-results__live-indicator">
             <span class="master-exam-results__live-indicator__dot"></span>
@@ -33,8 +33,6 @@
             </BaseButton>
           </div>
         </template>
-      </PageHeader>
-
       <ErrorBanner
         :error="masterExamStore.error"
         :retry="masterExamStore.error ? true : false"
@@ -166,7 +164,7 @@
           </table>
         </div>
       </BaseCard>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -175,7 +173,7 @@ import '@/assets/master.css'
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'

@@ -1,8 +1,11 @@
 <!-- frontend/src/features/admin/views/DatabaseInfo.vue -->
 <template>
   <Layout>
-    <div class="database-info">
-      <PageHeader :title="t('admin.database.title')" icon="bi bi-database" />
+    <PageShell
+      :title="t('admin.database.title')"
+      icon="bi bi-database"
+      page-class="database-info"
+    >
       <ErrorBanner :error="adminDatabaseStore.error" @dismiss="adminDatabaseStore.error = null" />
       <div class="grid-2col">
         <BaseCard>
@@ -277,14 +280,14 @@
           </BaseButton>
         </template>
       </BaseModal>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import ExportButtons from '@/components/common/ExportButtons.vue'
 import ExportFilters from '../components/ExportFilters.vue'

@@ -2,16 +2,16 @@
 <!-- FEATURE #8 — exam blueprint management. -->
 <template>
   <Layout>
-    <div class="blueprints-page">
-      <PageHeader :title="t('admin.blueprints.title')" icon="bi bi-diagram-3">
+    <PageShell
+      :title="t('admin.blueprints.title')"
+      icon="bi bi-diagram-3"
+      page-class="blueprints-page"
+    >
         <template #actions>
           <BaseButton variant="primary" @click="formModalRef?.open()">
             <i class="bi bi-plus-circle"></i> {{ t('admin.blueprints.addButton') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
- 
       <ErrorBanner
         :error="blueprintStore.error"
         :retry="blueprintStore.error ? true : false"
@@ -70,7 +70,7 @@
 
 
       <BlueprintFormModal ref="formModalRef" @saved="loadBlueprints" />
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -78,7 +78,7 @@
 import '@/assets/blueprints.css'
 import { ref, computed, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'

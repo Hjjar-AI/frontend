@@ -1,8 +1,12 @@
 <!-- frontend/src/features/masterExams/views/MasterExamDrafts.vue -->
 <template>
   <Layout>
-    <div class="master-exam-drafts-page">
-      <PageHeader :title="t('masterExams.draftsTitle')" icon="bi bi-journal-text">
+    <PageShell
+      :title="t('masterExams.draftsTitle')"
+      icon="bi bi-journal-text"
+      :subtitle="t('masterExams.draftsEmptyHint')"
+      page-class="master-exam-drafts-page"
+    >
         <template #badges>
           <BaseBadge variant="warning"
             >{{ masterExamStore.draftsTotal }} {{ t('masterExams.draftBadge') }}</BaseBadge
@@ -14,12 +18,6 @@
             {{ t('common.back') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
-      <p class="text-muted master-exam-drafts__intro">
-        {{ t('masterExams.draftsEmptyHint') }}
-      </p>
-
       <div class="master-exam-drafts-toolbar">
         <div class="master-exam-drafts-toolbar__search">
           <BaseInput
@@ -101,7 +99,7 @@
           </div>
         </template>
       </BaseListContainer>
-    </div>
+    </PageShell>
 
     <BaseModal
       :is-open="editModalOpen"
@@ -127,7 +125,7 @@ import '@/assets/master.css'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'

@@ -1,8 +1,11 @@
 <template>
   <Layout>
-    <div class="knowledge-map-page">
-      <PageHeader :title="t('knowledge.title')" icon="bi bi-map" />
-      <p class="text-muted knowledge-map-page__intro">{{ t('knowledge.description') }}</p>
+    <PageShell
+      :title="t('knowledge.title')"
+      icon="bi bi-map"
+      :subtitle="t('knowledge.description')"
+      page-class="knowledge-map-page"
+    >
 
       <ErrorBanner :error="error" @dismiss="error = null" />
 
@@ -98,7 +101,7 @@
           </div>
         </section>
       </template>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -106,7 +109,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'

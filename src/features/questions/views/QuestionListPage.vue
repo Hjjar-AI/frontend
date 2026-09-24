@@ -18,9 +18,7 @@
 -->
 <template>
   <Layout>
-    <div :class="containerClass">
-
-      <PageHeader :title="headerTitle" :icon="headerIcon">
+    <PageShell :title="headerTitle" :icon="headerIcon" :page-class="containerClass">
         <template #badges v-if="headerBadge">
           <BaseBadge :variant="headerBadge.variant">
             {{ headerBadge.label }}
@@ -55,8 +53,6 @@
             <i class="bi bi-plus-circle"></i> {{ t('questions.addButton') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
       <!-- Last-viewed chip (all only) -->
       <div v-if="mode === 'all' && lastViewedId" class="last-viewed-chip">
         <i class="bi bi-clock-history"></i>
@@ -241,7 +237,7 @@
         :total-pages="totalPages"
         @page-change="handlePageChange"
       />
-    </div>
+    </PageShell>
 
     <!-- Bulk tag editor (all only) -->
     <BulkTagEditor
@@ -257,7 +253,7 @@
 
 <script setup>
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import BulkActions from '@/components/common/BulkActions.vue'
 import BulkTagEditor from '@/components/common/BulkTagEditor.vue'

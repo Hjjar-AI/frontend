@@ -1,10 +1,13 @@
 <!-- frontend/src/features/admin/views/Import.vue -->
 <template>
   <Layout>
-    <div class="import-page">
+    <PageShell
+      :title="t('admin.import.title')"
+      icon="bi bi-upload"
+      size="medium"
+      page-class="import-page"
+    >
       <BaseCard>
-        <PageHeader :title="t('admin.import.title')" icon="bi bi-upload" />
-
         <TabStrip
           v-model="activeTab"
           variant="pills"
@@ -16,7 +19,7 @@
         <TelegramImport v-else-if="activeTab === 'telegram'" />
         <StateImport v-else @imported="handleStateImported" />
       </BaseCard>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -24,7 +27,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import TabStrip from '@/components/common/TabStrip.vue'
 import FileImport from '../FileImport.vue'
 import TelegramImport from '../TelegramImport.vue'

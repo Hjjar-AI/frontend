@@ -1,11 +1,11 @@
 <!-- frontend/src/features/masterExams/views/MasterExamEditor.vue -->
 <template>
   <Layout>
-    <div class="master-exam-editor">
-      <PageHeader
-        :title="isEdit ? t('masterExams.editTitle') : t('masterExams.newTitle')"
-        icon="bi bi-pencil-square"
-      >
+    <PageShell
+      :title="isEdit ? t('masterExams.editTitle') : t('masterExams.newTitle')"
+      icon="bi bi-pencil-square"
+      page-class="master-exam-editor"
+    >
         <template #actions>
           <BaseButton variant="secondary" @click="router.push('/master-exams')">
             <i class="bi bi-x-lg"></i> {{ t('common.cancel') }}
@@ -19,8 +19,6 @@
             <i class="bi bi-check-lg"></i> {{ t('common.save') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
       <div
         v-if="isFrozen"
         class="master-exam-runner__preview-banner master-exam-editor__frozen-banner"
@@ -430,14 +428,14 @@
           </div>
         </div>
       </BaseModal>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import '@/assets/master.css'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'

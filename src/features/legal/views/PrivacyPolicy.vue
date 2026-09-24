@@ -1,21 +1,23 @@
 <!-- frontend/src/features/legal/views/PrivacyPolicy.vue -->
 <template>
   <Layout>
-    <div class="privacy-page">
-      <BaseCard class="privacy-header-card">
-        <PageHeader :title="t('content.privacy.title')">
-          <template #badges>
-            <BaseBadge variant="info">
-              <i class="bi bi-calendar-check"></i>
-              {{ t('content.privacy.lastUpdateBadge', { date: content?.lastUpdate || '' }) }}
-            </BaseBadge>
-            <BaseBadge variant="success">
-              <i class="bi bi-shield-check"></i>
-              {{ t('content.privacy.effectiveBadge') }}
-            </BaseBadge>
-          </template>
-        </PageHeader>
+    <PageShell
+      :title="t('content.privacy.title')"
+      size="base"
+      page-class="privacy-page"
+    >
+      <template #badges>
+        <BaseBadge variant="info">
+          <i class="bi bi-calendar-check"></i>
+          {{ t('content.privacy.lastUpdateBadge', { date: content?.lastUpdate || '' }) }}
+        </BaseBadge>
+        <BaseBadge variant="success">
+          <i class="bi bi-shield-check"></i>
+          {{ t('content.privacy.effectiveBadge') }}
+        </BaseBadge>
+      </template>
 
+      <BaseCard class="privacy-header-card">
         <div v-if="!content" class="privacy-page__loading">
           <i class="bi bi-hourglass-split"></i>
           {{ loadError ? t('content.privacy.loadFailed') : t('content.privacy.loading') }}
@@ -104,7 +106,7 @@
           {{ content.footerDisclaimer }}
         </p>
       </div>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -114,7 +116,7 @@ import '@/assets/about.css'
 import { computed } from 'vue'
 
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 

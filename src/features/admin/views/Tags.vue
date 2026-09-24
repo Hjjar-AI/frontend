@@ -1,8 +1,7 @@
 <!-- frontend/src/features/admin/views/Tags.vue -->
 <template>
   <Layout>
-    <div class="admin-tags">
-      <PageHeader :title="t('admin.tags.title')" icon="bi bi-tags">
+    <PageShell :title="t('admin.tags.title')" icon="bi bi-tags" page-class="admin-tags">
         <template #actions>
           <BaseButton
             variant="primary"
@@ -13,7 +12,6 @@
             <i class="bi bi-shuffle"></i> {{ t('admin.tags.mergeButton') }}
           </BaseButton>
         </template>
-      </PageHeader>
       <ErrorBanner :error="tagError" @dismiss="dismissTagError" />
       <BaseListContainer
         :loading="loading"
@@ -120,14 +118,14 @@
           </BaseButton>
         </div>
       </BaseModal>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BaseField from '@/components/base/BaseField.vue'

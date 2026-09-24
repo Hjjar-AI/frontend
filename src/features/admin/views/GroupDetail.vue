@@ -2,16 +2,17 @@
 <!-- FEATURE #9 — admin group detail with member roster. -->
 <template>
   <Layout>
-    <div class="groups-page">
-      <PageHeader :title="group?.name || t('admin.groups.detailTitle')" icon="bi bi-people-fill">
+    <PageShell
+      :title="group?.name || t('admin.groups.detailTitle')"
+      icon="bi bi-people-fill"
+      page-class="groups-page"
+    >
         <template #actions>
           <BaseButton variant="secondary" size="small" @click="router.push('/admin/groups')">
             <DirectionalIcon ltr="bi bi-arrow-left" rtl="bi bi-arrow-right" />
             {{ t('common.back') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
       <ErrorBanner
         :error="groupStore.error"
         :retry="groupStore.error ? true : false"
@@ -131,7 +132,7 @@
           </BaseButton>
         </template>
       </BaseModal>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -139,7 +140,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'

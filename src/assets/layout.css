@@ -4,6 +4,26 @@
 .page--wide { max-width: var(--content-wide); margin-inline: auto; }
 .page--form { max-width: var(--content-form); margin-inline: auto; }
 
+.page-shell {
+  width: 100%;
+  margin-inline: auto;
+  padding-block: var(--space-lg);
+}
+.page-shell--form { max-width: var(--content-form); }
+.page-shell--narrow { max-width: var(--content-narrow); }
+.page-shell--medium { max-width: var(--content-medium); }
+.page-shell--base { max-width: var(--content-base); }
+.page-shell--wide { max-width: var(--content-wide); }
+.page-shell--fluid { max-width: none; }
+.page-shell__intro {
+  max-width: 75ch;
+  margin-block: calc(-1 * var(--space-sm)) var(--space-lg);
+  color: var(--color-text-muted);
+}
+.page-shell__intro > :first-child { margin-block-start: 0; }
+.page-shell__intro > :last-child { margin-block-end: 0; }
+.page-shell__feedback:empty { display: none; }
+
 .page-header {
   display: flex;
   align-items: center;

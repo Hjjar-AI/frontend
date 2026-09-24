@@ -1,15 +1,17 @@
 <!-- frontend/src/features/profile/views/Profile.vue -->
 <template>
   <Layout>
-    <div class="profile-page">
-      <PageHeader :title="t('profile.title')" icon="bi bi-person-circle">
+    <PageShell
+      :title="t('profile.title')"
+      icon="bi bi-person-circle"
+      size="base"
+      page-class="profile-page"
+    >
         <template #actions>
           <BaseButton variant="secondary" @click="router.push('/change-password')">
             <i class="bi bi-key"></i> {{ t('profile.changePassword') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
       <div class="profile-grid">
         <BaseCard class="profile-card profile-card--main">
           <div class="profile-avatar">
@@ -115,7 +117,7 @@
           </div>
         </BaseCard>
       </div>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -126,7 +128,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { useTheme } from '@/composables/useTheme'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import StatTile from '@/components/base/StatTile.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'
 import BaseButton from '@/components/base/BaseButton.vue'

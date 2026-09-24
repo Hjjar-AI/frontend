@@ -1,8 +1,7 @@
 <!-- frontend/src/features/admin/views/Flags.vue -->
 <template>
 <Layout>
-<div class="admin-flags">
-<PageHeader :title="t('admin.flags.title')" icon="bi bi-flag-fill">
+<PageShell :title="t('admin.flags.title')" icon="bi bi-flag-fill" page-class="admin-flags">
 <template #badges>
 <BaseBadge variant="warning">{{ t('admin.flags.badge', { count: flagStore.flags.length }) }}</BaseBadge>
 </template>
@@ -11,8 +10,6 @@
 <i class="bi bi-arrow-repeat"></i> {{ t('common.refresh') }}
 </BaseButton>
 </template>
-</PageHeader>
-
 <ErrorBanner :error="flagStore.error" @dismiss="flagStore.error = null" />
 
 <BulkActions
@@ -59,13 +56,13 @@ icon="bi-flag-fill"
 </ModerationCard>
 </template>
 </BaseListContainer>
-</div>
+</PageShell>
 </Layout>
 </template>
 
 <script setup>
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseListContainer from '@/components/base/BaseListContainer.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseBadge from '@/components/base/BaseBadge.vue'

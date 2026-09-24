@@ -1,8 +1,11 @@
 <!-- frontend/src/features/planner/views/StudyPlanner.vue -->
 <template>
   <Layout>
-    <div class="planner-page">
-      <PageHeader :title="t('planner.title')" icon="bi bi-calendar-check" />
+    <PageShell
+      :title="t('planner.title')"
+      icon="bi bi-calendar-check"
+      page-class="planner-page"
+    >
       <ErrorBanner :error="store.error" @dismiss="store.error = null" />
 
       <BaseCard v-if="store.planner" class="planner-card">
@@ -49,7 +52,7 @@
       <BaseEmptyState v-else :title="t('planner.empty')" icon="bi bi-calendar-plus">
         <BaseButton variant="primary" @click="createDefault">{{ t('planner.createDefault') }}</BaseButton>
       </BaseEmptyState>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
@@ -60,7 +63,7 @@ import { useStudyPlannerStore } from '@/stores/studyPlannerStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useDialog } from '@/composables/useDialog'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'

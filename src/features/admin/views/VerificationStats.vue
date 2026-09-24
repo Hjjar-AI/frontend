@@ -1,15 +1,16 @@
 <!-- frontend/src/features/admin/views/VerificationStats.vue -->
 <template>
   <Layout>
-    <div class="verification-stats">
-      <PageHeader :title="t('admin.verification.title')" icon="bi bi-bar-chart">
+    <PageShell
+      :title="t('admin.verification.title')"
+      icon="bi bi-bar-chart"
+      page-class="verification-stats"
+    >
         <template #actions>
           <BaseButton variant="secondary" size="small" @click="refresh" :loading="isRefreshing">
             <i class="bi bi-arrow-repeat"></i> {{ t('common.refresh') }}
           </BaseButton>
         </template>
-      </PageHeader>
-
       <ErrorBanner
         :error="adminVerificationStatsStore.error"
         @dismiss="adminVerificationStatsStore.error = null"
@@ -124,14 +125,14 @@
 
         <ExportButtons :url-builder="buildVerifiedExportUrl" />
       </div>
-    </div>
+    </PageShell>
   </Layout>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import Layout from '@/components/common/Layout.vue'
-import PageHeader from '@/components/common/PageHeader.vue'
+import PageShell from '@/components/common/PageShell.vue'
 import StatTile from '@/components/base/StatTile.vue'
 import ErrorBanner from '@/components/common/ErrorBanner.vue'
 import ExportButtons from '@/components/common/ExportButtons.vue'
