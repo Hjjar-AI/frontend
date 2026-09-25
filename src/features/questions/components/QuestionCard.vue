@@ -6,7 +6,6 @@
       question.verified ? 'question-card--verified' : 'question-card--unverified',
       { 'question-card--selected': selected },
     ]"
-    :variant="difficultyVariant"
   >
     <Transition name="stamp">
       <div v-if="showStamp" class="question-card__stamp">
@@ -38,12 +37,6 @@
           </span>
         </div>
         <div class="question-card__badges">
-          <BaseBadge v-if="question.knowledge_object_title" variant="info" status>
-            <i class="bi bi-bullseye"></i> {{ question.knowledge_object_title }}
-          </BaseBadge>
-          <BaseBadge v-if="question.case" variant="info" status>
-            <i class="bi bi-journal-medical"></i> {{ t('questions.caseBadge') }}
-          </BaseBadge>
           <BaseBadge :variant="question.verified ? 'success' : 'warning'" status>
             <i
               :class="
@@ -55,6 +48,19 @@
             {{ question.verified ? t('questions.verified') : t('questions.unverified') }}
           </BaseBadge>
           <DifficultyBadge :difficulty="question.difficulty" />
+          <details v-if="extraBadgeCount" class="question-card__badge-disclosure">
+            <summary :aria-label="t('questions.moreStatuses', { count: extraBadgeCount })">
+              {{ t('questions.moreStatusesCompact', { count: extraBadgeCount }) }}
+            </summary>
+            <div class="question-card__badge-menu">
+              <BaseBadge v-if="question.knowledge_object_title" variant="info" status>
+                <i class="bi bi-bullseye"></i> {{ question.knowledge_object_title }}
+              </BaseBadge>
+              <BaseBadge v-if="question.case" variant="info" status>
+                <i class="bi bi-journal-medical"></i> {{ t('questions.caseBadge') }}
+              </BaseBadge>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -257,11 +263,9 @@ watch(
   },
 )
 
-const difficultyVariant = computed(() => {
-  if (props.question.difficulty === 'easy') return 'success'
-  if (props.question.difficulty === 'hard') return 'danger'
-  return 'warning'
-})
+const extraBadgeCount = computed(() =>
+  Number(Boolean(props.question.knowledge_object_title)) + Number(Boolean(props.question.case)),
+)
 
 const ownershipDiffers = computed(() => {
   const author = props.question.authored_by_username

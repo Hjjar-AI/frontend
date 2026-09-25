@@ -73,6 +73,8 @@
     "caseStemHint": "To edit an existing case stem, open one of its questions and use the case-stem edit action there.",
     "caseSection": "Clinical case (optional)",
     "caseBadge": "Case",
+    "moreStatuses": "Show {count} more statuses",
+    "moreStatusesCompact": "+{count}",
     "caseClinicalTitle": "Clinical case",
     "caseQuestionCount": "({n} questions)",
 

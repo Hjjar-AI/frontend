@@ -39,6 +39,10 @@
     "defaultDifficulty": "Default difficulty filter",
     "autoAdvance": "Auto-advance to the next question after answering",
     "soundEffects": "Enable sound effects",
+    "density": "Interface density",
+    "densityHint": "Compact reduces spacing while keeping text size and touch targets accessible.",
+    "densityComfortable": "Comfortable",
+    "densityCompact": "Compact",
     "allDifficulties": "All"
   },
 

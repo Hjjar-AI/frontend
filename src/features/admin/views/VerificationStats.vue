@@ -79,7 +79,7 @@
           <i class="card-title__icon bi bi-diagram-3"></i>
           {{ t('admin.verification.breakdownTitle') }}
         </h4>
-        <BaseTableShell density="compact" striped mobile-mode="cards">
+        <BaseTableShell striped mobile-mode="cards">
           <table class="table-shared">
             <thead>
               <tr>

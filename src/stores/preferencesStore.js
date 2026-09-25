@@ -7,12 +7,14 @@ import { i18n } from '@/i18n'
 
 const VALID_PER_PAGE = [10, 20, 50, 100]
 const VALID_DIFFICULTY = ['', 'easy', 'medium', 'hard']
+const VALID_DENSITY = ['comfortable', 'compact']
 
 const KEY = {
   perPage: 'pref_perPage',
   difficulty: 'pref_difficulty',
   autoAdvance: 'pref_autoAdvance',
   sound: 'pref_sound',
+  density: 'pref_density',
   // NOTE: the locale is stored under the same key that i18n/index.js
   // reads. There is exactly one writer (setLocale in i18n/index.js)
   // and preferencesStore does not touch it.
@@ -25,6 +27,7 @@ export const usePreferencesStore = defineStore('preferences', {
     defaultDifficulty: '',
     autoAdvance: false,
     soundEffects: true,
+    density: 'comfortable',
     locale: DEFAULT_LOCALE,
   }),
 
@@ -42,6 +45,9 @@ export const usePreferencesStore = defineStore('preferences', {
 
       this.autoAdvance = storageService.getItem(KEY.autoAdvance) === 'true'
       this.soundEffects = storageService.getItem(KEY.sound) !== 'false'
+      const rawDensity = storageService.getItem(KEY.density)
+      this.density = VALID_DENSITY.includes(rawDensity) ? rawDensity : 'comfortable'
+      document.documentElement.setAttribute('data-density', this.density)
 
       // Read the ACTIVE locale from the i18n singleton rather than
       // re-parsing localStorage['locale']. Both used to read the
@@ -71,6 +77,11 @@ export const usePreferencesStore = defineStore('preferences', {
           value = Boolean(value)
           break
         }
+        case 'density': {
+          value = VALID_DENSITY.includes(value) ? value : 'comfortable'
+          document.documentElement.setAttribute('data-density', value)
+          break
+        }
         case 'locale': {
           // The store does NOT write the locale key. It is
           // owned by i18n/index.js's setLocale() helper, which
@@ -88,6 +99,7 @@ export const usePreferencesStore = defineStore('preferences', {
         defaultDifficulty: KEY.difficulty,
         autoAdvance: KEY.autoAdvance,
         soundEffects: KEY.sound,
+        density: KEY.density,
       }[key]
 
       if (storageKey) {
@@ -100,12 +112,15 @@ export const usePreferencesStore = defineStore('preferences', {
       this.defaultDifficulty = ''
       this.autoAdvance = false
       this.soundEffects = true
+      this.density = 'comfortable'
       this.locale = DEFAULT_LOCALE
+      document.documentElement.setAttribute('data-density', this.density)
 
       storageService.removeItem(KEY.perPage)
       storageService.removeItem(KEY.difficulty)
       storageService.removeItem(KEY.autoAdvance)
       storageService.removeItem(KEY.sound)
+      storageService.removeItem(KEY.density)
       // Intentionally NOT clearing the locale key: language is a UI
       // preference that should survive logout. It is not reset here
       // because this store is not the owner of that key.

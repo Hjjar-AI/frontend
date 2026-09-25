@@ -9,15 +9,6 @@
         :overtime="config.overtime || false"
         @tick="onTimerTick"
       />
-      <BaseIconButton
-        v-if="isPauseSupported && store.isActive"
-        class="btn-icon pause-btn"
-        icon="bi bi-pause-circle"
-        :label="t('tests.pauseAria')"
-        :disabled="navigationDisabled"
-        @click="pauseSession"
-        :title="t('tests.pause')"
-      />
       <ProgressBar
         :progress="store.progress"
         :label="`${store.currentIndex + 1}/${store.totalQuestions}`"
@@ -51,6 +42,8 @@
         :total="store.totalQuestions"
         :loading="submitting"
         :disabled="navigationDisabled"
+        :show-pause="isPauseSupported && store.isActive"
+        @pause="pauseSession"
         @previous="goPrevious"
         @next="goNext"
         @finish="finish"
@@ -91,7 +84,6 @@ import QuestionNavDots from '@/components/base/QuestionNavDots.vue'
 import ShortcutHint from '@/components/common/ShortcutHint.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import BaseIconButton from '@/components/base/BaseIconButton.vue'
 import { useTestQuestionController } from './composables/useTestQuestionController'
 import { MODES } from './modes'
 import { localizedQuestion } from '@/utils/localizedQuestion'

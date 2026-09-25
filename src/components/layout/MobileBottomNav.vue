@@ -1,4 +1,5 @@
-<!-- frontend/src/components/layout/MobileBottomNav.vue -->
+<!-- Four persistent destinations only. All secondary destinations live in
+     the navbar menu, avoiding a second mobile information architecture. -->
 <template>
   <nav class="bottom-nav no-print" :aria-label="t('a11y.bottomNav')">
     <div class="bottom-nav__bar">
@@ -12,132 +13,21 @@
         <span class="bottom-nav__icon"><i :class="link.icon"></i></span>
         <span class="bottom-nav__label">{{ t(link.shortLabelKey || link.labelKey) }}</span>
       </router-link>
-
-      <BaseButton variant="ghost" size="small" raw-content class="bottom-nav__item" :aria-label="t('nav.more')" @click="openSheet">
-        <span class="bottom-nav__icon"><i class="bi bi-three-dots"></i></span>
-        <span class="bottom-nav__label">{{ t('nav.more') }}</span>
-        <BaseBadge
-          v-if="masterExamStore.needsAckCount > 0"
-          variant="danger"
-          small
-          class="notification-bell__badge bottom-nav__badge"
-        >{{ masterExamStore.needsAckCount > 9 ? '9+' : masterExamStore.needsAckCount }}</BaseBadge>
-      </BaseButton>
     </div>
   </nav>
-
-  <BaseModal
-    :is-open="showMore"
-    :title="t('nav.more')"
-    size="lg"
-    @update:is-open="showMore = $event"
-  >
-          <div class="sheet__grid">
-            <router-link
-              v-for="link in generalSheetLinks"
-              :key="link.id"
-              :to="link.to"
-              class="sheet__link"
-              @click="closeSheet"
-            >
-              <i :class="link.icon"></i><span>{{ t(link.labelKey) }}</span>
-            </router-link>
-          </div>
-
-          <template v-if="masterSheetLinks.length">
-            <div class="sheet__divider"></div>
-            <h5 class="sheet__section-title">{{ t('nav.masterExams') }}</h5>
-            <div class="sheet__grid">
-              <router-link
-                v-for="link in masterSheetLinks"
-                :key="link.id"
-                :to="link.to"
-                class="sheet__link"
-                @click="closeSheet"
-              >
-                <i :class="link.icon"></i><span>{{ t(link.labelKey) }}</span>
-              </router-link>
-            </div>
-          </template>
-
-          <!--
-            Admin section. Iterates the shared ADMIN_LINKS registry
-            (constants/adminLinks.js). Previously this section
-            hard-coded its own list, which had already drifted from
-            the desktop navbar — four admin pages reachable on
-            desktop were not reachable from the mobile sheet. The
-            list is now the single source of truth.
-
-            `/analytics` is deliberately NOT in ADMIN_LINKS — it is
-            a member-reachable page (see the router comment) and is
-            rendered above in the general sheet grid.
-          -->
-          <template v-if="visibleAdminLinks.length > 0">
-            <div class="sheet__divider"></div>
-            <h5 class="sheet__section-title">{{ t('nav.admin') }}</h5>
-            <div class="sheet__grid">
-              <router-link
-                v-for="link in visibleAdminLinks"
-                :key="link.to"
-                :to="link.to"
-                class="sheet__link"
-                @click="closeSheet"
-              >
-                <i :class="link.icon"></i><span>{{ t(link.labelKey) }}</span>
-              </router-link>
-            </div>
-          </template>
-
-    <template #footer>
-      <BaseButton variant="danger" icon="bi bi-box-arrow-right" @click="handleLogout">
-        {{ t('nav.logout') }}
-      </BaseButton>
-    </template>
-  </BaseModal>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
-import { useMasterExamStore } from '@/stores/masterExamStore'
-import { ADMIN_LINKS } from '@/constants/adminLinks'
 import { navigationLinksFor, isNavigationLinkActive } from '@/constants/navigationLinks'
-import BaseModal from '@/components/base/BaseModal.vue'
-import BaseButton from '@/components/base/BaseButton.vue'
-import BaseBadge from '@/components/base/BaseBadge.vue'
 
 const { t } = useI18n()
-const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
-const masterExamStore = useMasterExamStore()
-const showMore = ref(false)
 
 const canUseLink = link => !link.capability || authStore.can(link.capability)
 const bottomLinks = computed(() => navigationLinksFor('bottomNav').filter(canUseLink))
-const generalSheetLinks = computed(() => navigationLinksFor('moreSheet', 'general').filter(canUseLink))
-const masterSheetLinks = computed(() => navigationLinksFor('moreSheet', 'master').filter(canUseLink))
-
 const isLinkActive = link => isNavigationLinkActive(link, route.path)
-
-// Same registry the desktop navbar uses. Iterating it fixes the
-// drift that had made four admin pages unreachable on mobile.
-const visibleAdminLinks = computed(() =>
-  ADMIN_LINKS.filter(link => authStore.can(link.cap))
-)
-
-function openSheet() {
-  showMore.value = true
-}
-
-function closeSheet() {
-  showMore.value = false
-}
-
-async function handleLogout() {
-  closeSheet()
-  await authStore.logout()
-  router.push('/login')
-}
 </script>

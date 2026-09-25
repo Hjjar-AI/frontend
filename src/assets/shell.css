@@ -14,6 +14,14 @@ html, body { min-height: 100%; }
 @media (max-width: 360px) { .layout__main { padding-inline-start: var(--space-xs); padding-inline-end: var(--space-xs); } }
 
 #app { min-height: 100vh; display: flex; flex-direction: column; }
+#app,
+.layout,
+.layout__main {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
 
 .footer {
   margin-top: auto;

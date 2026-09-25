@@ -12,7 +12,7 @@
           <h4 class="card-title">
             <i class="card-title__icon bi bi-info-circle"></i> {{ t('admin.database.infoTitle') }}
           </h4>
-          <BaseTableShell density="compact">
+          <BaseTableShell>
             <table class="table-shared">
               <tbody>
                 <tr>

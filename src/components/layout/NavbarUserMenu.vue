@@ -8,16 +8,8 @@
   that coordination, the user menu becomes a self-contained
   component with the same behavior.
 
-  ANALYTICS ENTRY
-  ---------------
-  A link to `/analytics` is rendered here for every authenticated
-  user. Before the router's `/analytics` route was loosened from
-  `analytics.view_all` to `requiresAuth`, that link lived in
-  `ADMIN_LINKS` and was only visible to admins. It was moved here
-  because the page has a member-facing section that every
-  authenticated user can read (see `router/index.js`); the
-  admin-only accordion reports on that page remain hidden by the
-  `canViewAll` check inside the view.
+  This menu is intentionally account-only. Product destinations live
+  in the primary navbar menu so navigation has one source of truth.
 -->
 <template>
   <div ref="rootRef" class="navbar__user">
@@ -52,32 +44,6 @@
         </router-link>
         <router-link to="/change-password" class="nav-link">
           <i class="bi bi-key"></i> {{ t('nav.changePassword') }}
-        </router-link>
-        <router-link to="/planner" class="nav-link">
-          <i class="bi bi-calendar-check"></i> {{ t('nav.planner') }}
-        </router-link>
-        <router-link to="/groups" class="nav-link">
-          <i class="bi bi-people-fill"></i> {{ t('nav.myGroups') }}
-        </router-link>
-        <router-link to="/analytics" class="nav-link">
-          <i class="bi bi-graph-up"></i> {{ t('nav.analytics') }}
-        </router-link>
-        <router-link
-          v-if="authStore.can('master_exams.create')"
-          to="/master-exams/new"
-          class="nav-link"
-        >
-          <i class="bi bi-plus-circle"></i> {{ t('nav.newMasterExam') }}
-        </router-link>
-        <router-link
-          v-if="authStore.can('master_exams.drafts_library')"
-          to="/master-exams/drafts"
-          class="nav-link"
-        >
-          <i class="bi bi-journal-text"></i> {{ t('nav.draftsLibrary') }}
-        </router-link>
-        <router-link to="/history" class="nav-link">
-          <i class="bi bi-clock-history"></i> {{ t('nav.history') }}
         </router-link>
         <router-link to="/preferences" class="nav-link">
           <i class="bi bi-sliders"></i> {{ t('nav.settings') }}

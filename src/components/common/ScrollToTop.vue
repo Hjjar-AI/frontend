@@ -22,9 +22,16 @@ function onScroll() {
 }
 
 function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const narrowViewport = window.matchMedia('(max-width: 768px)').matches
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: reducedMotion || narrowViewport ? 'auto' : 'smooth' })
+  })
 }
 
-onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
+onMounted(() => {
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>

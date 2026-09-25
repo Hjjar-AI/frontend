@@ -29,7 +29,11 @@
           :class="{ 'theme-dropdown__item--active': theme === currentTheme }"
           @click="selectTheme(theme)"
         >
-          <i :class="getThemeIcon(theme)" class="theme-dropdown__item-icon"></i>
+          <span class="theme-dropdown__swatch" :data-theme="theme" aria-hidden="true">
+            <span class="theme-dropdown__swatch-card"></span>
+            <span class="theme-dropdown__swatch-primary"></span>
+            <span class="theme-dropdown__swatch-info"></span>
+          </span>
           <span class="theme-dropdown__item-label">{{ t(`theme.${theme}`) }}</span>
           <i
             v-if="theme === currentTheme"
@@ -63,13 +67,9 @@ const themeIcons = {
   contrast: 'bi bi-circle-half',
   ink: 'bi bi-pen-fill',
   slate: 'bi bi-cloud-fill',
-  sepia: 'bi bi-book-fill',
+  amber: 'bi bi-sun-fill',
 }
 const currentThemeIcon = computed(() => themeIcons[currentTheme.value] || 'bi bi-palette')
-
-function getThemeIcon(theme) {
-  return themeIcons[theme] || 'bi bi-palette'
-}
 
 function selectTheme(theme) {
   applyTheme(theme)

@@ -2,16 +2,13 @@
 
 <template>
   <BaseCard class="heatmap-card">
-    
     <BaseButton
       variant="ghost"
       raw-content
       class="heatmap-card__toggle"
       :aria-expanded="expanded"
       aria-controls="heatmap-body"
-      :title="expanded
-        ? t('dashboard.heatmapCollapse')
-        : t('dashboard.heatmapExpand')"
+      :title="expanded ? t('dashboard.heatmapCollapse') : t('dashboard.heatmapExpand')"
       @click="expanded = !expanded"
     >
       <span class="heatmap-card__toggle-left">
@@ -26,33 +23,31 @@
 
       <span class="heatmap-card__stats">
         <span class="heatmap-stat">
-          <strong>{{ formatNumber(data.total_questions) }}</strong>
+          <strong>{{ formatNumber(visibleStats.totalQuestions) }}</strong>
           {{ t('dashboard.heatmapTotalQuestions') }}
         </span>
         <span class="heatmap-stat">
-          <strong>{{ data.active_days }}</strong>
+          <strong>{{ formatNumber(visibleStats.activeDays) }}</strong>
           {{ t('dashboard.heatmapActiveDays') }}
         </span>
         <span v-if="data.current_streak > 0" class="heatmap-stat heatmap-stat--streak">
-          🔥 <strong>{{ data.current_streak }}</strong>
+          <i class="bi bi-lightning-charge-fill" aria-hidden="true"></i>
+          <strong>{{ formatNumber(data.current_streak) }}</strong>
         </span>
       </span>
     </BaseButton>
 
-    
     <div v-show="expanded" id="heatmap-body" class="heatmap-card__body">
+      <div class="heatmap-card__range">{{ visibleRangeLabel }}</div>
+
       <div class="heatmap-scroll">
         <!-- Month labels row -->
-        <div
-          v-if="monthLabels.length"
-          class="heatmap-months"
-          :style="monthsStyle"
-        >
+        <div v-if="monthLabels.length" class="heatmap-months" :style="monthsStyle">
           <span
-            v-for="(label, i) in monthLabels"
-            :key="i"
+            v-for="label in monthLabels"
+            :key="label.key"
             class="heatmap-months__label"
-            :style="{ gridColumnStart: label.col }"
+            :style="{ gridColumn: `${label.col} / span ${label.span}` }"
           >
             {{ label.text }}
           </span>
@@ -61,27 +56,26 @@
         <!-- The grid -->
         <div class="heatmap-grid" :style="gridStyle">
           <!-- Day-of-week labels -->
-          <!-- Day-of-week labels -->
-<div class="heatmap-grid__day-labels">
-  <span
-    v-for="(d, i) in dayLabels"
-    :key="i"
-    class="heatmap-grid__day-label"
-    :style="{
-      gridRow: i + 1,
-      visibility: showDayLabel(i) ? 'visible' : 'hidden',
-    }"
-  >
-    {{ d }}
-  </span>
-</div>
+          <span
+            v-for="(day, i) in dayLabels"
+            :key="day.key"
+            class="heatmap-grid__day-label"
+            :style="{
+              gridColumn: 1,
+              gridRow: i + 1,
+              visibility: showDayLabel(i) ? 'visible' : 'hidden',
+            }"
+          >
+            {{ day.text }}
+          </span>
 
           <!-- Cells -->
           <div
-            v-for="(cell, idx) in cells"
-            :key="idx"
+            v-for="cell in cells"
+            :key="cell.date"
             class="heatmap-cell"
             :class="cellClass(cell.count)"
+            :style="{ gridColumn: cell.col, gridRow: cell.row }"
             :title="cellTooltip(cell)"
           ></div>
         </div>
@@ -106,8 +100,9 @@ import { computed, ref } from 'vue'
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { formatNumber } from '@/utils/formatters'
+import { buildDateOptions, resolveIntlLocale } from '@/i18n/helpers/format'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const props = defineProps({
   data: {
@@ -122,58 +117,113 @@ const props = defineProps({
 // Default closed. The dashboard's above-the-fold content should be
 // the study action cards, not a year-long activity grid.
 const expanded = ref(false)
+const isMobile = useMediaQuery('(max-width: 640px)')
+const isTablet = useMediaQuery('(min-width: 641px) and (max-width: 900px)')
 
+const DAY_MS = 86_400_000
+const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
+const VISIBLE_DAY_ROWS = new Set([1, 3, 5])
 
 function parseUtcDate(iso) {
   return new Date(iso + 'T00:00:00Z')
 }
 
+function toIsoDate(date) {
+  return date.toISOString().slice(0, 10)
+}
+
+function isValidIsoDate(value) {
+  if (!ISO_DATE_PATTERN.test(value)) return false
+  const parsed = parseUtcDate(value)
+  return !Number.isNaN(parsed.getTime()) && toIsoDate(parsed) === value
+}
+
+function shiftUtcMonths(date, amount) {
+  const targetMonth = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + amount, 1))
+  const lastDay = new Date(
+    Date.UTC(targetMonth.getUTCFullYear(), targetMonth.getUTCMonth() + 1, 0),
+  ).getUTCDate()
+  targetMonth.setUTCDate(Math.min(date.getUTCDate(), lastDay))
+  return targetMonth
+}
+
+const intlLocale = computed(() => resolveIntlLocale(locale.value, 'en-US'))
+
+// Keep the requested amount of history small enough to fit without
+// horizontal scrolling. Desktop retains the complete server range.
+const visibleMonthCount = computed(() => {
+  if (isMobile.value) return 3
+  if (isTablet.value) return 6
+  return null
+})
+
 const sortedDays = computed(() => {
   if (!props.data?.days?.length) return []
-  return [...props.data.days].sort((a, b) =>
-    a.date < b.date ? -1 : a.date > b.date ? 1 : 0
-  )
+  const byDate = new Map()
+
+  for (const day of props.data.days) {
+    if (!day || !isValidIsoDate(day.date)) continue
+    const parsedCount = Number(day.count)
+    byDate.set(day.date, {
+      date: day.date,
+      count: Number.isFinite(parsedCount) ? Math.max(0, parsedCount) : 0,
+    })
+  }
+
+  return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date))
 })
 
-// ── Grid computation ────────────────────────────────────────────────
-// GitHub-style: columns = weeks, rows = 7 (one per day of week).
-//
-// The container carries `direction: ltr` (see heatmap.css), so the
-// column numbering below is valid in every locale without
-// direction-aware branching.
+const displayedDays = computed(() => {
+  const source = sortedDays.value
+  if (!source.length) return []
+
+  const counts = new Map(source.map((day) => [day.date, day.count]))
+  const availableStart = parseUtcDate(source[0].date)
+  const end = parseUtcDate(source[source.length - 1].date)
+  const months = visibleMonthCount.value
+  const requestedStart = months ? shiftUtcMonths(end, -months) : availableStart
+  const start = requestedStart > availableStart ? requestedStart : availableStart
+  const days = []
+
+  // Generate a continuous calendar window. This prevents an omitted API
+  // date from shifting every later cell into the wrong weekday row.
+  for (let cursor = start.getTime(); cursor <= end.getTime(); cursor += DAY_MS) {
+    const date = toIsoDate(new Date(cursor))
+    days.push({ date, count: counts.get(date) ?? 0 })
+  }
+
+  return days
+})
+
+const startDayOfWeek = computed(() => {
+  const first = displayedDays.value[0]
+  return first ? parseUtcDate(first.date).getUTCDay() : 0
+})
 
 const cells = computed(() => {
-  const days = sortedDays.value
-  if (!days.length) return []
-
-  // 0=Sun, 1=Mon, ..., 6=Sat. This is the weekday of the OLDEST day
-  // in the window, and it is also the number of empty padding cells
-  // needed to land that day in the correct row.
-  const startDayOfWeek = parseUtcDate(days[0].date).getUTCDay()
-
-  const padded = []
-  for (let i = 0; i < startDayOfWeek; i++) {
-    padded.push({ date: null, count: -1 }) // -1 = empty padding cell
-  }
-  padded.push(...days)
-  return padded
+  return displayedDays.value.map((day, index) => {
+    const offset = startDayOfWeek.value + index
+    return {
+      ...day,
+      col: Math.floor(offset / 7) + 2,
+      row: (offset % 7) + 1,
+    }
+  })
 })
 
-const totalWeeks = computed(() => Math.ceil(cells.value.length / 7))
+const totalWeeks = computed(() =>
+  Math.ceil((startDayOfWeek.value + displayedDays.value.length) / 7),
+)
 
 // Column template used by both the month row and the week grid.
 // Column 1 is a fixed 24 px spacer matching the day-of-week label
 // column; columns 2..N+1 are fixed 11 px cells (matching
 // `.heatmap-cell`'s width).
 //
-// Fixed widths — rather than `1fr` — keep the grid's intrinsic size
-// deterministic regardless of the container. That is what makes the
-// scroll wrapper work: on a narrow viewport the columns keep their
-// intended 11 px size and the wrapper scrolls, instead of the
-// columns collapsing to sub-pixel widths.
-const columnTemplate = computed(
-  () => `24px repeat(${totalWeeks.value}, 11px)`,
-)
+// Fixed widths — rather than `1fr` — keep the grid and its month labels
+// aligned. Responsive date-window limits keep that fixed width inside
+// the card without shrinking cells or introducing a scrollbar.
+const columnTemplate = computed(() => `24px repeat(${totalWeeks.value}, 11px)`)
 
 const monthsStyle = computed(() => ({
   gridTemplateColumns: columnTemplate.value,
@@ -186,29 +236,39 @@ const gridStyle = computed(() => ({
 
 // ── Month labels ────────────────────────────────────────────────────
 const monthLabels = computed(() => {
-  const days = sortedDays.value
+  const days = displayedDays.value
   if (!days.length) return []
 
-  const startDayOfWeek = parseUtcDate(days[0].date).getUTCDay()
-  const monthFmt = new Intl.DateTimeFormat(undefined, {
-    month: 'short',
-    timeZone: 'UTC',
-  })
+  const monthFmt = new Intl.DateTimeFormat(
+    intlLocale.value,
+    buildDateOptions(intlLocale.value, { month: 'short', timeZone: 'UTC' }),
+  )
 
   const labels = []
-  let lastMonth = -1
+  let lastMonthKey = ''
   for (let i = 0; i < days.length; i++) {
     const d = parseUtcDate(days[i].date)
-    const month = d.getUTCMonth()
-    if (month !== lastMonth) {
-      lastMonth = month
-      // +2 for the day-label spacer column, and because
-      // gridColumnStart is 1-indexed.
-      const col = Math.floor((i + startDayOfWeek) / 7) + 2
-      labels.push({ col, text: monthFmt.format(d) })
+    const key = `${d.getUTCFullYear()}-${d.getUTCMonth()}`
+    if (key === lastMonthKey) continue
+
+    lastMonthKey = key
+    const col = Math.floor((i + startDayOfWeek.value) / 7) + 2
+    const label = { key, col, text: monthFmt.format(d) }
+
+    // A range can begin in the last few days of a month. In that case
+    // its label would collide with the next month's label, so prefer the
+    // complete month rather than painting two names over one another.
+    if (labels.length && col - labels[labels.length - 1].col < 3) {
+      labels[labels.length - 1] = label
+    } else {
+      labels.push(label)
     }
   }
-  return labels
+
+  return labels.map((label, index) => ({
+    ...label,
+    span: Math.max(1, (labels[index + 1]?.col ?? totalWeeks.value + 2) - label.col),
+  }))
 })
 
 // ── Day-of-week labels ──────────────────────────────────────────────
@@ -220,24 +280,44 @@ const monthLabels = computed(() => {
 // current session's clock.
 const dayLabels = computed(() => {
   const sundayUtc = Date.UTC(2024, 0, 7)
-  const fmt = new Intl.DateTimeFormat(undefined, {
-    weekday: 'narrow',
-    timeZone: 'UTC',
-  })
-  return Array.from({ length: 7 }, (_, i) =>
-    fmt.format(new Date(sundayUtc + i * 86_400_000))
+  const fmt = new Intl.DateTimeFormat(
+    intlLocale.value,
+    buildDateOptions(intlLocale.value, { weekday: 'narrow', timeZone: 'UTC' }),
   )
+  return Array.from({ length: 7 }, (_, i) => ({
+    key: i,
+    text: fmt.format(new Date(sundayUtc + i * DAY_MS)),
+  }))
 })
-const VISIBLE_DAY_ROWS = new Set([2, 4, 6])
 
 function showDayLabel(i) {
   return VISIBLE_DAY_ROWS.has(i)
 }
+
+const visibleStats = computed(() => ({
+  totalQuestions: displayedDays.value.reduce((sum, day) => sum + day.count, 0),
+  activeDays: displayedDays.value.filter((day) => day.count > 0).length,
+  maxDaily: Math.max(0, ...displayedDays.value.map((day) => day.count)),
+}))
+
+const visibleRangeLabel = computed(() => {
+  const days = displayedDays.value
+  if (!days.length) return ''
+  const fmt = new Intl.DateTimeFormat(
+    intlLocale.value,
+    buildDateOptions(intlLocale.value, {
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    }),
+  )
+  return `${fmt.format(parseUtcDate(days[0].date))} – ${fmt.format(parseUtcDate(days[days.length - 1].date))}`
+})
+
 // ── Cell styling ────────────────────────────────────────────────────
 function cellClass(count) {
-  if (count < 0) return 'heatmap-cell--pad'
   if (count === 0) return 'heatmap-cell--0'
-  const max = props.data.max_daily || 1
+  const max = visibleStats.value.maxDaily || 1
   const ratio = count / max
   if (ratio <= 0.25) return 'heatmap-cell--1'
   if (ratio <= 0.5) return 'heatmap-cell--2'
@@ -246,10 +326,19 @@ function cellClass(count) {
 }
 
 function cellTooltip(cell) {
-  if (!cell.date) return ''
+  const dateFmt = new Intl.DateTimeFormat(
+    intlLocale.value,
+    buildDateOptions(intlLocale.value, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'UTC',
+    }),
+  )
+  const date = dateFmt.format(parseUtcDate(cell.date))
   if (cell.count === 0) {
-    return `${cell.date}: ${t('dashboard.heatmapNoActivity')}`
+    return `${date}: ${t('dashboard.heatmapNoActivity')}`
   }
-  return `${cell.date}: ${t('dashboard.heatmapQuestions', { count: cell.count })}`
+  return `${date}: ${t('dashboard.heatmapQuestions', { count: cell.count })}`
 }
 </script>

@@ -39,17 +39,15 @@
   /* ----- CORE COLOURS -----
      `light` is retained as a compatibility alias for persisted
      preferences from before the default palette was named Stone. */
-  --color-print-primary: #7a3f20;
-  --color-print-success: #2b6547;
-  --color-print-danger: #913a32;
-  --color-print-warning: #755200;
-  --color-print-info: #285e78;
+  --color-print-primary: #9a3412;
+  --color-print-success: #13714b;
+  --color-print-danger: #b42318;
+  --color-print-warning: #815500;
+  --color-print-info: #176b87;
 
   --color-primary: var(--color-print-primary);
-  --color-tint-base: #d9cab9;
-  /* A subdued, palette-tinted replacement for pure white on coloured
-     controls. It avoids glare while retaining accessible contrast. */
-  --color-light-foreground: #eee3d6;
+  --color-tint-base: #ffffff;
+  --color-light-foreground: #ffffff;
   --color-strong-weight: 70%;
   --color-glow-weight: 20%;
   --color-primary-light: color-mix(in srgb, var(--color-primary) 45%, var(--color-tint-base));
@@ -76,18 +74,22 @@
   --color-info-dark: color-mix(in srgb, var(--color-info) var(--color-strong-weight), black);
   --color-info-soft-text: var(--color-info-dark);
 
-  /* ----- BACKGROUNDS (STONE THEME) ----- */
-  --color-bg-body: #c4b29f;
-  --color-bg-card: #d9cab9;
-  --color-bg-alt: #cbbbaa;
+  /* ----- BACKGROUNDS (STONE THEME) -----
+     Light themes use a clean neutral canvas and reserve their hue for
+     accents and secondary surfaces. This avoids the full-screen paper
+     tint produced by the previous mid-tone background palette. */
+  --color-bg-body: #e9edf1;
+  --color-bg-card: #ffffff;
+  --color-bg-alt: #e9eef2;
   --color-bg-overlay: color-mix(in srgb, var(--color-bg-card) 94%, transparent);
 
   /* ----- TEXT COLOURS ----- */
-  --color-text-primary: #2d211a;
-  --color-text-secondary: #50382d;
-  --color-text-muted: #574035;
+  --color-text-primary: #1c2730;
+  --color-text-secondary: #3b4a56;
+  --color-text-muted: #596773;
 
-  --color-border: color-mix(in srgb, var(--color-text-muted) 30%, transparent);
+  --color-border-weight: 30%;
+  --color-border: color-mix(in srgb, var(--color-text-muted) var(--color-border-weight), transparent);
   --color-overlay: rgba(0, 0, 0, 0.58);
 
   /* ----- CONTRAST-SAFE "ON" COLORS ----- */
@@ -341,21 +343,21 @@
 
 /* ===== BLOSSOM THEME ===== */
 [data-theme="blossom"] {
-  --color-tint-base: #e2b9cb;
-  --color-light-foreground: #f1e2e9;
-  --color-primary: #9b285c;
-  --color-success: #24614f;
-  --color-danger: #a82746;
-  --color-warning: #775000;
-  --color-info: #315f92;
+  --color-tint-base: #ffffff;
+  --color-light-foreground: #ffffff;
+  --color-primary: #b1125b;
+  --color-success: #087665;
+  --color-danger: #bd1738;
+  --color-warning: #875700;
+  --color-info: #4c5fc1;
 
-  --color-bg-body: #d2a8bb;
-  --color-bg-card: #e2b9cb;
-  --color-bg-alt: #d6a6bb;
+  --color-bg-body: #efedf0;
+  --color-bg-card: #ffffff;
+  --color-bg-alt: #f8e6ee;
 
-  --color-text-primary: #351622;
-  --color-text-secondary: #5d293d;
-  --color-text-muted: #66364a;
+  --color-text-primary: #321522;
+  --color-text-secondary: #593246;
+  --color-text-muted: #725064;
 
   --color-on-primary: var(--color-light-foreground);
   --color-on-success: var(--color-light-foreground);
@@ -382,21 +384,21 @@
 
 /* ===== FRESH THEME ===== */
 [data-theme="fresh"] {
-  --color-tint-base: #c4ddc8;
-  --color-light-foreground: #e4f0e6;
-  --color-primary: #176b42;
-  --color-success: #1f754c;
-  --color-danger: #9b3f37;
-  --color-warning: #745600;
-  --color-info: #17657c;
+  --color-tint-base: #ffffff;
+  --color-light-foreground: #ffffff;
+  --color-primary: #087a4b;
+  --color-success: #277044;
+  --color-danger: #b52a31;
+  --color-warning: #7d5a00;
+  --color-info: #08718e;
 
-  --color-bg-body: #aed0b6;
-  --color-bg-card: #c4ddc8;
-  --color-bg-alt: #b2d1b8;
+  --color-bg-body: #eaf0ec;
+  --color-bg-card: #ffffff;
+  --color-bg-alt: #e3f3e9;
 
-  --color-text-primary: #12291c;
-  --color-text-secondary: #294c37;
-  --color-text-muted: #355840;
+  --color-text-primary: #14271d;
+  --color-text-secondary: #304c3d;
+  --color-text-muted: #50685b;
 
   --color-on-primary: var(--color-light-foreground);
   --color-on-success: var(--color-light-foreground);
@@ -425,22 +427,23 @@
    Every solid semantic color has at least 7:1 contrast against its
    soft-white foreground. Meaning still remains paired with text/icons. */
 [data-theme="contrast"] {
-  --color-tint-base: #e6e6e6;
-  --color-light-foreground: #e6e6e6;
+  --color-tint-base: #ffffff;
+  --color-light-foreground: #ffffff;
   --color-glow-weight: 55%;
-  --color-primary: #1d3a8f;
-  --color-success: #104d28;
-  --color-danger: #8f0f1b;
-  --color-warning: #5d3b00;
-  --color-info: #064e62;
+  --color-primary: #003db8;
+  --color-success: #00652f;
+  --color-danger: #ad001f;
+  --color-warning: #704900;
+  --color-info: #005b82;
 
-  --color-bg-body: #d6d6d6;
-  --color-bg-card: #e6e6e6;
-  --color-bg-alt: #dedede;
+  --color-bg-body: #eef0f2;
+  --color-bg-card: #ffffff;
+  --color-bg-alt: #eceff3;
 
   --color-text-primary: #0a0a0a;
-  --color-text-secondary: #262626;
-  --color-text-muted: #4d4d4d;
+  --color-text-secondary: #20242a;
+  --color-text-muted: #3e4650;
+  --color-border-weight: 62%;
 
   --color-on-primary: var(--color-light-foreground);
   --color-on-success: var(--color-light-foreground);
@@ -468,21 +471,21 @@
 
 /* ===== INK THEME ===== */
 [data-theme="ink"] {
-  --color-tint-base: #deded9;
-  --color-light-foreground: #e8e8e4;
-  --color-primary: #252525;
-  --color-success: #236b43;
-  --color-danger: #a33128;
-  --color-warning: #805500;
-  --color-info: #2a5f7e;
+  --color-tint-base: #ffffff;
+  --color-light-foreground: #ffffff;
+  --color-primary: #202124;
+  --color-success: #24653d;
+  --color-danger: #9e2323;
+  --color-warning: #7a5107;
+  --color-info: #3e5f78;
 
-  --color-bg-body: #d0d0cc;
-  --color-bg-card: #deded9;
-  --color-bg-alt: #d2d2cd;
+  --color-bg-body: #e6e6e3;
+  --color-bg-card: #ffffff;
+  --color-bg-alt: #e3e3e0;
 
-  --color-text-primary: #171719;
-  --color-text-secondary: #3a3a3d;
-  --color-text-muted: #545459;
+  --color-text-primary: #17181a;
+  --color-text-secondary: #393b3f;
+  --color-text-muted: #595c62;
 
   --color-streak-start: #9b4a28;
   --color-streak-end: #78351f;
@@ -500,21 +503,21 @@
 
 /* ===== SLATE THEME ===== */
 [data-theme="slate"] {
-  --color-tint-base: #c6d3e0;
-  --color-light-foreground: #e5edf4;
-  --color-primary: #285f8d;
-  --color-success: #27654c;
-  --color-danger: #94433d;
-  --color-warning: #735700;
-  --color-info: #684d97;
+  --color-tint-base: #ffffff;
+  --color-light-foreground: #ffffff;
+  --color-primary: #155f9b;
+  --color-success: #1c704b;
+  --color-danger: #ae2d3a;
+  --color-warning: #805600;
+  --color-info: #6948a8;
 
-  --color-bg-body: #aebfd1;
-  --color-bg-card: #c6d3e0;
-  --color-bg-alt: #b4c4d4;
+  --color-bg-body: #e7edf2;
+  --color-bg-card: #ffffff;
+  --color-bg-alt: #e0edf7;
 
-  --color-text-primary: #14283a;
+  --color-text-primary: #13283a;
   --color-text-secondary: #304d66;
-  --color-text-muted: #354f66;
+  --color-text-muted: #50677b;
 
   --color-streak-start: #8a4825;
   --color-streak-end: #753820;
@@ -530,24 +533,23 @@
   color-scheme: light;
 }
 
-/* ===== SEPIA THEME ===== */
-[data-theme="sepia"] {
-  --color-tint-base: #e8d09a;
-  --color-light-foreground: #f0e2c6;
-  --color-primary: #8a4318;
-  --color-success: #416b2b;
-  --color-danger: #9b3324;
-  /* Darkened from the proposal so warning text clears 4.5:1 on cards. */
-  --color-warning: #705100;
-  --color-info: #2e627e;
+/* ===== AMBER THEME ===== */
+[data-theme="amber"] {
+  --color-tint-base: #ffffff;
+  --color-light-foreground: #ffffff;
+  --color-primary: #9a3f0b;
+  --color-success: #4d711d;
+  --color-danger: #ad2c1d;
+  --color-warning: #795300;
+  --color-info: #246582;
 
-  --color-bg-body: #d8be86;
-  --color-bg-card: #e8d09a;
-  --color-bg-alt: #ddbf83;
+  --color-bg-body: #efebe4;
+  --color-bg-card: #ffffff;
+  --color-bg-alt: #f7e7cc;
 
-  --color-text-primary: #35220c;
-  --color-text-secondary: #60451f;
-  --color-text-muted: #674a24;
+  --color-text-primary: #33200f;
+  --color-text-secondary: #604326;
+  --color-text-muted: #73583d;
 
   --color-streak-start: #9a4d25;
   --color-streak-end: #78331f;
@@ -580,7 +582,7 @@
   --color-info-light: color-mix(in srgb, var(--color-info) 45%, var(--color-tint-base));
   --color-info-dark: color-mix(in srgb, var(--color-info) var(--color-strong-weight), black);
   --color-bg-overlay: color-mix(in srgb, var(--color-bg-card) 94%, transparent);
-  --color-border: color-mix(in srgb, var(--color-text-muted) 30%, transparent);
+  --color-border: color-mix(in srgb, var(--color-text-muted) var(--color-border-weight), transparent);
   --color-text-placeholder: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
   --color-on-muted: var(--color-on-primary);
   --color-avatar-0: var(--color-primary);

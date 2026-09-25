@@ -39,6 +39,10 @@
     "defaultDifficulty": "فلتر الصعوبة الافتراضي",
     "autoAdvance": "الانتقال التلقائي للسؤال التالي بعد الإجابة",
     "soundEffects": "تفعيل المؤثرات الصوتية",
+    "density": "كثافة الواجهة",
+    "densityHint": "يقلل النمط المدمج المسافات مع الحفاظ على حجم النص وأهداف اللمس.",
+    "densityComfortable": "مريح",
+    "densityCompact": "مدمج",
     "allDifficulties": "الكل"
   },
 

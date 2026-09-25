@@ -76,6 +76,8 @@
 .table-shell th,
 .table-shell td { padding: var(--table-cell-block, var(--space-sm)) var(--table-cell-inline, var(--space-md)); border-bottom: var(--border-width) solid var(--color-border); text-align: start; }
 .table-shell th { background: var(--color-bg-alt); font-weight: var(--font-weight-semibold); white-space: nowrap; }
+html[data-density="compact"] .table-shell:not(.table-shell--comfortable) { --table-cell-block: var(--space-xs); --table-cell-inline: var(--space-sm); }
+html[data-density="comfortable"] .table-shell:not(.table-shell--compact) { --table-cell-block: var(--space-md); --table-cell-inline: var(--space-lg); }
 .table-shell--compact { --table-cell-block: var(--space-xs); --table-cell-inline: var(--space-sm); }
 .table-shell--comfortable { --table-cell-block: var(--space-md); --table-cell-inline: var(--space-lg); }
 .table-shell--striped tbody tr:nth-child(even) { background: color-mix(in srgb, var(--color-bg-alt) 35%, transparent); }
@@ -89,6 +91,14 @@
    safe default, low-priority columns can collapse, and record-oriented tables
    can opt into stacked cards using data-label on each cell. */
 @media (max-width: 768px) {
+  .table-shell--mobile-scroll,
+  .table-shell--mobile-columns {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table-shell--mobile-scroll > table { min-width: 42rem; }
+  .table-shell--mobile-columns > table { min-width: 34rem; }
   .table-shell--mobile-columns [data-priority="low"] { display: none; }
 
   .table-shell--mobile-cards {

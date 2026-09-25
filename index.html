@@ -30,6 +30,16 @@
     })();
   </script>
 
+  <script>
+    (function () {
+      try {
+        var savedDensity = localStorage.getItem('pref_density')
+        var density = savedDensity === 'compact' ? 'compact' : 'comfortable'
+        document.documentElement.setAttribute('data-density', density)
+      } catch (e) { /* storage disabled / private mode — keep CSS defaults */ }
+    })();
+  </script>
+
   <!-- ============================================================
        Theme bootstrap.
        Reads the persisted theme from localStorage and applies it
@@ -47,17 +57,19 @@
        The supported list here must stay in sync with
        `THEMES` in frontend/src/utils/constants.js and with the
        set of `[data-theme="…"]` blocks in the CSS. The old `light`
-       value is normalized to `stone` for existing installations.
+       value is normalized to `stone` and the former `sepia` value is
+       normalized to `amber` for existing installations.
        ============================================================ -->
   <script>
     (function () {
       try {
         var supported = [
           'stone', 'dark', 'onyx', 'blossom', 'fresh',
-          'contrast', 'ink', 'slate', 'sepia'
+          'contrast', 'ink', 'slate', 'amber'
         ]
         var saved = localStorage.getItem('theme')
         if (saved === 'light') saved = 'stone'
+        if (saved === 'sepia') saved = 'amber'
         var theme = (saved && supported.indexOf(saved) !== -1)
           ? saved
           : 'stone'

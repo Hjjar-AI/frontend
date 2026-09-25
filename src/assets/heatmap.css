@@ -15,22 +15,13 @@
    arithmetic in StudyActivityHeatmap.vue produces the same visual
    layout in every locale.
 
-   OVERFLOW NOTE
-   -------------
-   The grid has fixed-width cells (11 × 11 px) laid out one column
-   per week. A one-year window is ~53 columns ≈ 715 px wide — wider
-   than a phone. The layout strategy:
-
-     • .heatmap-scroll   A single horizontal scroll region
-                         wrapping BOTH the month label row and the
-                         week grid, so they scroll together and
-                         stay column-aligned at any scroll position.
-     • .heatmap-months,
-       .heatmap-grid     width: max-content — each is exactly as
-                         wide as its own column template requires.
-     • .heatmap-card     min-width: 0 + overflow: hidden — nothing
-                         can push the card wider than its parent
-                         in the dashboard column.
+   RESPONSIVE RANGE
+   ----------------
+   The component renders three months on phones, six months on
+   tablets, and the complete API range on desktop. Every range fits
+   its target viewport with fixed 11 px cells, so this stylesheet
+   deliberately clips overflow instead of presenting a horizontal
+   scrollbar.
 
    COLLAPSIBLE HEADER
    ------------------
@@ -130,23 +121,23 @@
   margin-top: var(--space-md);
 }
 
-/* ── Scroll wrapper ────────────────────────────────────────────────
-   One shared horizontal scroll region for the month label row and
-   the week grid. `overflow-y: hidden` is set explicitly to prevent
-   the browser from making this element a vertical scroll container
-   as well (spec quirk: `overflow-x: auto` with `overflow-y: visible`
-   silently computes `overflow-y` to `auto`, which would create an
-   unwanted vertical scrollbar when the grid's fixed row heights
-   exceed the wrapper). */
+.heatmap-card__range {
+  margin-bottom: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  text-align: center;
+}
+
+/* The class name is retained for compatibility, but this is now a
+   centred, non-scrolling viewport. The component limits its date range
+   at narrow breakpoints so no horizontal interaction is required. */
 .heatmap-scroll {
-  overflow-x: auto;
-  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
   max-width: 100%;
   min-width: 0;
-  /* Reserve a small amount of vertical space for the horizontal
-     scrollbar so it sits below the last row of cells rather than
-     overlapping the day labels. */
-  padding-bottom: 2px;
 }
 
 /* ── Month labels ─────────────────────────────────────────────────
@@ -156,8 +147,7 @@
    and week cells align on the same X axis.
 
    `width: max-content` sizes the row to exactly the width of its
-   column template, matching the grid's own intrinsic width. The
-   two scroll together inside .heatmap-scroll. */
+   column template, matching the grid's own intrinsic width. */
 .heatmap-months {
   direction: ltr;
   display: grid;
@@ -169,6 +159,8 @@
 }
 
 .heatmap-months__label {
+  min-width: 0;
+  overflow: hidden;
   white-space: nowrap;
 }
 
@@ -176,29 +168,13 @@
    grid-template-columns and grid-template-rows are set inline by
    the component (both depend on the data).
 
-   `grid-auto-flow: column` fills each column's 7 rows before moving
-   to the next column, so one column represents one week. Without
-   it, the default `row` flow lays the cells out left-to-right,
-   decoupling each cell from the day-of-week label it should sit
-   next to.
-
-   `width: max-content` sizes the grid to exactly the width of its
-   column template; the scroll wrapper above handles any overflow
-   on narrow viewports. */
+   Every cell receives an explicit column and row from its actual date;
+   CSS auto-placement is intentionally not used. */
 .heatmap-grid {
   direction: ltr;
   display: grid;
   gap: 2px;
-  grid-auto-flow: column;
   width: max-content;
-}
-
-.heatmap-grid__day-labels {
-  display: grid;
-  grid-template-rows: repeat(7, 11px);
-  gap: 2px;
-  grid-row: 1 / -1;
-  grid-column: 1;
 }
 
 .heatmap-grid__day-label {
@@ -222,12 +198,21 @@
   outline: var(--border-width) solid var(--color-border);
 }
 
-.heatmap-cell--pad { visibility: hidden; }
-.heatmap-cell--0   { background: var(--color-bg-alt); }
-.heatmap-cell--1   { background: color-mix(in srgb, var(--color-success) 25%, var(--color-bg-alt)); }
-.heatmap-cell--2   { background: color-mix(in srgb, var(--color-success) 50%, var(--color-bg-alt)); }
-.heatmap-cell--3   { background: color-mix(in srgb, var(--color-success) 75%, var(--color-bg-alt)); }
-.heatmap-cell--4   { background: var(--color-success); }
+.heatmap-cell--0 {
+  background: var(--color-bg-alt);
+}
+.heatmap-cell--1 {
+  background: color-mix(in srgb, var(--color-success) 25%, var(--color-bg-alt));
+}
+.heatmap-cell--2 {
+  background: color-mix(in srgb, var(--color-success) 50%, var(--color-bg-alt));
+}
+.heatmap-cell--3 {
+  background: color-mix(in srgb, var(--color-success) 75%, var(--color-bg-alt));
+}
+.heatmap-cell--4 {
+  background: var(--color-success);
+}
 
 /* Legend */
 .heatmap-legend {
@@ -244,9 +229,29 @@
   margin: 0 var(--space-xs);
 }
 
-/* Removed: the previous `@media (max-width: 768px)` block that set
-   `min-width: 700px` on `.heatmap-grid`. See the OVERFLOW NOTE in
-   the file header for the reasoning. The `.heatmap-scroll` wrapper
-   now provides the horizontal scroll that the min-width was trying
-   to guarantee, without forcing the grid element wider than its
-   parent card. */
+@media (max-width: 640px) {
+  .heatmap-card {
+    padding: var(--space-md);
+  }
+
+  .heatmap-card__toggle {
+    align-items: flex-start;
+  }
+
+  .heatmap-card__toggle-left,
+  .heatmap-card__stats {
+    width: 100%;
+  }
+
+  .heatmap-card__stats {
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+}
+
+@media (pointer: coarse) {
+  .heatmap-cell:hover {
+    transform: none;
+    outline: none;
+  }
+}

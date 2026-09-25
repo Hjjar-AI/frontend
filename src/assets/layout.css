@@ -1,4 +1,25 @@
 /* Page width utilities and grids */
+html[data-density="compact"] {
+  --space-lg: 1.125rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2.25rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+}
+
+html[data-density="compact"] .base-card,
+html[data-density="compact"] .entity-row,
+html[data-density="compact"] .list-toolbar {
+  padding: var(--space-md);
+}
+
+@media (pointer: coarse) {
+  html[data-density="compact"] {
+    --control-height: 44px;
+    --control-height-compact: 36px;
+  }
+}
+
 .page--narrow { max-width: var(--content-narrow); margin-inline: auto; }
 .page--base { max-width: var(--content-base); margin-inline: auto; }
 .page--wide { max-width: var(--content-wide); margin-inline: auto; }

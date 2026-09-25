@@ -10,6 +10,7 @@ import { useWrongAnswerStore } from '@/stores/wrongAnswerStore'
 import { useAnalyticsStore } from '@/stores/analyticsStore'
 import { useMasterExamStore } from '@/stores/masterExamStore'
 import { useTipStore } from '@/stores/tipStore'
+import { useStudyPlannerStore } from '@/stores/studyPlannerStore'
 import { useDialog } from '@/composables/useDialog'
 import { useNotify } from '@/composables/useNotify'
 import { useRotatingContent } from '@/composables/useRotatingContent'
@@ -29,6 +30,7 @@ export function useDashboardController() {
   const analyticsStore = useAnalyticsStore()
   const masterExamStore = useMasterExamStore()
   const tipStore = useTipStore()
+  const studyPlannerStore = useStudyPlannerStore()
   const { confirm } = useDialog()
   const { notify } = useNotify()
 
@@ -86,6 +88,24 @@ export function useDashboardController() {
     }
   })
 
+  const todayProgressPercent = computed(() => {
+    if (!studyPlannerStore.planner) return resumableSession.value?.progress || 0
+    const target = Number(studyPlannerStore.planner.target_questions_per_day) || 1
+    return Math.min(100, Math.round((studyPlannerStore.todayProgress / target) * 100))
+  })
+
+  const todayProgressLabel = computed(() => {
+    if (!studyPlannerStore.planner) {
+      return resumableSession.value
+        ? t('dashboard.sessionProgressLabel', { progress: resumableSession.value.progress })
+        : t('dashboard.noDailyGoal')
+    }
+    return t('dashboard.todayProgressLabel', {
+      current: studyPlannerStore.todayProgress,
+      target: studyPlannerStore.planner.target_questions_per_day,
+    })
+  })
+
   const studyNowBreakdownLine = computed(() => {
     const breakdown = wrongAnswerStore.studyNowQueue?.breakdown
     if (!breakdown) return ''
@@ -102,6 +122,45 @@ export function useDashboardController() {
     if (breakdown.fresh) parts.push(`${breakdown.fresh} ${t('dashboard.breakdownFresh')}`)
     if (breakdown.general) parts.push(`${breakdown.general} ${t('dashboard.breakdownGeneral')}`)
     return parts.length ? t('dashboard.studyNowBreakdown', { parts: parts.join(' · ') }) : ''
+  })
+
+  const todayAction = computed(() => {
+    if (resumableSession.value) {
+      return {
+        kind: 'resume',
+        title: t('dashboard.continue'),
+        description: t('dashboard.continueAt', {
+          current: resumableSession.value.currentIndex + 1,
+          total: resumableSession.value.totalQuestions,
+        }),
+        icon: 'bi bi-play-circle-fill',
+        buttonIcon: 'bi bi-play-circle',
+        buttonLabel: t('dashboard.resume'),
+        loading: false,
+      }
+    }
+
+    if (wrongAnswerStore.srsDueCount > 0) {
+      return {
+        kind: 'srs',
+        title: t('dashboard.srsDue', { count: wrongAnswerStore.srsDueCount }),
+        description: t('dashboard.srsDesc'),
+        icon: 'bi bi-arrow-repeat',
+        buttonIcon: 'bi bi-play-circle',
+        buttonLabel: t('dashboard.srsStart'),
+        loading: testSessionStore.isLoading,
+      }
+    }
+
+    return {
+      kind: 'study-now',
+      title: t('dashboard.studyNow'),
+      description: t('dashboard.studyNowDesc'),
+      icon: 'bi bi-lightning-charge-fill',
+      buttonIcon: 'bi bi-play-circle',
+      buttonLabel: t('dashboard.startButton'),
+      loading: wrongAnswerStore.isStudyNowLoading,
+    }
   })
 
   const testModes = computed(() => [
@@ -154,6 +213,12 @@ export function useDashboardController() {
     })
     if (startResult) router.push('/study/question')
     else notify(t('dashboard.studyNowFailed'), 'error')
+  }
+
+  function runTodayAction() {
+    if (todayAction.value.kind === 'resume') return resume(resumableSession.value.mode)
+    if (todayAction.value.kind === 'srs') return startSRS()
+    return startStudyNow()
   }
 
   function resume(mode) {
@@ -213,11 +278,12 @@ export function useDashboardController() {
       analyticsStore.fetchSummary(30),
       masterExamStore.fetchNeedsAck(),
       groupStore.fetchHeatmap(365),
+      studyPlannerStore.recordProgress().then(() => studyPlannerStore.fetchPlanner()),
     ])
   }
 
   onMounted(async () => {
-    stopTimer = setTimeout(stopBannerAnimation, 12000)
+    stopTimer = setTimeout(stopBannerAnimation, 16000)
     document.addEventListener('visibilitychange', onVisibilityChange)
 
     if (
@@ -255,11 +321,15 @@ export function useDashboardController() {
     weakCategories,
     daysSinceLastLogin,
     resumableSession,
+    todayAction,
+    todayProgressPercent,
+    todayProgressLabel,
     studyNowBreakdownLine,
     testModes,
     currentTip,
     tipKey,
     startStudyNow,
+    runTodayAction,
     resume,
     handleBookmark,
     handleDelete,

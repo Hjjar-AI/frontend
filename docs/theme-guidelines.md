@@ -51,5 +51,8 @@ color alone must not carry meaning.
 6. Confirm the theme menu, charts, native date inputs, focus rings, print view,
    streaks, ranks, and avatar tones.
 
+Use the repeatable [visual QA checklist](./visual-qa-checklist.md) for every
+theme and density before release.
+
 Print semantics use the fixed `--color-print-*` tokens. Screen themes must not
 override them; this keeps print readable without a duplicated palette snapshot.

@@ -2,7 +2,7 @@
   <div
     class="table-shell"
     :class="[
-      `table-shell--${density}`,
+      density !== 'auto' ? `table-shell--${density}` : '',
       `table-shell--mobile-${mobileMode}`,
       { 'table-shell--striped': striped, 'table-shell--sticky': sticky },
     ]"
@@ -17,7 +17,7 @@
 
 <script setup>
 defineProps({
-  density: { type: String, default: 'normal', validator: value => ['compact', 'normal', 'comfortable'].includes(value) },
+  density: { type: String, default: 'auto', validator: value => ['auto', 'compact', 'normal', 'comfortable'].includes(value) },
   striped: { type: Boolean, default: false },
   sticky: { type: Boolean, default: false },
   maxHeight: { type: String, default: '' },

@@ -24,6 +24,13 @@
               :label="t('preferences.defaultDifficulty')"
               :options="difficultyOptions"
             />
+            <BaseSelect
+              :model-value="prefs.density"
+              @update:model-value="prefs.update('density', $event)"
+              :label="t('preferences.density')"
+              :hint="t('preferences.densityHint')"
+              :options="densityOptions"
+            />
             <BaseCheckbox
               :model-value="prefs.autoAdvance"
               @update:model-value="prefs.update('autoAdvance', $event)"
@@ -62,5 +69,9 @@ const perPageOptions = PER_PAGE_OPTIONS.map(v => ({ value: v, label: String(v) }
 const difficultyOptions = computed(() => [
   { value: '', label: t('preferences.allDifficulties') },
   ...DIFFICULTY_OPTIONS.map(opt => ({ value: opt.value, label: t(opt.labelKey) })),
+])
+const densityOptions = computed(() => [
+  { value: 'comfortable', label: t('preferences.densityComfortable') },
+  { value: 'compact', label: t('preferences.densityCompact') },
 ])
 </script>

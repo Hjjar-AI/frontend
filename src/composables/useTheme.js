@@ -90,8 +90,8 @@ export function loadSavedTheme() {
       currentTheme.value = normalized
       document.documentElement.setAttribute('data-theme', normalized)
     }
-    // Persist the canonical name when migrating the former `light`
-    // value, or when recovering from an unknown stored value.
+    // Persist the canonical name when migrating the former `light` or
+    // `sepia` values, or when recovering from an unknown stored value.
     if (saved !== normalized) storageService.setItem('theme', normalized)
   } else {
     currentTheme.value = DEFAULT_THEME

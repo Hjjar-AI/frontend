@@ -73,6 +73,8 @@
     "caseStemHint": "لتعديل نص حالة قائمة، انتقل إلى إحدى أسئلتها واستخدم زر تعديل نص الحالة هناك.",
     "caseSection": "حالة سريرية (اختياري)",
     "caseBadge": "حالة",
+    "moreStatuses": "عرض {count} حالات إضافية",
+    "moreStatusesCompact": "+{count}",
     "caseClinicalTitle": "حالة سريرية",
     "caseQuestionCount": "({n} أسئلة)",
 

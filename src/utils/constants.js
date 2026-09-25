@@ -18,10 +18,10 @@ export const THEMES = [
   'contrast',
   'ink',
   'slate',
-  'sepia',
+  'amber',
 ]
 export const DARK_THEMES = ['dark', 'onyx']
-export const THEME_ALIASES = { light: DEFAULT_THEME }
+export const THEME_ALIASES = { light: DEFAULT_THEME, sepia: 'amber' }
 
 export function normalizeTheme(theme) {
   const normalized = THEME_ALIASES[theme] || theme
